@@ -13,6 +13,10 @@ class statusView(normalView):
         }
         result = dockletRequest.post('/cluster/list/', data)
         clusters = result.get('clusters')
+        result = dockletRequest.post('/monitor/user/quotainfo/', data)
+        quotainfo = result.get('quotainfo')
+        quotainfo['cpu'] = int(int(quotainfo['cpu'])/100000)
+        print(quotainfo)
         if (result):
             containers = {}
             for cluster in clusters:
@@ -23,7 +27,7 @@ class statusView(normalView):
                 else:
                    self.error()
                 containers[cluster] = message
-            return self.render(self.template_path, clusters = clusters, containers = containers, user = session['username'])
+            return self.render(self.template_path, clusters = clusters, quotainfo = quotainfo, containers = containers, user = session['username'])
         else:
             self.error()
 

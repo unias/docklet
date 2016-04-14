@@ -16,6 +16,50 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
+	<div class="col-md-12">
+         <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">Your Quotas</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+              </div>
+                     <div class="box-body table-responsive">
+
+                         <table class="table table-bordered">
+                             <thead>
+                             <tr>
+				                <th>CPU</th>
+				                <th>Memory</th>
+                                <th>Disk</th>
+                                <th>Network</th>
+                                <th>Image</th>
+                                <th>Idletime</th>
+                             </tr>
+                             </thead>
+                             <tbody>
+                             <tr>
+                                {% if quotainfo['cpu'] > 1 %}
+                                    <th>{{ quotainfo['cpu'] }} Cores</th>
+                                {% else %}
+                                    <th>{{ quotainfo['cpu'] }} Core</th>
+                                {% endif %}
+                                <th>{{ quotainfo['memory'] }} MB</th>
+                                <th>{{ quotainfo['disk'] }} MB</th>
+                                <th>{{ quotainfo['network'] }} IP addresses</th>
+                                <th>{{ quotainfo['image'] }}</th>
+                                <th>{{ quotainfo['idletime'] }}</th>
+			                 </tr>
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+	   </div>
+
 {% for cluster in clusters %}
 	  <div class="row">
 	     <div class="col-md-12">

@@ -346,6 +346,10 @@ class DockletHttpHandler(http.server.BaseHTTPRequestHandler):
                     res['basic_info'] = fetcher.get_basic_info(cmds[2])
                 self.response(200, {'success':'true', 'monitor':res})
             elif cmds[1] == 'user':
+                if cmds[2] == 'quotainfo':
+                    user_info = G_usermgr.selfQuery(cur_user = cur_user)
+                    quotainfo = user_info['data']['groupinfo']
+                    self.response(200, {'success':'true', 'quotainfo':quotainfo}) 
                 if not user == 'root':
                     self.response(400, {'success':'false', 'message':'Root Required'})
                 if cmds[3] == 'clustercnt':
