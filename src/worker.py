@@ -48,30 +48,31 @@ class Worker(object):
         self.master = self.etcd.getkey("service/master")[1]
         self.mode=None
 
-        # register self to master
         self.etcd.setkey("machines/runnodes/"+self.addr, "waiting")
-        for f in range (0, 3):
-            [status, value] = self.etcd.getkey("machines/runnodes/"+self.addr)
-            if not value.startswith("init"):
-                # master wakesup every 0.1s  to check register
-                logger.debug("worker % register to master failed %d \
-                        time, sleep %fs" % (self.addr, f+1, 0.1))
-                time.sleep(0.1)
-            else:
-                break
-
-        if value.startswith("init"):
-            # check token to check global directory
-            [status, token_1] = self.etcd.getkey("token")
-            tokenfile = open(self.fspath+"/global/token", 'r')
-            token_2 = tokenfile.readline().strip()
-            if token_1 != token_2:
-                logger.error("check token failed, global directory is not a shared filesystem")
-                sys.exit(1)
+        [status, node] = self.etcd.getnode("machines/runnodes/"+self.addr)
+        if status:
+            self.key = node['key']
         else:
-            logger.error ("worker register in machines/runnodes failed, maybe master not start")
+            logger.error("get key failed. %s" % node)
             sys.exit(1)
-        logger.info ("worker registered in master and checked the token")
+
+        # check token to check global directory
+        [status, token_1] = self.etcd.getkey("token")
+        tokenfile = open(self.fspath+"/global/token", 'r')
+        token_2 = tokenfile.readline().strip()
+        if token_1 != token_2:
+            logger.error("check token failed, global directory is not a shared filesystem")
+            sys.exit(1)
+        logger.info ("worker registered and checked the token")
+
+        # worker itself to judge how to init
+        value = 'init-new'
+        [status, runlist] = self.etcd.listdir("machines/runnodes")
+        for node in runlist:
+            if node['key'] == self.key:
+                value = 'init-recovery'
+                break
+        logger.info("worker start in "+value+" mode")
 
         Containers = container.Container(self.addr, etcdclient)
         if value == 'init-new':
