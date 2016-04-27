@@ -199,4 +199,13 @@ class Client(object):
                 return [False, 'you are not lock holder']
         else:
             return [False, 'no one holds this lock']
-    
+
+    def getnode(self, key):
+        key = key.strip("/")
+        out = dorequest(self.keysurl+key)
+        if 'action' not in out:
+            return [False, "key not found"]
+        elif 'dir' in out:
+            return [False, dirname+" is a directory"]
+        else:
+            return [True, {"key":out['node']['key'], 'value':out['node']['value']}]

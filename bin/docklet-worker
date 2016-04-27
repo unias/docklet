@@ -43,8 +43,6 @@ PIDFILE=$RUN_DIR/$DAEMON_NAME.pid
 ###########
 
 pre_start () {
-    log_daemon_msg "Starting $DAEMON_NAME in $FS_PREFIX"
-
     [ ! -d $FS_PREFIX/global ] && mkdir -p $FS_PREFIX/global
     [ ! -d $FS_PREFIX/local ] && mkdir -p $FS_PREFIX/local
     [ ! -d $FS_PREFIX/global/users ] && mkdir -p $FS_PREFIX/global/users
@@ -81,6 +79,7 @@ pre_start () {
 
 do_start() {
     pre_start
+    log_daemon_msg "Starting $DAEMON_NAME in $FS_PREFIX"
     start-stop-daemon --start --oknodo --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
     log_end_msg $?
 }
@@ -90,6 +89,7 @@ do_stop () {
     start-stop-daemon --stop --quiet --oknodo --remove-pidfile --pidfile $PIDFILE --retry 10
     log_end_msg $?
 }
+
 
 
 
@@ -115,7 +115,6 @@ case "$1" in
     status)
         status_of_proc -p $PIDFILE "$DAEMON" "$DAEMON_NAME" && exit 0 || exit $?
         ;;
-
     *)
         echo "Usage: $DAEMON_NAME {start|stop|restart|status}"
         exit 1
