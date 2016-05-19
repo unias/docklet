@@ -18,6 +18,9 @@ def loadenv(configpath):
         value = keyvalue[1].strip()
         #logger.info ("load env and put env %s:%s" % (key, value))
         os.environ[key] = value
-        
+
 def gen_token():
     return str(random.randint(10000, 99999))+"-"+str(random.randint(10000, 99999))
+    
+def netid_decode(netid):
+    return [int(netid/4094) + 1, netid%4094 + 1]

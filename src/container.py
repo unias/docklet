@@ -5,11 +5,12 @@ import imagemgr
 from log import logger
 import env
 from lvmtool import sys_run, check_volume
+from tools import netid_decode
 
 class Container(object):
     def __init__(self, addr, etcdclient):
         self.addr = addr
-        self.etcd=etcdclient
+        self.etcd = etcdclient
         self.libpath = env.getenv('DOCKLET_LIB')
         self.confpath = env.getenv('DOCKLET_CONF')
         self.fspath = env.getenv('FS_PREFIX')
@@ -17,48 +18,48 @@ class Container(object):
         self.rundir = "/home/jupyter"
         # set root running dir in container
         self.nodehome = "/root"
-
         self.lxcpath = "/var/lib/lxc"
         self.imgmgr = imagemgr.ImageMgr()
 
-    def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
+    def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, netid, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
         try:
-            user_info = json.loads(user_info) 
+            # prepare container quota
+            user_info = json.loads(user_info)
             cpu = int(user_info["data"]["groupinfo"]["cpu"]) * 100000
             memory = user_info["data"]["groupinfo"]["memory"]
             disk = user_info["data"]["groupinfo"]["disk"]
-            image = json.loads(image) 
-            status = self.imgmgr.prepareFS(username,image,lxc_name,disk)
+
+            # prepare root file system
+            image = json.loads(image)
+            status = self.imgmgr.prepareFS(username, image, lxc_name, disk)
             if not status:
                 return [False, "Create container failed when preparing filesystem, possibly insufficient space"]
-            
-            #Ret = subprocess.run([self.libpath+"/lxc_control.sh",
-            #    "create", lxc_name, username, str(clusterid), hostname,
-            #    ip, gateway, str(vlanid), str(cpu), str(memory)], stdout=subprocess.PIPE,
-            #    stderr=subprocess.STDOUT,shell=False, check=True)
-            
             rootfs = "/var/lib/lxc/%s/rootfs" % lxc_name
-            
-            if not os.path.isdir("%s/global/users/%s" % (self.fspath,username)):
+            if not os.path.isdir("%s/global/users/%s" % (self.fspath, username)):
                 logger.error("user %s directory not found" % username)
                 return [False, "user directory not found"]
             sys_run("mkdir -p /var/lib/lxc/%s" % lxc_name)
+
+            # prepare network config
+            [switchid, vlanid] = netid_decode(int(netid))
+
+            # generate config file
             logger.info("generate config file for %s" % lxc_name)
-            
             def config_prepare(content):
-                content = content.replace("%ROOTFS%",rootfs)
-                content = content.replace("%HOSTNAME%",hostname)
-                content = content.replace("%IP%",ip)
-                content = content.replace("%GATEWAY%",gateway)
-                content = content.replace("%CONTAINER_MEMORY%",str(memory))
-                content = content.replace("%CONTAINER_CPU%",str(cpu))
-                content = content.replace("%FS_PREFIX%",self.fspath)
-                content = content.replace("%USERNAME%",username)
-                content = content.replace("%CLUSTERID%",str(clusterid))
-                content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
-                content = content.replace("%LXCNAME%",lxc_name)
-                content = content.replace("%VLANID%",str(vlanid))
+                content = content.replace("%ROOTFS%", rootfs)
+                content = content.replace("%HOSTNAME%", hostname)
+                content = content.replace("%IP%", ip)
+                content = content.replace("%GATEWAY%", gateway)
+                content = content.replace("%CONTAINER_MEMORY%", str(memory))
+                content = content.replace("%CONTAINER_CPU%", str(cpu))
+                content = content.replace("%FS_PREFIX%", self.fspath)
+                content = content.replace("%USERNAME%", username)
+                content = content.replace("%CLUSTERID%", str(clusterid))
+                content = content.replace("%LXCSCRIPT%", env.getenv("LXC_SCRIPT"))
+                content = content.replace("%LXCNAME%", lxc_name)
+                content = content.replace("%USERBR", 'docklet-br-'+str(switchid))
+                content = content.replace("%VLANID%", str(vlanid))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
                 return content
@@ -68,7 +69,7 @@ class Container(object):
             conffile.close()
             conftext = config_prepare(conftext)
 
-            conffile = open("/var/lib/lxc/%s/config" % lxc_name,"w")
+            conffile = open("/var/lib/lxc/%s/config" % lxc_name, "w")
             conffile.write(conftext)
             conffile.close()
 
@@ -81,7 +82,6 @@ class Container(object):
                 conffile.write(conftext)
                 conffile.close()
 
-            #logger.debug(Ret.stdout.decode('utf-8'))
             logger.info("create container %s success" % lxc_name)
 
             # get AUTH COOKIE URL for jupyter
@@ -90,18 +90,15 @@ class Container(object):
                 [status, masterip] = self.etcd.getkey("service/master")
                 if status:
                     webport = env.getenv("WEB_PORT")
-                    authurl = "http://%s:%s/jupyter" % (masterip,
-                            webport)
+                    authurl = "http://%s:%s/jupyter" % (masterip, webport)
                 else:
-                    logger.error ("get AUTH COOKIE URL failed for jupyter")
+                    logger.error("get AUTH COOKIE URL failed for jupyter")
                     authurl = "error"
-            
-            cookiename='docklet-jupyter-cookie'
+
+            cookiename = 'docklet-jupyter-cookie'
 
             rundir = self.lxcpath+'/'+lxc_name+'/rootfs' + self.rundir
-
             logger.debug(rundir)
-
             if not os.path.exists(rundir):
                 os.makedirs(rundir)
             else:
@@ -111,21 +108,19 @@ class Container(object):
 
             jconfigpath = rundir + '/jupyter.config'
             config = open(jconfigpath, 'w')
-            jconfigs="""USER=%s
+            jconfigs = """USER=%s
 PORT=%d
 COOKIE_NAME=%s
 BASE_URL=%s
 HUB_PREFIX=%s
 HUB_API_URL=%s
 IP=%s
-""" % (username, 10000, cookiename, '/go/'+username+'/'+clustername, '/jupyter',
-        authurl, ip.split('/')[0])
+""" % (username, 10000, cookiename, '/go/'+username+'/'+clustername, '/jupyter', authurl, ip.split('/')[0])
             config.write(jconfigs)
             config.close()
 
         except subprocess.CalledProcessError as sube:
-            logger.error('create container %s failed: %s' % (lxc_name,
-                    sube.stdout.decode('utf-8')))
+            logger.error('create container %s failed: %s' % (lxc_name, sube.stdout.decode('utf-8')))
             return [False, "create container failed"]
         except Exception as e:
             logger.error(e)
@@ -133,76 +128,44 @@ IP=%s
         return [True, "create container success"]
 
     def delete_container(self, lxc_name):
-        logger.info ("delete container:%s" % lxc_name)
+        logger.info("delete container:%s" % lxc_name)
         if self.imgmgr.deleteFS(lxc_name):
             logger.info("delete container %s success" % lxc_name)
             return [True, "delete container success"]
         else:
             logger.info("delete container %s failed" % lxc_name)
             return [False, "delete container failed"]
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "delete", lxc_name])
-        #if int(status) == 1:
-        #    logger.error("delete container %s failed" % lxc_name)
-        #    return [False, "delete container failed"]
-        #else:
-        #    logger.info ("delete container %s success" % lxc_name)
-        #    return [True, "delete container success"]
 
     # start container, if running, restart it
     def start_container(self, lxc_name):
-        logger.info ("start container:%s" % lxc_name)
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "start", lxc_name])
-        #if int(status) == 1:
-        #    logger.error ("start container %s failed" % lxc_name)
-        #    return [False, "start container failed"]
-        #else:
-        #    logger.info ("start container %s success" % lxc_name)
-        #    return [True, "start container success"]
-        #subprocess.run(["lxc-stop -k -n %s" % lxc_name],
-        #        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, check=True)
-        try :
-            subprocess.run(["lxc-start -n %s" % lxc_name],
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, check=True)
-            logger.info ("start container %s success" % lxc_name)
+        logger.info("start container:%s" % lxc_name)
+        try:
+            subprocess.run(["lxc-start -n %s" % lxc_name], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, check=True)
+            logger.info("start container %s success" % lxc_name)
             return [True, "start container success"]
         except subprocess.CalledProcessError as sube:
-            logger.error('start container %s failed: %s' % (lxc_name,
-                    sube.stdout.decode('utf-8')))
+            logger.error('start container %s failed: %s' % (lxc_name, sube.stdout.decode('utf-8')))
             return [False, "start container failed"]
 
     # start container services
-    # for the master node, jupyter must be started, 
+    # for the master node, jupyter must be started,
     # for other node, ssh must be started.
     # container must be RUNNING before calling this service
     def start_services(self, lxc_name, services=[]):
-        logger.info ("start services for container %s: %s" % (lxc_name, services))
+        logger.info("start services for container %s: %s" % (lxc_name, services))
         try:
-            #Ret = subprocess.run(["lxc-attach -n %s -- ln -s /nfs %s" %
-                #(lxc_name, self.nodehome)],
-                #stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                #shell=True, check=False)
-            #logger.debug ("prepare nfs for %s: %s" % (lxc_name,
-                #Ret.stdout.decode('utf-8')))
-            # not sure whether should execute this 
-            #Ret = subprocess.run(["lxc-attach -n %s -- service ssh start" % lxc_name],
-            #        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            #shell=True, check=False)
-            #logger.debug(Ret.stdout.decode('utf-8'))
             if len(services) == 0: # master node
-                Ret = subprocess.run(["lxc-attach -n %s -- su -c %s/start_jupyter.sh" % (lxc_name, self.rundir)],
-                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, check=True)
-                logger.debug (Ret)
-            logger.info ("start services for container %s success" % lxc_name)
+                Ret = subprocess.run(["lxc-attach -n %s -- su -c %s/start_jupyter.sh" % (lxc_name, self.rundir)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True, check=True)
+                logger.debug(Ret)
+            logger.info("start services for container %s success" % lxc_name)
             return [True, "start container services success"]
         except subprocess.CalledProcessError as sube:
-            logger.error('start services for container %s failed: %s' % (lxc_name,
-                    sube.output.decode('utf-8')))
+            logger.error('start services for container %s failed: %s' % (lxc_name, sube.output.decode('utf-8')))
             return [False, "start services for container failed"]
 
     # recover container: if running, do nothing. if stopped, start it
     def recover_container(self, lxc_name):
-        logger.info ("recover container:%s" % lxc_name)
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "status", lxc_name])
+        logger.info("recover container:%s" % lxc_name)
         [success, status] = self.container_status(lxc_name)
         if not success:
             return [False, status]
@@ -223,8 +186,7 @@ IP=%s
             return [True, "recover success"]
 
     def stop_container(self, lxc_name):
-        logger.info ("stop container:%s" % lxc_name)
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "stop", lxc_name])
+        logger.info("stop container:%s" % lxc_name)
         [success, status] = self.container_status(lxc_name)
         if not success:
             return [False, status]
@@ -237,22 +199,15 @@ IP=%s
         else:
             logger.info("stop container %s success" % lxc_name)
             return [True, "stop container success"]
-        #if int(status) == 1:
-        #    logger.error ("stop container %s failed" % lxc_name)
-        #    return [False, "stop container failed"]
-        #else:
-        #    logger.info ("stop container %s success" % lxc_name)
-        #    return [True, "stop container success"]
 
     # check container: check LV and mountpoints, if wrong, try to repair it
     def check_container(self, lxc_name):
-        logger.info ("check container:%s" % lxc_name)
+        logger.info("check container:%s" % lxc_name)
         if not check_volume("docklet-group", lxc_name):
             logger.error("check container %s failed" % lxc_name)
             return [False, "check container failed"]
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "check", lxc_name])
         self.imgmgr.checkFS(lxc_name)
-        logger.info ("check container %s success" % lxc_name)
+        logger.info("check container %s success" % lxc_name)
         return [True, "check container success"]
 
     def is_container(self, lxc_name):
@@ -265,7 +220,6 @@ IP=%s
         if not self.is_container(lxc_name):
             return [False, "container not found"]
         Ret = sys_run("lxc-info -n %s | grep RUNNING" % lxc_name)
-        #status = subprocess.call([self.libpath+"/lxc_control.sh", "status", lxc_name])
         if Ret.returncode == 0:
             return [True, 'running']
         else:
@@ -279,29 +233,29 @@ IP=%s
             if os.path.isfile(self.lxcpath+"/"+onedir+"/config"):
                 lxclist.append(onedir)
             else:
-                logger.warning ("%s in lxc directory, but not container directory" % onedir)
+                logger.warning("%s in lxc directory, but not container directory" % onedir)
         return [True, lxclist]
 
     def delete_allcontainers(self):
-        logger.info ("deleting all containers...")
+        logger.info("deleting all containers...")
         [status, containers] = self.list_containers()
         result = True
         for container in containers:
             [result, status] = self.container_status(container)
-            if status=='running':
+            if status == 'running':
                 self.stop_container(container)
             result = result & self.delete_container(container)[0]
         if result:
-            logger.info ("deleted all containers success")
+            logger.info("deleted all containers success")
             return [True, 'all deleted']
         else:
-            logger.error ("deleted all containers failed")
+            logger.error("deleted all containers failed")
             return [False, 'some containers delete failed']
 
     # list containers in /var/lib/lxc/ as local
     # list containers in FS_PREFIX/global/... on this host as global
     def diff_containers(self):
-        [status, localcontainers] = self.list_containers()
+        [_, localcontainers] = self.list_containers()
         globalpath = self.fspath+"/global/users/"
         users = os.listdir(globalpath)
         globalcontainers = []
@@ -326,13 +280,14 @@ IP=%s
                 onlyglobal.append(container)
         return [both, onlylocal, onlyglobal]
 
-    def create_image(self,username,imagename,containername,description="not thing",imagenum=10):
-        return self.imgmgr.createImage(username,imagename,containername,description,imagenum)
+    def create_image(self, username, imagename, containername, description="not thing", imagenum=10):
+        return self.imgmgr.createImage(username, imagename, containername, description, imagenum)
 
-    def flush_container(self,username,imagename,containername):
-        self.imgmgr.flush_one(username,imagename,containername)
+    def flush_container(self, username, imagename, containername):
+        self.imgmgr.flush_one(username, imagename, containername)
         logger.info("container: %s has been flushed" % containername)
         return 0
+
     # check all local containers
     def check_allcontainers(self):
         [both, onlylocal, onlyglobal] = self.diff_containers()
@@ -340,18 +295,18 @@ IP=%s
         status = True
         result = True
         for container in both:
-            logger.info ("%s in LOCAL and GLOBAL checks..." % container)
-            [status, meg]=self.check_container(container)
+            logger.info("%s in LOCAL and GLOBAL checks..." % container)
+            [status, _] = self.check_container(container)
             result = result & status
         if len(onlylocal) > 0:
             result = False
-            logger.error ("some container only exists in LOCAL: %s" % onlylocal)
+            logger.error("some container only exists in LOCAL: %s" % onlylocal)
         if len(onlyglobal) > 0:
             result = False
-            logger.error ("some container only exists in GLOBAL: %s" % onlyglobal)
+            logger.error("some container only exists in GLOBAL: %s" % onlyglobal)
         if status:
-            logger.info ("check all containers success")
+            logger.info("check all containers success")
             return [True, 'all is ok']
         else:
-            logger.error ("check all containers failed")
+            logger.error("check all containers failed")
             return [False, 'not ok']
