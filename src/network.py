@@ -277,10 +277,10 @@ class UserPool(EnumPool):
 class NetIdMgr(object):
     def __init__(self, etcdclient, mode):
         self.__etcd = etcdclient
-        self.__netid_count = 0
+        self.netid_count = 0
         self.__pool_count = 0
-        self.__cur_pool_index = -1
-        self.__cur_pool = []
+        self.cur_pool_index = -1
+        self.cur_pool = []
         if mode == 'new':
             logger.info("init net id manager")
         elif mode == 'recovery':
@@ -292,72 +292,72 @@ class NetIdMgr(object):
             sys.exit(1)
 
     def __dump_info(self):
-        self.__etcd.setkey('netids/info', json.dump({'netid_count': self.__netid_count, 'pool_count': self.__pool_count}))
+        self.__etcd.setkey('netids/info', json.dump({'netid_count': self.netid_count, 'pool_count': self.__pool_count}))
 
     def __load_info(self):
         [sts, res] = self.__etcd.getkey('netids/info')
         if sts:
             info = json.loads(res)
-            self.__netid_count = int(info['netid_count'])
+            self.netid_count = int(info['netid_count'])
             self.__pool_count = int(info['pool_count'])
         else:
-            self.__netid_count = 0
+            self.netid_count = 0
             self.__pool_count = 0
             logger.warning('load_info in NetIdMgr: etcd get info failed, use default')
 
     def __dump_cur_pool(self):
-        if self.__cur_pool_index >=0 and self.__cur_pool_index < self.__pool_count:
-            self.__etcd.setkey('netids/cur_pool_index', self.__cur_pool_index)
-            self.__etcd.setkey('netids/pools/'+str(self.__cur_pool_index), self.__cur_pool)
+        if self.cur_pool_index >=0 and self.cur_pool_index < self.__pool_count:
+            self.__etcd.setkey('netids/cur_pool_index', self.cur_pool_index)
+            self.__etcd.setkey('netids/pools/'+str(self.cur_pool_index), self.cur_pool)
 
     def __load_cur_pool_index(self):
         [sts, res] = self.__etcd.getkey('netids/cur_pool_index')
         if sts:
-            self.__cur_pool_index = int(res)
+            self.cur_pool_index = int(res)
         else:
-            self.__cur_pool_index = -1
+            self.cur_pool_index = -1
             logger.warning('load_info in NetIdMgr: etcd get cur_pool_index failed, use default')
 
     def __load_pool(self, pool_index):
         [sts, res] = self.__etcd.getkey('netids/pools/'+str(pool_index))
         if sts:
-            self.__cur_pool = list(json.loads(res))
+            self.cur_pool = list(json.loads(res))
         else:
-            self.__cur_pool = []
+            self.cur_pool = []
             logger.warning('load_pool in NetIdMgr: etcd get pools/%s failed, used default' % (str(index)))
 
     # add pools to etcd, modify etcd info and pools
     def add_pool(self, count=4094, pool_size=89):
         new_pool_count = int(celling(count/pool_size))
         for i in range(0, new_pool_count):
-            pool = list(range(self.__netid_count + i*pool_size, self.__netid_count + (i+1)*pool_size))
+            pool = list(range(self.netid_count + i*pool_size, self.netid_count + (i+1)*pool_size))
             self.etcd.setkey('netids/pools/'+str(self.__pool_count+i), json.dumps(pool))
-        self.__netid_count += count
+        self.netid_count += count
         self.__pool_count += new_pool_count
         self.__dump_info()
 
     # get netid, if current pool is empty, load next pool
     def get_netid(self):
-        if len(self.__cur_pool) == 0:
-            self.__cur_pool_index += 1
-            if self.__cur_pool_index == self.__pool_count:
+        if len(self.cur_pool) == 0:
+            self.cur_pool_index += 1
+            if self.cur_pool_index == self.__pool_count:
                 self.__add_pool()
             self.__load_pool(self.cur_pool_index)
-        netid = self.__cur_pool.pop()
+        netid = self.cur_pool.pop()
         self.__dump_cur_pool()
         return int(netid)
     
     # return netid, if current pool is full, load previous pool
     def ret_netid(self, netid, pool_size=89):
-        if len(self.__cur_pool) == pool_size:
-            self.__cur_pool_index -= 1
-            if self.__cur_pool_index == -1:
+        if len(self.cur_pool) == pool_size:
+            self.cur_pool_index -= 1
+            if self.cur_pool_index == -1:
                 # should should not happen
-                self.__cur_pool_index += 1
+                self.cur_pool_index += 1
                 logger.warning('ret_netid in NetIdMgr: return netid %s when all pools are full' % (str(netid)))
             else:
-                self.__load_pool(self.__cur_pool_index)
-        self.__cur_pool.append(netid)
+                self.__load_pool(self.cur_pool_index)
+        self.cur_pool.append(netid)
         self.__dump_cur_pool()
         return
 
@@ -366,11 +366,12 @@ class NetIdMgr(object):
 #   system : enumeration pool to acquire and release system ip address
 #   users : set of users' enumeration pools to manage users' ip address
 class NetworkMgr(object):
-    def __init__(self, vnet_count, addr_cidr, etcdclient, mode):
+    def __init__(self, vsmgr, addr_cidr, etcdclient, mode):
         self.etcd = etcdclient
-        self.__idmgr = NetIdMgr(self.etcd, mode)
+        self.vsmgr = vsmgr
+        self.idmgr = NetIdMgr(self.etcd, mode)
         if mode == 'new':
-            logger.info("init network manager with %s and max %s ids" % (addr_cidr, str(vnet_count))
+            logger.info("init network manager with %s" % (addr_cidr)
             self.center = IntervalPool(addr_cidr=addr_cidr)
             # allocate a pool for system IPs, use CIDR=27, has 32 IPs
             syscidr = 27
@@ -382,9 +383,6 @@ class NetworkMgr(object):
             # But, EnumPool drop the last IP address in its pool -- it is not important
             self.system = EnumPool(sysaddr+"/"+str(syscidr))
             self.users = {}
-            #self.netids = {}
-            #self.init_netids(vnet_count, 60)
-            #self.init_shared_netids()
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -392,74 +390,10 @@ class NetworkMgr(object):
             self.center = None
             self.system = None
             self.users = {}
-            #self.netids = {}
             self.load_center()
             self.load_system()
-            #self.load_netids()
-            #self.load_shared_netids()
         else:
             logger.error("mode: %s not supported" % mode)
-
-    # def init_netids(self, total, block):
-    #     self.netids['total'] = total
-    #     self.netids['block'] = block
-    #     self.etcd.setkey("network/netids/info", str(total)+"/"+str(block))
-    #     i = 0
-    #     for i in range(1, int((total-1)/block)):
-    #         self.etcd.setkey("network/netids/"+str(i), json.dumps(list(range(block*(i-1), block*i))))
-    #     self.netids['currentpool'] = list(range(block*i, total))
-    #     self.netids['currentindex'] = i+1
-    #     self.etcd.setkey("network/netids/"+str(i+1), json.dumps(self.netids['currentpool']))
-    #     self.etcd.setkey("network/netids/current", str(i+1))
-
-    # Data Structure:
-    # shared_netids = [{netid = ..., remainnum = ...}, {netid = ..., remainnum = ...}, ...]
-    # def init_shared_netids(self, netnum=128, sharenum=128):
-    #     self.shared_netids = []
-    #     for i in range(netnum):
-    #         shared_netid = {}
-    #         [status, shared_netid['netid']] = self.acquire_netid()
-    #         if not status:
-    #             logger.info('not enough netids for sharing, still need %s' % str(netnum-i))
-    #             break
-    #         shared_netid['remainnum'] = sharenum
-    #         self.shared_netids.append(shared_netid)
-    #     self.etcd.setkey("network/shared_netids", json.dumps(self.shared_netids))
-
-    # load net info and an avaliable net pool
-    # def load_netids(self):
-    #     [status, info] = self.etcd.getkey("network/netids/info")
-    #     if not status:
-    #         logger.info("load netids info failed")
-    #     self.netids['total'] = int(info.split("/")[0])
-    #     self.netids['block'] = int(info.split("/")[1])
-    #     [status, current] = self.etcd.getkey("network/netids/current")
-    #     self.netids['currentindex'] = int(current)
-    #     if self.netids['currentindex'] == 0:
-    #         self.netids['currentpool'] = []
-    #     else:
-    #         [status, pool] = self.etcd.getkey("network/netids/"+str(self.netids['currentindex']))
-    #         self.netids['currentpool'] = json.loads(pool)
-
-    # def dump_netids(self):
-    #     if self.netids['currentpool'] == []:
-    #         if self.netids['currentindex'] != 0:
-    #             self.etcd.delkey("network/netids/"+str(self.netids['currentindex']))
-    #             self.etcd.setkey("network/netids/current", str(self.netids['currentindex']-1))
-    #         else:
-    #             pass
-    #     else:
-    #         self.etcd.setkey("network/netids/"+str(self.netids['currentindex']), json.dumps(self.netids['currentpool']))
-
-    # def load_shared_netids(self):
-    #     [status, shared_netids] = self.etcd.getkey("network/shared_netids")
-    #     if not status:
-    #         self.init_shared_netids()
-    #     else:
-    #         self.shared_netids = json.loads(shared_netids)
-
-    # def dump_shared_netids(self):
-    #     self.etcd.setkey("network/shared_netids", json.dumps(self.shared_netids))
 
     def load_center(self):
         [status, centerdata] = self.etcd.getkey("network/center")
@@ -503,44 +437,7 @@ class NetworkMgr(object):
         print("<users>")
         print("    users in users is in etcd, not in memory")
         print("<netids>")
-        print(str(self.netids['currentindex'])+":"+str(self.netids['currentpool']))
-
-    # def acquire_netid(self, isshared=False):
-    #     if isshared:
-    #         # only share netid of the front entry
-    #         # if remainnum is reduced to 0, move the front entry to the back
-    #         # if remainnum is still equal to 0, one round of sharing is complete, start another one
-    #         if self.shared_netids[0]['remainnum'] == 0:
-    #             self.shared_netids.append(self.shared_netids.pop(0))
-    #         if self.shared_netids[0]['remainnum'] == 0:
-    #             logger.info("shared netids not enough, add user to full netids")
-    #             for shared_netid in self.shared_netids:
-    #                 shared_netid['remainnum'] = 128
-    #         self.shared_netids[0]['remainnum'] -= 1
-    #         self.dump_shared_netids()
-    #         return [True, self.shared_netids[0]['netid']]
-
-    #     if self.netids['currentpool'] == []:
-    #         if self.netids['currentindex'] == 0:
-    #             return [False, "No Net IDs"]
-    #         else:
-    #             logger.error("netids current pool is empty with current index not zero")
-    #             return [False, "internal error"]
-    #     netid = self.netids['currentpool'].pop()
-    #     self.dump_netids()
-    #     if self.netids['currentpool'] == []:
-    #         self.load_netids()
-    #     return [True, netid]
-
-    # def release_netid(self, netid):
-    #     if len(self.netids['currentpool']) == self.netids['block']:
-    #         self.netids['currentpool'] = [netid]
-    #         self.netids['currentindex'] = self.netids['currentindex']+1
-    #         self.dump_netids()
-    #     else:
-    #         self.netids['currentpool'].append(netid)
-    #         self.dump_netids()
-    #     return [True, "Release Net ID success"]
+        print("%s : %s" % (str(self.idmgr.cur_pool_index), str(self.idmgr.cur_pool)))
 
     def add_user(self, username, cidr, isshared=False):
         logger.info("add user %s with cidr=%s" % (username, str(cidr)))
@@ -550,8 +447,7 @@ class NetworkMgr(object):
         self.dump_center()
         if not status:
             return [False, result]
-        #[status, netid] = self.acquire_netid(isshared)
-        netid = self.__idmgr.get_netid()
+        netid = self.idmgr.get_netid()
         if status:
             netid = int(netid)
         else:
@@ -561,6 +457,7 @@ class NetworkMgr(object):
         self.users[username] = UserPool(addr_cidr=result+"/"+str(cidr), netid=netid)
         logger.info("setup gateway for %s with %s and netid=%s" % (username, self.users[username].get_gateway_cidr(), str(netid)))
         [switchid, vlanid] = netid_decode(netid)
+        self.vsmgr.check_switch(switchid)
         netcontrol.setup_gw(switchid, username, self.users[username].get_gateway_cidr(), vlanid)
         self.dump_user(username)
         del self.users[username]
@@ -571,13 +468,14 @@ class NetworkMgr(object):
             return [False, username+" not in users set"]
         self.load_user(username)
         [addr, cidr] = self.users[username].info.split('/')
+        netid = self.users[username].netid
         logger.info("delete user %s with cidr=%s" % (username, int(cidr)))
         self.center.free(addr, int(cidr))
         self.dump_center()
-        #if not isshared:
-        #    self.release_netid(self.users[username].netid)
-        self.__idmgr.ret_netid(netid)
-        netcontrol.del_gw(self.users[username].switchid, username)
+        self.idmgr.ret_netid(netid)
+        [switchid, vlanid] = netid_decode(netid)
+        self.vsmgr.check_switch(switchid)
+        netcontrol.del_gw(switchid, username)
         self.etcd.deldir("network/users/"+username)
         del self.users[username]
         return [True, 'delete user success']
@@ -585,6 +483,7 @@ class NetworkMgr(object):
     def check_usergw(self, username):
         self.load_user(username)
         [switchid, vlanid] = netid_decode(self.users[username].netid)
+        self.vsmgr.check_switch(switchid)
         netcontrol.check_gw(switchid, username, self.users[username].get_gateway_cidr(), vlanid)
         del self.users[username]
         return [True, 'check gw ok']
@@ -668,3 +567,70 @@ class NetworkMgr(object):
         result = self.system.release(ip_or_ips)
         self.dump_system()
         return result
+
+
+class VSMgr:
+    def __init__(self, nodemgr, addr, master, mode):
+        self.__mode = mode
+        self.__addr = addr
+        self.__master = master
+        self.__switches = []
+        self.__nodemgr = nodemgr
+    
+    # worker and master: check if a switch exists, if not add one
+    def check_switch(self, switchid):
+        switchid = int(switchid)
+        if switchid not in self.__switches and self.__mode == 'new' and netcontrol.bridge_exists(switchid):
+            [sts, _] = netcontrol.del_bridge(switchid)
+            if not sts:
+                return [False, "del virtual switch failed with mode new"]
+        if not netcontrol.bridge_exists(switchid):
+            [sts, _] = netcontrol.new_bridge(switchid)
+            if not sts:
+                return [False, "add virtual switch failed"]
+        if switchid not in self.__switches:
+            self.__switches.append(switchid)
+        return [True, "check virtual switch okay"]
+
+    # master: add a new switch and a gre tunnel to the worker
+    # if master on this node, reuse master's virtual network
+    def connect_switch(self, switchid, worker_rpc):
+        if self.__addr != self.__master:
+            return [False, 'not master']
+        [sts, _] = self.check_switch(switchid)
+        if not sts:
+            return [False, 'master switch check failed']
+        workerip = self.__nodemgr.rpc_to_ip(worker_rpc)
+        if self.__addr == workerip:
+            return [True, 'worker reuse master switch']
+        if not netcontrol.gre_exists(switchid, workerip):
+            [sts, _] = netcontrol.setup_gre(switchid, workerip, switchid)
+            if not sts:
+                return [False, 'master setup gre failed']
+        [sts, _] = worker_rpc.check_switch_with_gre(switchid)
+        if sts:
+            return [True, 'switch connected']
+        else:
+            return [False, 'worker setup failed']
+
+    # worker: check a switch and a gre tunnel to the master
+    # if master on this node, reuse master's virtual network
+    def check_switch_with_gre(self, switchid):
+        if self.__addr == self.__master:
+            return True
+        switchid = int(switchid)
+        if switchid not in self.__switches and self.__mode == 'new' and netcontrol.bridge_exists(switchid):
+            [sts, _] = netcontrol.del_bridge(switchid)
+            if not sts:
+                return [False, "del virtual switch failed with mode new"]
+        if not netcontrol.bridge_exists(switchid):
+            [sts, _] = netcontrol.new_bridge(switchid)
+            if not sts:
+                return [False, "add virtual switch failed"]
+        if switchid not in self.__switches:
+            self.__switches.append(switchid)
+        if not netcontrol.gre_exists(switchid, self.__master):
+            [sts, _] = netcontrol.setup_gre(switchid, self.__master, switchid)
+            if not sts:
+                return [False, "setup gre to master failed"]
+        return [True, "check virtual switch okay"]

@@ -686,6 +686,7 @@ if __name__ == '__main__':
     global G_vclustermgr
     global G_usermgr
     global etcdclient
+    global G_vsmgr
     global G_networkmgr
     global G_clustername
     global G_sysmgr
@@ -770,12 +771,14 @@ if __name__ == '__main__':
 
     G_sysmgr = sysmgr.SystemManager()
 
-    G_networkmgr = network.NetworkMgr(clusternet, etcdclient, mode)
-    G_networkmgr.printpools()
-
     # start NodeMgr and NodeMgr will wait for all nodes to start ...
-    G_nodemgr = nodemgr.NodeMgr(G_networkmgr, etcdclient, addr = ipaddr, mode=mode)
+    G_nodemgr = nodemgr.NodeMgr(etcdclient, addr = ipaddr, mode=mode)
     logger.info("nodemgr started")
+    
+    G_vsmgr = network.VSMgr(G_nodemgr, ipaddr, ipaddr, mode)
+    G_networkmgr = network.NetworkMgr(G_vsmgr, clusternet, etcdclient, mode)
+    G_networkmgr.printpools()
+    
     G_vclustermgr = vclustermgr.VclusterMgr(G_nodemgr, G_networkmgr, etcdclient, ipaddr, mode)
     logger.info("vclustermgr started")
     G_imagemgr = imagemgr.ImageMgr()

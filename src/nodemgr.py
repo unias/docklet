@@ -1,11 +1,8 @@
 #!/usr/bin/python3
 
-import threading, random, time, xmlrpc.client, sys
-#import network
-from nettools import netcontrol
+import threading, random, time, xmlrpc.client
 from log import logger
 import env
-from tools import netid_decode
 
 ##########################################
 #                NodeMgr
@@ -17,32 +14,12 @@ from tools import netid_decode
 #         machines/runnodes  -- run nodes of this start up
 ##############################################
 class NodeMgr(object):
-    def __init__(self, networkmgr, etcdclient, addr, mode):
+    def __init__(self, etcdclient, addr, mode):
+        logger.info("begin initialize on %s" % addr)
         self.addr = addr
-        logger.info("begin initialize on %s" % self.addr)
-        self.networkmgr = networkmgr
         self.etcd = etcdclient
         self.mode = mode
         self.workerport = env.getenv('WORKER_PORT')
-
-        # initialize the master network
-        logger.info("initialize network")
-        [status, info] = self.etcd.getkey('network/netids/info')
-        if status:
-            vnet_count = int(info.split('/')[0])
-        else:
-            vnet_count = int(env.getenv('VNET_COUNT'))
-        [switch_count, _] = netid_decode(vnet_count)
-        if self.mode == 'new':
-            for switchid in range(1, switch_count+1):
-                if netcontrol.bridge_exists(switchid):
-                    netcontrol.del_bridge(switchid)
-                netcontrol.new_bridge(switchid)
-        else:
-            for switchid in range(1, switch_count+1):
-                if not netcontrol.bridge_exists(switchid):
-                    logger.error("docklet-br-%s not found" % (switchid))
-                    sys.exit(1)
 
         # init rpc list
         self.rpcs = []
@@ -105,22 +82,6 @@ class NodeMgr(object):
                     logger.info("%s want to joins, call it to init first" % nodeip)
                 elif node['value'] == 'work':
                     logger.info("new node %s joins" % nodeip)
-                    # setup GRE tunnels for new nodes
-                    if self.addr == nodeip:
-                        logger.debug("worker start on master node. not need to setup GRE")
-                    else:
-                        logger.debug("setup GRE for %s" % nodeip)
-                        [status, info] = self.etcd.getkey('network/netids/info')
-                        if status:
-                            vnet_count = int(info.split('/')[0])
-                        else:
-                            vnet_count = int(env.getenv('VNET_COUNT'))
-                        [switch_count, _] = netid_decode(vnet_count)
-                        for switchid in range(1, switch_count+1):
-                            if netcontrol.gre_exists(switchid, nodeip):
-                                logger.debug("GRE for %s already exists, reuse it" % nodeip)
-                            else:
-                                netcontrol.setup_gre(switchid, nodeip, switchid)
                     self.etcd.setkey("machines/runnodes/"+nodeip, "ok")
                     if nodeip not in self.runnodes:
                         self.runnodes.append(nodeip)

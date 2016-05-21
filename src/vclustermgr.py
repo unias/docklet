@@ -7,6 +7,8 @@ from log import logger
 import env
 import proxytool
 
+from tools import netid_decode
+
 ##################################################
 #                  VclusterMgr
 # Description : VclusterMgr start/stop/manage virtual clusters
@@ -69,11 +71,9 @@ class VclusterMgr(object):
             if not status:
                 logger.info("add user: %s to networkmgr failed" % (username))
                 return [False, result]
-
         gateway = self.networkmgr.get_usergw(username)
         logger.info("create cluster with gateway : %s" % gateway)
         netid = self.networkmgr.get_usernetid(username)
-
         [status, result] = self.networkmgr.acquire_userips_cidr(username, clustersize)
         if not status:
             logger.info("create cluster failed: %s" % result)
@@ -90,6 +90,8 @@ class VclusterMgr(object):
             lxc_name = username + "-" + str(clusterid) + "-" + str(i)
             hostname = "host-"+str(i)
             logger.info("create container with : name-%s, username-%s, clustername-%s, clusterid-%s, hostname-%s, ip-%s, gateway-%s, image-%s" % (lxc_name, username, clustername, str(clusterid), hostname, ips[i], gateway, image_json))
+            [switchid, _] = netid_decode(netid)
+            self.networkmgr.vsmgr.connect_switch(switchid, onework)
             [success, message] = onework.create_container(lxc_name, username, user_info, clustername, str(clusterid), str(i), hostname, ips[i], gateway, str(netid), image_json)
             if not success:
                 logger.info("container create failed, so vcluster create failed")
@@ -130,6 +132,8 @@ class VclusterMgr(object):
         onework = workers[random.randint(0, len(workers)-1)]
         lxc_name = username + "-" + str(clusterid) + "-" + str(cid)
         hostname = "host-" + str(cid)
+        [switchid, _] = netid_decode(netid)
+        self.networkmgr.vsmgr.connect_switch(switchid, onework)
         [success, message] = onework.create_container(lxc_name, username, user_info, clustername, clusterid, str(cid), hostname, ip, gateway, str(netid), image_json)
         if success is False:
             logger.info("create container failed, so scale out failed")

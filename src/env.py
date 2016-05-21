@@ -9,8 +9,6 @@ def getenv(key):
         return int(os.environ.get("CLUSTER_SIZE", 1))
     elif key == "CLUSTER_NET":
         return os.environ.get("CLUSTER_NET", "172.16.0.1/16")
-    elif key == "VNET_COUNT":
-        return int(os.environ.get("VENT_COUNT", 4094))
     elif key == "CONTAINER_CPU":
         return int(os.environ.get("CONTAINER_CPU", 100000))
     elif key == "CONTAINER_DISK":

@@ -13,8 +13,11 @@ from log import logger
 import xmlrpc.server, sys, time
 from socketserver import ThreadingMixIn
 import threading
-import etcdlib, network, container
+import etcdlib, container
+import network
+
 from nettools import netcontrol
+from network import VSMgr
 import monitor
 from lvmtool import *
 
@@ -114,6 +117,8 @@ class Worker(object):
             logger.error("worker init mode:%s not supported" % value)
             sys.exit(1)
 
+        self.vsmgr = VSMgr(None, self.addr, self.master, self.mode)
+
         # initialize rpc
         # xmlrpc.server.SimpleXMLRPCServer(addr) -- addr : (ip-addr, port)
         # if ip-addr is "", it will listen ports of all IPs of this host
@@ -126,37 +131,8 @@ class Worker(object):
         self.rpcserver.register_introspection_functions()
         self.rpcserver.register_instance(Containers)
         self.rpcserver.register_function(monitor.workerFetchInfo)
+        self.rpcserver.register_function(self.vsmgr.check_switch_with_gre)
 
-        # initialize the network
-        if self.addr == self.master:
-            # if worker and master run on the same node, reuse bridges
-            # no need to create new bridges
-            logger.info("master also on this node. reuse master's network")
-        else:
-            logger.info("initialize network")
-            [status, info] = self.etcd.getkey('network/netids/info')
-            if status:
-                vnet_count = int(info.split('/')[0])
-            else:
-                vnet_count = int(env.getenv('VNET_COUNT'))
-            [switch_count, _] = tools.netid_decode(vnet_count)
-            if self.mode == 'new':
-                # create bridges for worker
-                for switchid in range(1, switch_count+1):
-                    if netcontrol.bridge_exists(switchid):
-                        netcontrol.del_bridge(switchid)
-                    netcontrol.new_bridge(switchid)
-            else:
-                # check bridges for worker
-                for switchid in range(switchid, switch_count+1):
-                    if not netcontrol.bridge_exists(switchid):
-                        logger.error("docklet-br-%s not found" % str(switchid))
-                        sys.exit(1)
-            # setup GRE tunnel from worker to master
-            logger.info("setup GRE tunnel to master %s" % self.master)
-            for switchid in range(1, switch_count+1):
-                if not netcontrol.gre_exists(switchid, self.master):
-                    netcontrol.setup_gre(switchid, self.master, switchid)
 
     # start service of worker
     def start(self):
