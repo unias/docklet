@@ -63,7 +63,7 @@ class Container(object):
                 content = content.replace("%VLANID%",str(vlanid))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
-                content = content.replace("%MASTER", str(self.masterIP))
+                content = content.replace("%MASTER%", str(self.masterIP))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')
