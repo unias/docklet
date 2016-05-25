@@ -20,6 +20,8 @@ class Container(object):
 
         self.lxcpath = "/var/lib/lxc"
         self.imgmgr = imagemgr.ImageMgr()
+        # get Master IP
+        self.masterIP = self.etcd.getkey("service/master")[1]
 
     def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
@@ -61,6 +63,7 @@ class Container(object):
                 content = content.replace("%VLANID%",str(vlanid))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
+                content = content.replace("%MASTER", str(self.masterIP))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')

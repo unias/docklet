@@ -37,14 +37,14 @@ class NodeMgr(object):
         #logger.info ("initialize bridge wih ip %s" % self.bridgeip)
         #network.netsetup("init", self.bridgeip)
 
-        if self.mode == 'new':
-            if netcontrol.bridge_exists('docklet-br'):
-                netcontrol.del_bridge('docklet-br')
-            netcontrol.new_bridge('docklet-br')
-        else:
-            if not netcontrol.bridge_exists('docklet-br'):
-                logger.error("docklet-br not found")
-                sys.exit(1)
+        #if self.mode == 'new':
+        #    if netcontrol.bridge_exists('docklet-br'):
+        #        netcontrol.del_bridge('docklet-br')
+        #    netcontrol.new_bridge('docklet-br')
+        #else:
+        #    if not netcontrol.bridge_exists('docklet-br'):
+        #        logger.error("docklet-br not found")
+        #        sys.exit(1)
 
         # init rpc list 
         self.rpcs = []
@@ -115,10 +115,10 @@ class NodeMgr(object):
                         logger.debug ("worker start on master node. not need to setup GRE")
                     else:
                         logger.debug ("setup GRE for %s" % nodeip)
-                        if netcontrol.gre_exists('docklet-br', nodeip):
-                            logger.debug("GRE for %s already exists, reuse it" % nodeip)
-                        else:
-                            netcontrol.setup_gre('docklet-br', nodeip)
+                        #if netcontrol.gre_exists('docklet-br', nodeip):
+                        #    logger.debug("GRE for %s already exists, reuse it" % nodeip)
+                        #else:
+                        #    netcontrol.setup_gre('docklet-br', nodeip)
                     self.etcd.setkey("machines/runnodes/"+nodeip, "ok")
                     if nodeip not in self.runnodes:
                         self.runnodes.append(nodeip)

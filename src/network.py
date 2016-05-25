@@ -292,8 +292,7 @@ class NetworkMgr(object):
             self.system = EnumPool(sysaddr+"/"+str(syscidr))
             self.users = {}
             self.vlanids = {}
-            self.init_vlanids(4095, 60)
-            self.init_shared_vlanids()
+            self.init_vlanids(1677215, 60)
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -318,19 +317,6 @@ class NetworkMgr(object):
         self.vlanids['currentindex'] = i+1
         self.etcd.setkey("network/vlanids/"+str(i+1), json.dumps(self.vlanids['currentpool']))
         self.etcd.setkey("network/vlanids/current", str(i+1))
-    
-    # Data Structure:
-    # shared_vlanids = [{vlanid = ..., sharenum = ...}, {vlanid = ..., sharenum = ...}, ...]
-    def init_shared_vlanids(self, vlannum = 128, sharenum = 128):
-        self.shared_vlanids = []
-        for i in range(vlannum):
-            shared_vlanid = {}
-            [status, shared_vlanid['vlanid']] = self.acquire_vlanid()
-            shared_vlanid['sharenum'] = sharenum
-            self.shared_vlanids.append(shared_vlanid)
-        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
-
-
 
     def load_vlanids(self):
         [status, info] = self.etcd.getkey("network/vlanids/info")
@@ -398,21 +384,7 @@ class NetworkMgr(object):
         print ("<vlanids>")
         print (str(self.vlanids['currentindex'])+":"+str(self.vlanids['currentpool']))
 
-    def acquire_vlanid(self, isshared = False):
-        if isshared:
-            # only share vlanid of the front entry
-            # if sharenum is reduced to 0, move the front entry to the back
-            # if sharenum is still equal to 0, one round of sharing is complete, start another one
-            if self.shared_vlanids[0]['sharenum'] == 0:
-                self.shared_vlanids.append(self.shared_vlanids.pop(0))
-            if self.shared_vlanids[0]['sharenum'] == 0:
-                logger.info("shared vlanids not enough, add user to full vlanids")
-                for shared_vlanid in self.shared_vlanids:
-                    shared_vlanid['sharenum'] = 128
-            self.shared_vlanids[0]['sharenum'] -= 1
-            self.dump_shared_vlanids()
-            return [True, self.shared_vlanids[0]['vlanid']]
-
+    def acquire_vlanid(self):
         if self.vlanids['currentpool'] == []:
             if self.vlanids['currentindex'] == 0:
                 return [False, "No VLAN IDs"]
@@ -435,7 +407,7 @@ class NetworkMgr(object):
             self.dump_vlanids()
         return [True, "Release VLAN ID success"]
 
-    def add_user(self, username, cidr, isshared = False):
+    def add_user(self, username, cidr):
         logger.info ("add user %s with cidr=%s" % (username, str(cidr)))
         if self.has_user(username):
             return [False, "user already exists in users set"]
@@ -443,7 +415,7 @@ class NetworkMgr(object):
         self.dump_center()
         if status == False:
             return [False, result]
-        [status, vlanid] = self.acquire_vlanid(isshared)
+        [status, vlanid] = self.acquire_vlanid()
         if status:
             vlanid = int(vlanid)
         else:
@@ -452,12 +424,20 @@ class NetworkMgr(object):
             return [False, vlanid]
         self.users[username] = UserPool(addr_cidr = result+"/"+str(cidr), vlanid=vlanid)
         logger.info("setup gateway for %s with %s and vlan=%s" % (username, self.users[username].get_gateway_cidr(), str(vlanid)))
-        netcontrol.setup_gw('docklet-br', username, self.users[username].get_gateway_cidr(), str(vlanid))
+        netcontrol.new_bridge("docklet-user-"+str(vlanid));
+        [status, nodeinfo]=self.etcd.listdir("machines/allnodes")
+        if status:
+            for node in nodeinfo:
+                nodeip = node["key"].rsplit('/', 1)[1];
+                netcontrol.setup_vxlan("docklet-user-"+str(vlanid), nodeip, vlanid);
+        else:
+            return [False, nodeinfo]
+        netcontrol.setup_gw("docklet-user-"+str(vlanid), username, self.users[username].get_gateway_cidr(), str(vlanid))
         self.dump_user(username)
         del self.users[username]
         return [True, 'add user success']
 
-    def del_user(self, username, isshared = False):
+    def del_user(self, username):
         if not self.has_user(username):
             return [False, username+" not in users set"]
         self.load_user(username)
@@ -465,16 +445,16 @@ class NetworkMgr(object):
         logger.info ("delete user %s with cidr=%s" % (username, int(cidr)))
         self.center.free(addr, int(cidr))
         self.dump_center()
-        if not isshared:
-            self.release_vlanid(self.users[username].vlanid)
-        netcontrol.del_gw('docklet-br', username)
+        self.release_vlanid(self.users[username].vlanid)
+        netcontrol.del_gw('docklet-user'+str(self.users[username].vlanid), username)
+        netcontrol.del_bridge('docklet-user'+str(self.users[username].vlanid));
         self.etcd.deldir("network/users/"+username)
         del self.users[username]
         return [True, 'delete user success']
 
     def check_usergw(self, username):
         self.load_user(username)
-        netcontrol.check_gw('docklet-br', username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
+        netcontrol.check_gw('docklet-user'+str(self.users[username].vlanid), username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
         del self.users[username]
         return [True, 'check gw ok']
 

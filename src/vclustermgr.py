@@ -65,7 +65,7 @@ class VclusterMgr(object):
             return [False, "no workers are running"]
         # check user IP pool status, should be moved to user init later
         if not self.networkmgr.has_user(username):
-            self.networkmgr.add_user(username, cidr=29, isshared = True if str(groupname) == "fundation" else False)
+            self.networkmgr.add_user(username, cidr=29)
         [status, result] = self.networkmgr.acquire_userips_cidr(username, clustersize)
         gateway = self.networkmgr.get_usergw(username)
         vlanid = self.networkmgr.get_uservlanid(username)
@@ -254,7 +254,7 @@ class VclusterMgr(object):
         groupname = json.loads(user_info)["data"]["group"]
         [status, clusters] = self.list_clusters(username)
         if len(clusters) == 0:
-            self.networkmgr.del_user(username, isshared = True if str(groupname) == "fundation" else False)
+            self.networkmgr.del_user(username)
             logger.info("vlanid release triggered")
         
         return [True, "cluster delete"]
