@@ -425,7 +425,7 @@ class NetworkMgr(object):
             return [False, vlanid]
         self.users[username] = UserPool(addr_cidr = result+"/"+str(cidr), vlanid=vlanid)
         logger.info("setup gateway for %s with %s and vlan=%s" % (username, self.users[username].get_gateway_cidr(), str(vlanid)))
-        bridgeid = vlanid / self.bridgeUserSize
+        bridgeid = vlanid // self.bridgeUserSize
         hasBridge = netcontrol.bridge_exists("docklet-br-"+str(bridgeid))
         if not hasBridge:
             netcontrol.new_bridge("docklet-br-"+str(bridgeid));
@@ -433,7 +433,7 @@ class NetworkMgr(object):
             if status:
                 for node in nodeinfo:
                     nodeip = node["key"].rsplit('/', 1)[1];
-                    netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, vlanid);
+                    netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, bridgeid);
             else:
                 return [False, nodeinfo]
         netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str(vlanid))
