@@ -2,7 +2,7 @@
 
 import json, sys, netifaces
 from nettools import netcontrol
-
+import env
 from log import logger
 
 # getip : get ip from network interface
@@ -277,6 +277,7 @@ class UserPool(EnumPool):
 #   users : set of users' enumeration pools to manage users' ip address
 class NetworkMgr(object):
     def __init__(self, addr_cidr, etcdclient, mode):
+        self.bridgeUserSize = env.getenv("VNET_COUNT")
         self.etcd = etcdclient
         if mode == 'new':
             logger.info("init network manager with %s" % addr_cidr)
@@ -424,15 +425,18 @@ class NetworkMgr(object):
             return [False, vlanid]
         self.users[username] = UserPool(addr_cidr = result+"/"+str(cidr), vlanid=vlanid)
         logger.info("setup gateway for %s with %s and vlan=%s" % (username, self.users[username].get_gateway_cidr(), str(vlanid)))
-        netcontrol.new_bridge("docklet-user-"+str(vlanid));
-        [status, nodeinfo]=self.etcd.listdir("machines/allnodes")
-        if status:
-            for node in nodeinfo:
-                nodeip = node["key"].rsplit('/', 1)[1];
-                netcontrol.setup_vxlan("docklet-user-"+str(vlanid), nodeip, vlanid);
-        else:
-            return [False, nodeinfo]
-        netcontrol.setup_gw("docklet-user-"+str(vlanid), username, self.users[username].get_gateway_cidr(), str(vlanid))
+        bridgeid = vlanid / self.bridgeUserSize
+        hasBridge = netcontrol.bridge_exists("docklet-br-"+str(bridgeid))
+        if not hasBridge:
+            netcontrol.new_bridge("docklet-br-"+str(bridgeid));
+            [status, nodeinfo]=self.etcd.listdir("machines/allnodes")
+            if status:
+                for node in nodeinfo:
+                    nodeip = node["key"].rsplit('/', 1)[1];
+                    netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, vlanid);
+            else:
+                return [False, nodeinfo]
+        netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str(vlanid))
         self.dump_user(username)
         del self.users[username]
         return [True, 'add user success']
@@ -446,15 +450,17 @@ class NetworkMgr(object):
         self.center.free(addr, int(cidr))
         self.dump_center()
         self.release_vlanid(self.users[username].vlanid)
-        netcontrol.del_gw('docklet-user'+str(self.users[username].vlanid), username)
-        netcontrol.del_bridge('docklet-user'+str(self.users[username].vlanid));
+        bridgeid = vlanid / self.bridgeUserSize
+        netcontrol.del_gw('docklet-br'+str(bridgeid), username)
+        #netcontrol.del_bridge('docklet-br'+str(self.users[username].vlanid));
         self.etcd.deldir("network/users/"+username)
         del self.users[username]
         return [True, 'delete user success']
 
     def check_usergw(self, username):
         self.load_user(username)
-        netcontrol.check_gw('docklet-user'+str(self.users[username].vlanid), username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
+        bridgeid = vlanid / self.bridgeUserSize
+        netcontrol.check_gw('docklet-br'+str(bridgeid), username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
         del self.users[username]
         return [True, 'check gw ok']
 
