@@ -50,7 +50,7 @@ class Container(object):
             sys_run("mkdir -p /var/lib/lxc/%s" % lxc_name)
             logger.info("generate config file for %s" % lxc_name)
             
-            def config_prepare(content):
+            def config_prepare(content, bridgeUserSize):
                 content = content.replace("%ROOTFS%",rootfs)
                 content = content.replace("%HOSTNAME%",hostname)
                 content = content.replace("%IP%",ip)
@@ -63,17 +63,17 @@ class Container(object):
                 content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%",lxc_name)
                 # tag = 0 is not allowed
-                content = content.replace("%VLANID%",str(vlanid % self.bridgeUserSize + 1))
+                content = content.replace("%VLANID%", str(vlanid % bridgeUserSize + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
                 content = content.replace("%MASTER%", str(self.masterIP))
-                content = content.replace("%BRIDGEID%", str(vlanid // self.bridgeUserSize))
+                content = content.replace("%BRIDGEID%", str(vlanid // bridgeUserSize))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')
             conftext = conffile.read()
             conffile.close()
-            conftext = config_prepare(conftext)
+            conftext = config_prepare(conftext,bridgeUserSize)
 
             conffile = open("/var/lib/lxc/%s/config" % lxc_name,"w")
             conffile.write(conftext)
@@ -83,7 +83,7 @@ class Container(object):
                 conffile = open(self.confpath+"/lxc.custom.conf", 'r')
                 conftext = conffile.read()
                 conffile.close()
-                conftext = config_prepare(conftext)
+                conftext = config_prepare(conftext,bridgeUserSize)
                 conffile = open("/var/lib/lxc/%s/config" % lxc_name, 'a')
                 conffile.write(conftext)
                 conffile.close()

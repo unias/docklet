@@ -305,7 +305,6 @@ class NetworkMgr(object):
             self.load_center()
             self.load_system()
             self.load_vlanids()
-            self.load_shared_vlanids()
         else:
             logger.error("mode: %s not supported" % mode)
 

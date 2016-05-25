@@ -55,6 +55,6 @@ def getenv(key):
     elif key =="DATA_QUOTA_CMD":
         return os.environ.get("DATA_QUOTA_CMD", "gluster volume quota docklet-volume limit-usage %s %s")
     elif key =="VNET_COUNT":
-        return os.environ.get("VNET_COUNT", 4094)
+        return int(os.environ.get("VNET_COUNT", 4094))
     else:
         return os.environ[key]
