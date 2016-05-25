@@ -212,7 +212,7 @@ class ovscontrol(object):
          try:
             subprocess.run(['ovs-vsctl', 'add-port', str(bridge), str(port), '--', 'set', 'interface', str(port), 'type=vxlan', 'options:remote_ip='+str(remote), 'options:key='+str(key)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
             return [True, str(port)]
-        except subprocess.CalledProcessError as suberror:
+         except subprocess.CalledProcessError as suberror:
             return [False, "add port failed : %s" % suberror.stdout.decode('utf-8')]
                    
     @staticmethod
