@@ -145,3 +145,5 @@
 # default: "gluster volume quota docklet-volume limit-usage %s %s"
 # DATA_QUOTA_CMD="gluster volume quota docklet-volume limit-usage %s %s"
 
+# VNET_COUNT : the number of users in a bridge. default 4094
+# VNET_COUNT=4094

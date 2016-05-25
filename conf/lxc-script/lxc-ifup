@@ -10,5 +10,5 @@
 #ovs-vsctl --may-exist add-port $Bridge $5 tag=$VLANID
 ovs-vsctl --may-exist add-br $Bridge
 ovs-vsctl --if-exists del-port $Bridge $5
-ovs-vsctl --may-exist add-port $Bridge $5
+ovs-vsctl --may-exist add-port $Bridge $5 tag=$VLANID
 ovs-vsctl --may-exist add-port $Bridge vxlan-$VLANID-$MasterIP -- set interface vxlan-$VLANID-$MasterIP type=vxlan options:remote_ip=$MasterIP options:key=$VLANID

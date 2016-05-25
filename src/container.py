@@ -22,6 +22,8 @@ class Container(object):
         self.imgmgr = imagemgr.ImageMgr()
         # get Master IP
         self.masterIP = self.etcd.getkey("service/master")[1]
+        # get the size of users in a bridge
+        self.bridgeUserSize = env.getenv("VNET_COUNT")
 
     def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
@@ -60,10 +62,12 @@ class Container(object):
                 content = content.replace("%CLUSTERID%",str(clusterid))
                 content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%",lxc_name)
-                content = content.replace("%VLANID%",str(vlanid))
+                # tag = 0 is not allowed
+                content = content.replace("%VLANID%",str(vlanid % self.bridgeUserSize + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
                 content = content.replace("%MASTER%", str(self.masterIP))
+                content = content.replace("%BRIDGEID%", str(vlanid / self.bridgeUserSize))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')
