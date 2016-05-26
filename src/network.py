@@ -342,16 +342,16 @@ class NetworkMgr(object):
         print ("<users>")
         print ("    users in users is in etcd, not in memory")
         print ("<vlanids>")
-        [status, currentid] = self.etcd.getkey("network/vlanid/current")
+        [status, currentid] = self.etcd.getkey("network/vlanids/current")
         print ("Current vlanid:"+currentid)
 
     def acquire_vlanid(self):
-        [status, currentid] = self.etcd.getkey("network/vlanid/current")
+        [status, currentid] = self.etcd.getkey("network/vlanids/current")
         if not status:
             logger.error("acquire_vlanid get key error")
             return [False, currentid]
         currenid = int(currentid);
-        [status, maxid] = self.etcd.getkey("network/vlanid/total")
+        [status, maxid] = self.etcd.getkey("network/vlanids/total")
         if not status:
             logger.error("acquire_vlanid get key error")
             return [False, currentid]
@@ -359,7 +359,7 @@ class NetworkMgr(object):
             logger.error("No more VlanID")
             return [False, currentid]
         nextid = currentid + 1;
-        self.etcd.setkey("network/vlanid/current", str(nextid))
+        self.etcd.setkey("network/vlanids/current", str(nextid))
         return [True, currentid]
 
     def add_user(self, username, cidr):
