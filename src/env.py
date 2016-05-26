@@ -9,6 +9,8 @@ def getenv(key):
         return int(os.environ.get("CLUSTER_SIZE", 1))
     elif key == "CLUSTER_NET":
         return os.environ.get("CLUSTER_NET", "172.16.0.1/16")
+    elif key == "USER_PER_VS":
+        return int(os.environ.get("USER_PER_VS", 4094))
     elif key == "CONTAINER_CPU":
         return int(os.environ.get("CONTAINER_CPU", 100000))
     elif key == "CONTAINER_DISK":
@@ -34,8 +36,7 @@ def getenv(key):
     elif key == "WEB_PORT":
         return int(os.environ.get("WEB_PORT", 8888))
     elif key == "PORTAL_URL":
-        return os.environ.get("PORTAL_URL",
-            "http://"+getenv("MASTER_IP") + ":" + str(getenv("PROXY_PORT")))
+        return os.environ.get("PORTAL_URL", "http://"+getenv("MASTER_IP") + ":" + str(getenv("PROXY_PORT")))
     elif key == "LOG_LEVEL":
         return os.environ.get("LOG_LEVEL", "DEBUG")
     elif key == "LOG_LIFE":

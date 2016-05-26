@@ -58,7 +58,7 @@ class Container(object):
                 content = content.replace("%CLUSTERID%", str(clusterid))
                 content = content.replace("%LXCSCRIPT%", env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%", lxc_name)
-                content = content.replace("%USERBR", 'docklet-br-'+str(switchid))
+                content = content.replace("%USERBR%", 'docklet-br-'+str(switchid))
                 content = content.replace("%VLANID%", str(vlanid))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))

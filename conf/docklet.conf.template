@@ -47,6 +47,9 @@
 # CLUSTER_NET: cluster network ip address range, default is 172.16.0.1/16
 # CLUSTER_NET=172.16.0.1/16
 
+# USER_PER_VS: count of users of a visual switch
+# USER_PER_VS=1
+
 # Deprecated since v0.2.7. read from quota group set in web admin page
 # CONTAINER_CPU: CPU quota of container, default is 100000
 # A single CPU core has total=100000 (100ms), so the default 100000

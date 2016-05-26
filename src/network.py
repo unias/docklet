@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import json, sys, netifaces
+import math
 from nettools import netcontrol
 
 from log import logger
@@ -243,7 +244,7 @@ class EnumPool(object):
 # wrap EnumPool with netid and gateway
 class UserPool(EnumPool):
     def __init__(self, addr_cidr=None, netid=None, copy=None):
-        if addr_cidr and netid:
+        if addr_cidr and netid != None:
             EnumPool.__init__(self, addr_cidr=addr_cidr)
             self.netid = netid
             self.pool.sort(key=ip_to_int)
@@ -278,6 +279,7 @@ class NetIdMgr(object):
     def __init__(self, etcdclient, mode):
         self.__etcd = etcdclient
         self.netid_count = 0
+        self.__pool_size = 89
         self.__pool_count = 0
         self.cur_pool_index = -1
         self.cur_pool = []
@@ -286,13 +288,14 @@ class NetIdMgr(object):
         elif mode == 'recovery':
             logger.info("init net id manager from etcd")
             self.__load_info()
-            self.__load_pool()
+            self.__load_cur_pool_index()
+            self.__load_pool(self.cur_pool_index)
         else:
             logger.error("__init__ in NetIdMgr: mode: %s not supported" % (mode))
             sys.exit(1)
 
     def __dump_info(self):
-        self.__etcd.setkey('netids/info', json.dump({'netid_count': self.netid_count, 'pool_count': self.__pool_count}))
+        self.__etcd.setkey('netids/info', json.dumps({'netid_count': self.netid_count, 'pool_count': self.__pool_count}))
 
     def __load_info(self):
         [sts, res] = self.__etcd.getkey('netids/info')
@@ -324,16 +327,14 @@ class NetIdMgr(object):
             self.cur_pool = list(json.loads(res))
         else:
             self.cur_pool = []
-            logger.warning('load_pool in NetIdMgr: etcd get pools/%s failed, used default' % (str(index)))
+            logger.warning('load_pool in NetIdMgr: etcd get pools /%s failed, used default' % (str(pool_index)))
 
     # add pools to etcd, modify etcd info and pools
-    def add_pool(self, count=4094, pool_size=89):
-        new_pool_count = int(celling(count/pool_size))
-        for i in range(0, new_pool_count):
-            pool = list(range(self.netid_count + i*pool_size, self.netid_count + (i+1)*pool_size))
-            self.etcd.setkey('netids/pools/'+str(self.__pool_count+i), json.dumps(pool))
-        self.netid_count += count
-        self.__pool_count += new_pool_count
+    def add_pool(self):
+        pool = list(range(self.netid_count, self.netid_count + self.__pool_size))
+        self.__etcd.setkey('netids/pools/'+str(self.__pool_count), json.dumps(pool))
+        self.netid_count += self.__pool_size
+        self.__pool_count += 1
         self.__dump_info()
 
     # get netid, if current pool is empty, load next pool
@@ -341,15 +342,15 @@ class NetIdMgr(object):
         if len(self.cur_pool) == 0:
             self.cur_pool_index += 1
             if self.cur_pool_index == self.__pool_count:
-                self.__add_pool()
+                self.add_pool()
             self.__load_pool(self.cur_pool_index)
         netid = self.cur_pool.pop()
         self.__dump_cur_pool()
         return int(netid)
     
     # return netid, if current pool is full, load previous pool
-    def ret_netid(self, netid, pool_size=89):
-        if len(self.cur_pool) == pool_size:
+    def ret_netid(self, netid):
+        if len(self.cur_pool) == self.__pool_size:
             self.cur_pool_index -= 1
             if self.cur_pool_index == -1:
                 # should should not happen
@@ -371,7 +372,7 @@ class NetworkMgr(object):
         self.vsmgr = vsmgr
         self.idmgr = NetIdMgr(self.etcd, mode)
         if mode == 'new':
-            logger.info("init network manager with %s" % (addr_cidr)
+            logger.info("init network manager with %s" % (addr_cidr))
             self.center = IntervalPool(addr_cidr=addr_cidr)
             # allocate a pool for system IPs, use CIDR=27, has 32 IPs
             syscidr = 27

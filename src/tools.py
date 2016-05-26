@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os, random
-
+import env
 #from log import logger
 
 def loadenv(configpath):
@@ -21,6 +21,8 @@ def loadenv(configpath):
 
 def gen_token():
     return str(random.randint(10000, 99999))+"-"+str(random.randint(10000, 99999))
-    
+
 def netid_decode(netid):
-    return [int(netid/4094) + 1, netid%4094 + 1]
+    user_per_vs = env.getenv("USER_PER_VS")
+    return [int(netid/user_per_vs) + 1, netid%user_per_vs + 1]
+
