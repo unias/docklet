@@ -293,7 +293,7 @@ class NetworkMgr(object):
             self.system = EnumPool(sysaddr+"/"+str(syscidr))
             self.users = {}
             self.vlanids = {}
-            self.init_vlanids(1677215, 60)
+            self.init_vlanids(16777215, 60)
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -339,13 +339,6 @@ class NetworkMgr(object):
         else:
             self.etcd.setkey("network/vlanids/"+str(self.vlanids['currentindex']), json.dumps(self.vlanids['currentpool']))
     
-    def load_shared_vlanids(self):
-        [status, shared_vlanids] = self.etcd.getkey("network/shared_vlanids")
-        if not status:
-            self.init_shared_vlanids()
-        else:
-            self.shared_vlanids = json.loads(shared_vlanids)
-
     def dump_shared_vlanids(self):
         self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
 
@@ -435,7 +428,7 @@ class NetworkMgr(object):
                     netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, bridgeid);
             else:
                 return [False, nodeinfo]
-        netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str(vlanid))
+        netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str((vlanid % self.bridgeUserSize) + 1))
         self.dump_user(username)
         del self.users[username]
         return [True, 'add user success']
@@ -449,6 +442,7 @@ class NetworkMgr(object):
         self.center.free(addr, int(cidr))
         self.dump_center()
         self.release_vlanid(self.users[username].vlanid)
+        vlanid = self.users[username].vlanid
         bridgeid = vlanid / self.bridgeUserSize
         netcontrol.del_gw('docklet-br'+str(bridgeid), username)
         #netcontrol.del_bridge('docklet-br'+str(self.users[username].vlanid));
@@ -458,8 +452,10 @@ class NetworkMgr(object):
 
     def check_usergw(self, username):
         self.load_user(username)
+        vlanid = self.users[username].vlanid
         bridgeid = vlanid / self.bridgeUserSize
-        netcontrol.check_gw('docklet-br'+str(bridgeid), username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
+        tag = (vlanid % self.bridgeUserSize) + 1
+        netcontrol.check_gw('docklet-br'+str(bridgeid), username, self.users[username].get_gateway_cidr(), tag)
         del self.users[username]
         return [True, 'check gw ok']
 

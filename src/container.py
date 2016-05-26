@@ -23,7 +23,7 @@ class Container(object):
         # get Master IP
         self.masterIP = self.etcd.getkey("service/master")[1]
         # get the size of users in a bridge
-        self.bridgeUserSize = env.getenv("VNET_COUNT")
+        self.bridgeUserSize = int(env.getenv("VNET_COUNT"))
 
     def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
@@ -34,6 +34,7 @@ class Container(object):
             disk = user_info["data"]["groupinfo"]["disk"]
             image = json.loads(image) 
             status = self.imgmgr.prepareFS(username,image,lxc_name,disk)
+            vlanid = int(vlanid)
             if not status:
                 return [False, "Create container failed when preparing filesystem, possibly insufficient space"]
             
@@ -50,7 +51,7 @@ class Container(object):
             sys_run("mkdir -p /var/lib/lxc/%s" % lxc_name)
             logger.info("generate config file for %s" % lxc_name)
             
-            def config_prepare(content, bridgeUserSize):
+            def config_prepare(content):
                 content = content.replace("%ROOTFS%",rootfs)
                 content = content.replace("%HOSTNAME%",hostname)
                 content = content.replace("%IP%",ip)
@@ -63,17 +64,17 @@ class Container(object):
                 content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%",lxc_name)
                 # tag = 0 is not allowed
-                content = content.replace("%VLANID%", str(vlanid % bridgeUserSize + 1))
+                content = content.replace("%VLANID%", str((vlanid % self.bridgeUserSize) + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
-                content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
+                content = content.replace("%VETHPAIR%", username+str(clusterid)+'-'+str(containerid))
                 content = content.replace("%MASTER%", str(self.masterIP))
-                content = content.replace("%BRIDGEID%", str(vlanid // bridgeUserSize))
+                content = content.replace("%BRIDGEID%", str(vlanid // self.bridgeUserSize))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')
             conftext = conffile.read()
             conffile.close()
-            conftext = config_prepare(conftext,bridgeUserSize)
+            conftext = config_prepare(conftext)
 
             conffile = open("/var/lib/lxc/%s/config" % lxc_name,"w")
             conffile.write(conftext)
@@ -83,7 +84,7 @@ class Container(object):
                 conffile = open(self.confpath+"/lxc.custom.conf", 'r')
                 conftext = conffile.read()
                 conffile.close()
-                conftext = config_prepare(conftext,bridgeUserSize)
+                conftext = config_prepare(conftext)
                 conffile = open("/var/lib/lxc/%s/config" % lxc_name, 'a')
                 conffile.write(conftext)
                 conffile.close()
