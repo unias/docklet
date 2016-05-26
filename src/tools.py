@@ -23,6 +23,7 @@ def gen_token():
     return str(random.randint(10000, 99999))+"-"+str(random.randint(10000, 99999))
 
 def netid_decode(netid):
+    # TODO: there should be a more elegant way to do this
     user_per_vs = env.getenv("USER_PER_VS")
     return [int(netid/user_per_vs) + 1, netid%user_per_vs + 1]
 

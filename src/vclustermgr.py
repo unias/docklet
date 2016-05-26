@@ -61,13 +61,12 @@ class VclusterMgr(object):
         logger.info("starting cluster %s with %d containers for %s" % (clustername, int(clustersize), username))
         workers = self.nodemgr.get_rpcs()
         image_json = json.dumps(image)
-        groupname = json.loads(user_info)["data"]["group"]
         if len(workers) == 0:
             logger.warning("no workers to start containers, start cluster failed")
             return [False, "no workers are running"]
         # check user IP pool status, should be moved to user init later
         if not self.networkmgr.has_user(username):
-            [status, result] = self.networkmgr.add_user(username, cidr=29, isshared=True if str(groupname) == "fundation" else False)
+            [status, result] = self.networkmgr.add_user(username, cidr=29)
             if not status:
                 logger.info("add user: %s to networkmgr failed" % (username))
                 return [False, result]
@@ -244,7 +243,7 @@ class VclusterMgr(object):
         infofile.close()
         return res
 
-    def delete_cluster(self, clustername, username, user_info):
+    def delete_cluster(self, clustername, username):
         [status, info] = self.get_clusterinfo(clustername, username)
         if not status:
             return [False, "cluster not found"]
@@ -261,10 +260,9 @@ class VclusterMgr(object):
         os.remove(self.fspath+"/global/users/"+username+"/clusters/"+clustername)
         os.remove(self.fspath+"/global/users/"+username+"/hosts/"+str(info['clusterid'])+".hosts")
 
-        groupname = json.loads(user_info)["data"]["group"]
         [status, clusters] = self.list_clusters(username)
         if len(clusters) == 0:
-            self.networkmgr.del_user(username, isshared=True if str(groupname) == "fundation" else False)
+            self.networkmgr.del_user(username)
             logger.info("netid release triggered")
 
         return [True, "cluster delete"]

@@ -222,9 +222,7 @@ def delete_cluster(cur_user, user, form):
     if (clustername == None):
         return json.dumps({'success':'false', 'message':'clustername is null'})
     logger.info ("handle request : delete cluster %s" % clustername)
-    user_info = G_usermgr.selfQuery(cur_user=cur_user)
-    user_info = json.dumps(user_info)
-    [status, result] = G_vclustermgr.delete_cluster(clustername, user, user_info)
+    [status, result] = G_vclustermgr.delete_cluster(clustername, user)
     if status:
         return json.dumps({'success':'true', 'action':'delete cluster', 'message':result})
     else:

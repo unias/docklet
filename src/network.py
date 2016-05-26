@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import json, sys, netifaces
-import math
 from nettools import netcontrol
 
 from log import logger
@@ -279,6 +278,7 @@ class NetIdMgr(object):
     def __init__(self, etcdclient, mode):
         self.__etcd = etcdclient
         self.netid_count = 0
+        # pool_size should not be changed after master init
         self.__pool_size = 89
         self.__pool_count = 0
         self.cur_pool_index = -1
@@ -309,7 +309,7 @@ class NetIdMgr(object):
             logger.warning('load_info in NetIdMgr: etcd get info failed, use default')
 
     def __dump_cur_pool(self):
-        if self.cur_pool_index >=0 and self.cur_pool_index < self.__pool_count:
+        if self.cur_pool_index >= 0 and self.cur_pool_index < self.__pool_count:
             self.__etcd.setkey('netids/cur_pool_index', self.cur_pool_index)
             self.__etcd.setkey('netids/pools/'+str(self.cur_pool_index), self.cur_pool)
 
@@ -347,7 +347,7 @@ class NetIdMgr(object):
         netid = self.cur_pool.pop()
         self.__dump_cur_pool()
         return int(netid)
-    
+
     # return netid, if current pool is full, load previous pool
     def ret_netid(self, netid):
         if len(self.cur_pool) == self.__pool_size:
@@ -440,7 +440,7 @@ class NetworkMgr(object):
         print("<netids>")
         print("%s : %s" % (str(self.idmgr.cur_pool_index), str(self.idmgr.cur_pool)))
 
-    def add_user(self, username, cidr, isshared=False):
+    def add_user(self, username, cidr):
         logger.info("add user %s with cidr=%s" % (username, str(cidr)))
         if self.has_user(username):
             return [False, "user already exists in users set"]
@@ -464,7 +464,7 @@ class NetworkMgr(object):
         del self.users[username]
         return [True, 'add user success']
 
-    def del_user(self, username, isshared=False):
+    def del_user(self, username):
         if not self.has_user(username):
             return [False, username+" not in users set"]
         self.load_user(username)
@@ -474,7 +474,7 @@ class NetworkMgr(object):
         self.center.free(addr, int(cidr))
         self.dump_center()
         self.idmgr.ret_netid(netid)
-        [switchid, vlanid] = netid_decode(netid)
+        [switchid, _] = netid_decode(netid)
         self.vsmgr.check_switch(switchid)
         netcontrol.del_gw(switchid, username)
         self.etcd.deldir("network/users/"+username)
@@ -577,7 +577,7 @@ class VSMgr:
         self.__master = master
         self.__switches = []
         self.__nodemgr = nodemgr
-    
+
     # worker and master: check if a switch exists, if not add one
     def check_switch(self, switchid):
         switchid = int(switchid)
