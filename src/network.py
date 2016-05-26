@@ -350,15 +350,15 @@ class NetworkMgr(object):
         if not status:
             logger.error("acquire_vlanid get key error")
             return [False, currentid]
-        currenid = int(currentid);
+        currentid = int(currentid)
         [status, maxid] = self.etcd.getkey("network/vlanids/total")
         if not status:
             logger.error("acquire_vlanid get key error")
             return [False, currentid]
-        if maxid < currentid:
+        if int(maxid) < currentid:
             logger.error("No more VlanID")
             return [False, currentid]
-        nextid = currentid + 1;
+        nextid = currentid + 1
         self.etcd.setkey("network/vlanids/current", str(nextid))
         return [True, currentid]
 
@@ -403,7 +403,6 @@ class NetworkMgr(object):
         logger.info ("delete user %s with cidr=%s" % (username, int(cidr)))
         self.center.free(addr, int(cidr))
         self.dump_center()
-        self.release_vlanid(self.users[username].vlanid)
         vlanid = self.users[username].vlanid
         bridgeid = vlanid / self.bridgeUserSize
         netcontrol.del_gw('docklet-br'+str(bridgeid), username)
