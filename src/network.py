@@ -108,7 +108,7 @@ class IntervalPool(object):
             #self.pool[str(i)].sort(key=ip_to_int)  # cidr between thiscidr and upcidr are null, no need to sort
         return [True, upinterval]
 
-    # check whether the addr/cidr overlaps the self.pool 
+    # check whether the addr/cidr overlaps the self.pool
     # for example, addr/cidr=172.16.0.48/29 overlaps self.pool['24']=[172.16.0.0]
     def overlap(self, addr, cidr):
         cidr=int(cidr)
@@ -226,7 +226,7 @@ class EnumPool(object):
             ips = [ ip_or_ips ]
         else:
             ips = ip_or_ips
-        # check whether all IPs are not in the pool but in the range of pool 
+        # check whether all IPs are not in the pool but in the range of pool
         for ip in ips:
             ip = ip.split('/')[0]
             if (ip in self.pool) or (not self.inrange(ip)):
@@ -292,8 +292,7 @@ class NetworkMgr(object):
             # But, EnumPool drop the last IP address in its pool -- it is not important
             self.system = EnumPool(sysaddr+"/"+str(syscidr))
             self.users = {}
-            self.vlanids = {}
-            self.init_vlanids(16777215, 60)
+            self.init_vlanids(16777215)
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -301,46 +300,14 @@ class NetworkMgr(object):
             self.center = None
             self.system = None
             self.users = {}
-            self.vlanids = {}
             self.load_center()
             self.load_system()
-            self.load_vlanids()
         else:
             logger.error("mode: %s not supported" % mode)
 
-    def init_vlanids(self, total, block):
-        self.vlanids['block'] = block
-        self.etcd.setkey("network/vlanids/info", str(total)+"/"+str(block))
-        for i in range(1, int((total-1)/block)):
-            self.etcd.setkey("network/vlanids/"+str(i), json.dumps(list(range(1+block*(i-1), block*i+1))))
-        self.vlanids['currentpool'] = list(range(1+block*i, total+1))
-        self.vlanids['currentindex'] = i+1
-        self.etcd.setkey("network/vlanids/"+str(i+1), json.dumps(self.vlanids['currentpool']))
-        self.etcd.setkey("network/vlanids/current", str(i+1))
-
-    def load_vlanids(self):
-        [status, info] = self.etcd.getkey("network/vlanids/info")
-        self.vlanids['block'] = int(info.split("/")[1])
-        [status, current] = self.etcd.getkey("network/vlanids/current")
-        self.vlanids['currentindex'] = int(current)
-        if self.vlanids['currentindex'] == 0:
-            self.vlanids['currentpool'] = []
-        else:
-            [status, pool]= self.etcd.getkey("network/vlanids/"+str(self.vlanids['currentindex']))
-            self.vlanids['currentpool'] = json.loads(pool)
-
-    def dump_vlanids(self):
-        if self.vlanids['currentpool'] == []:
-            if self.vlanids['currentindex'] != 0:
-                self.etcd.delkey("network/vlanids/"+str(self.vlanids['currentindex']))
-                self.etcd.setkey("network/vlanids/current", str(self.vlanids['currentindex']-1))
-            else:
-                pass
-        else:
-            self.etcd.setkey("network/vlanids/"+str(self.vlanids['currentindex']), json.dumps(self.vlanids['currentpool']))
-    
-    def dump_shared_vlanids(self):
-        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
+    def init_vlanids(self, total):
+        self.etcd.setkey("network/vlanids/total", str(total))
+        self.etcd.setkey("network/vlanids/current", str('1'))
 
     def load_center(self):
         [status, centerdata] = self.etcd.getkey("network/center")
@@ -363,7 +330,7 @@ class NetworkMgr(object):
         usercopy = json.loads(userdata)
         user = UserPool(copy = usercopy)
         self.users[username] = user
-        
+
     def dump_user(self, username):
         self.etcd.setkey("network/users/"+username, json.dumps({'info':self.users[username].info, 'vlanid':self.users[username].vlanid, 'gateway':self.users[username].gateway, 'pool':self.users[username].pool}))
 
@@ -375,36 +342,31 @@ class NetworkMgr(object):
         print ("<users>")
         print ("    users in users is in etcd, not in memory")
         print ("<vlanids>")
-        print (str(self.vlanids['currentindex'])+":"+str(self.vlanids['currentpool']))
+        [status, currentid] = self.etcd.getkey("network/vlanid/current")
+        print ("Current vlanid:"+currentid)
 
     def acquire_vlanid(self):
-        if self.vlanids['currentpool'] == []:
-            if self.vlanids['currentindex'] == 0:
-                return [False, "No VLAN IDs"]
-            else:
-                logger.error("vlanids current pool is empty with current index not zero")
-                return [False, "internal error"]
-        vlanid = self.vlanids['currentpool'].pop()
-        self.dump_vlanids()
-        if self.vlanids['currentpool'] == []:
-            self.load_vlanids()
-        return [True, vlanid]
-
-    def release_vlanid(self, vlanid):
-        if len(self.vlanids['currentpool']) == self.vlanids['block']:
-            self.vlanids['currentpool'] = [vlanid]
-            self.vlanids['currentindex'] = self.vanids['currentindex']+1
-            self.dump_vlanids()
-        else:
-            self.vlanids['currentpool'].append(vlanid)
-            self.dump_vlanids()
-        return [True, "Release VLAN ID success"]
+        [status, currentid] = self.etcd.getkey("network/vlanid/current")
+        if not status:
+            logger.error("acquire_vlanid get key error")
+            return [False, currentid]
+        currenid = int(currentid);
+        [status, maxid] = self.etcd.getkey("network/vlanid/total")
+        if not status:
+            logger.error("acquire_vlanid get key error")
+            return [False, currentid]
+        if maxid < currentid:
+            logger.error("No more VlanID")
+            return [False, currentid]
+        nextid = currentid + 1;
+        self.etcd.setkey("network/vlanid/current", str(nextid))
+        return [True, currentid]
 
     def add_user(self, username, cidr):
         logger.info ("add user %s with cidr=%s" % (username, str(cidr)))
         if self.has_user(username):
             return [False, "user already exists in users set"]
-        [status, result] = self.center.allocate(cidr) 
+        [status, result] = self.center.allocate(cidr)
         self.dump_center()
         if status == False:
             return [False, result]
@@ -537,6 +499,6 @@ class NetworkMgr(object):
         logger.info ("acquire system ips: %s" % str(ip_or_ips))
         result = self.system.release(ip_or_ips)
         self.dump_system()
-        return result 
+        return result
 
 
