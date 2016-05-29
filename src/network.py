@@ -307,7 +307,7 @@ class NetworkMgr(object):
 
     def init_vlanids(self, total):
         self.etcd.setkey("network/vlanids/total", str(total))
-        self.etcd.setkey("network/vlanids/current", str('1'))
+        self.etcd.setkey("network/vlanids/current", str('0'))
 
     def load_center(self):
         [status, centerdata] = self.etcd.getkey("network/center")
@@ -379,17 +379,24 @@ class NetworkMgr(object):
             return [False, vlanid]
         self.users[username] = UserPool(addr_cidr = result+"/"+str(cidr), vlanid=vlanid)
         logger.info("setup gateway for %s with %s and vlan=%s" % (username, self.users[username].get_gateway_cidr(), str(vlanid)))
-        bridgeid = vlanid // self.bridgeUserSize
+        bridgeid = vlanid // self.bridgeUserSize + 1
         hasBridge = netcontrol.bridge_exists("docklet-br-"+str(bridgeid))
+        # if there is not a bridge then create it
         if not hasBridge:
             netcontrol.new_bridge("docklet-br-"+str(bridgeid));
             [status, nodeinfo]=self.etcd.listdir("machines/allnodes")
+            # if get the nodes
             if status:
+                # get the master ip
+                masterIP = self.etcd.getkey("service/master")[1]
                 for node in nodeinfo:
                     nodeip = node["key"].rsplit('/', 1)[1];
-                    netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, bridgeid);
+                    # don't setup the tunnel to itself
+                    if masterIP != nodeip:
+                        netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, bridgeid);
             else:
                 return [False, nodeinfo]
+        
         netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str((vlanid % self.bridgeUserSize) + 1))
         self.dump_user(username)
         del self.users[username]
@@ -404,7 +411,7 @@ class NetworkMgr(object):
         self.center.free(addr, int(cidr))
         self.dump_center()
         vlanid = self.users[username].vlanid
-        bridgeid = vlanid / self.bridgeUserSize
+        bridgeid = vlanid // self.bridgeUserSize + 1
         netcontrol.del_gw('docklet-br'+str(bridgeid), username)
         #netcontrol.del_bridge('docklet-br'+str(self.users[username].vlanid));
         self.etcd.deldir("network/users/"+username)
@@ -414,7 +421,7 @@ class NetworkMgr(object):
     def check_usergw(self, username):
         self.load_user(username)
         vlanid = self.users[username].vlanid
-        bridgeid = vlanid / self.bridgeUserSize
+        bridgeid = vlanid // self.bridgeUserSize + 1
         tag = (vlanid % self.bridgeUserSize) + 1
         netcontrol.check_gw('docklet-br'+str(bridgeid), username, self.users[username].get_gateway_cidr(), tag)
         del self.users[username]

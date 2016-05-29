@@ -66,9 +66,13 @@ class Container(object):
                 # tag = 0 is not allowed
                 content = content.replace("%VLANID%", str((vlanid % self.bridgeUserSize) + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
-                content = content.replace("%VETHPAIR%", username+str(clusterid)+'-'+str(containerid))
-                content = content.replace("%MASTER%", str(self.masterIP))
-                content = content.replace("%BRIDGEID%", str(vlanid // self.bridgeUserSize))
+                content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
+                if self.addr != masterIP:
+                    content = content.replace("%MASTER%", str(self.masterIP))
+                else:
+                    #don't set the tunnel to itself
+                    content = content.replace("%MASTER%", "ERROR")
+                content = content.replace("%BRIDGEID%", str(vlanid // self.bridgeUserSize + 1))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')
