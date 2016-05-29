@@ -67,7 +67,7 @@ class Container(object):
                 content = content.replace("%VLANID%", str((vlanid % self.bridgeUserSize) + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
-                if self.addr != masterIP:
+                if self.addr != self.masterIP:
                     content = content.replace("%MASTER%", str(self.masterIP))
                 else:
                     #don't set the tunnel to itself

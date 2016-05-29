@@ -240,7 +240,7 @@ class EnumPool(object):
 # wrap EnumPool with vlanid and gateway
 class UserPool(EnumPool):
     def __init__(self, addr_cidr=None, vlanid=None, copy=None):
-        if addr_cidr and vlanid:
+        if addr_cidr and vlanid != None:
             EnumPool.__init__(self, addr_cidr = addr_cidr)
             self.vlanid=vlanid
             self.pool.sort(key=ip_to_int)
