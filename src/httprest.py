@@ -114,12 +114,12 @@ def register():
         newuser.status = 'applying'
         newuser.user_group = cur_user.user_group
         newuser.auth_method = cur_user.auth_method
-        newuser.e_mail = form.get('email','')
-        newuser.student_number = form.get('studentnumber', '')
-        newuser.department = form.get('department', '')
-        newuser.truename = form.get('truename', '')
-        newuser.tel = form.get('tel', '')
-        newuser.description = form.get('description', '')
+        newuser.e_mail = request.form.get('email','')
+        newuser.student_number = request.form.get('studentnumber', '')
+        newuser.department = request.form.get('department', '')
+        newuser.truename = request.form.get('truename', '')
+        newuser.tel = request.form.get('tel', '')
+        newuser.description = request.form.get('description', '')
         result = G_usermgr.register(user = newuser)
         userManager.send_remind_activating_email(newuser.username)
         return json.dumps(result)

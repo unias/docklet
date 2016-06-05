@@ -125,6 +125,17 @@
    {
 
        $.post(url+"/basic_info/",{},function(data){
+
+       		$.post(url+"/disk_use/",{},function(data){
+                var diskuse = data.monitor.disk_use;
+		       	var usedp = diskuse.percent;
+                var total = diskuse.total/1024.0/1024.0;
+                var used = diskuse.used/1024.0/1024.0;
+			    var detail = "("+used.toFixed(2)+"MiB/"+total.toFixed(2)+"MiB)";
+		       	$("#"+index+"_disk").html(usedp+"%<br/>"+detail);
+		       	},"json");
+            $("#"+index+"_time").html(data.monitor.basic_info.RunningTime+"s")
+
 		var state = data.monitor.basic_info.State;
 		    if(state == 'RUNNING')
        		{
@@ -147,7 +158,6 @@
 		    $("#"+index+"_mem").html('--');
 		    return;
        		}
-            $("#"+index+"_time").html(data.monitor.basic_info.RunningTime+"s")
 
        		$.post(url+"/cpu_use/",{},function(data){
 		       	var usedp = data.monitor.cpu_use.usedp;
@@ -169,14 +179,6 @@
 		       	$("#"+index+"_mem").html((usedp/0.01).toFixed(2)+"%<br/>"+out);
 		       	},"json");
 
-       		$.post(url+"/disk_use/",{},function(data){
-                var diskuse = data.monitor.disk_use;
-		       	var usedp = diskuse.percent;
-                var total = diskuse.total/1024.0/1024.0;
-                var used = diskuse.used/1024.0/1024.0;
-			    var detail = "("+used.toFixed(2)+"MiB/"+total.toFixed(2)+"MiB)";
-		       	$("#"+index+"_disk").html(usedp+"%<br/>"+detail);
-		       	},"json");
        		},"json");
    }
 

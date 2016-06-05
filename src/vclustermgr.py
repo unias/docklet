@@ -339,7 +339,6 @@ class VclusterMgr(object):
             proxytool.set_route('/go/'+username+'/'+clustername, target)
         except:
             return [False, "start cluster failed with setting proxy failed"]
-        info['containers'][0]
         # recover containers of this cluster
         for container in info['containers']:
             worker = self.nodemgr.ip_to_rpc(container['host'])

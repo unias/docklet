@@ -329,10 +329,6 @@ IP=%s
     def create_image(self,username,imagename,containername,description="not thing",imagenum=10):
         return self.imgmgr.createImage(username,imagename,containername,description,imagenum)
 
-    def flush_container(self,username,imagename,containername):
-        self.imgmgr.flush_one(username,imagename,containername)
-        logger.info("container: %s has been flushed" % containername)
-        return 0
     # check all local containers
     def check_allcontainers(self):
         [both, onlylocal, onlyglobal] = self.diff_containers()

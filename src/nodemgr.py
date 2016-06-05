@@ -104,6 +104,9 @@ class NodeMgr(object):
             for node in runlist:
                 nodeip = node['key'].rsplit('/',1)[1]
                 if node['value']=='waiting':
+                    #   waiting state can be deleted, there is no use to let master check 
+                    # this state because worker will change it and master will not change it now.
+                    # it is only preserved for compatible.
                     logger.info ("%s want to joins, call it to init first" % nodeip)
                 elif node['value']=='work':
                     logger.info ("new node %s joins" % nodeip)
@@ -119,6 +122,7 @@ class NodeMgr(object):
                     self.etcd.setkey("machines/runnodes/"+nodeip, "ok")
                     if nodeip not in self.runnodes:
                         self.runnodes.append(nodeip)
+                        # node not in all node list is a new node.
                         if nodeip not in self.allnodes:
                             self.allnodes.append(nodeip)
                             self.etcd.setkey("machines/allnodes/"+nodeip, "ok")

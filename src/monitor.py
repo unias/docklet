@@ -65,6 +65,9 @@ class Container_Collector(threading.Thread):
         #if basic_exist:
          #   logger.info(workercinfo[container_name]['basic_info'])
         if(info['State'] == 'STOPPED'):
+            if not 'RunningTime' in basic_info.keys():
+                basic_info['RunningTime'] = 0
+                basic_info['LastTime'] = 0
             workercinfo[container_name]['basic_info'] = basic_info
             logger.info(basic_info)
             return False

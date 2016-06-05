@@ -16,7 +16,7 @@ import threading
 import etcdlib, network, container
 from nettools import netcontrol
 import monitor
-from lvmtool import *
+from lvmtool import new_group, recover_group
 
 ##################################################################
 #                       Worker
@@ -54,12 +54,14 @@ class Worker(object):
         self.master = self.etcd.getkey("service/master")[1]
         self.mode=None
 
+        # waiting state is preserved for compatible.
         self.etcd.setkey("machines/runnodes/"+self.addr, "waiting")
+        # get this node's key to judge how to init.
         [status, key] = self.etcd.getkey("machines/runnodes/"+self.addr)
         if status:
             self.key = generatekey("machines/allnodes/"+self.addr)
         else:
-            logger.error("get key failed. %s" % node)
+            logger.error("get key failed. %s" % 'machines/runnodes/'+self.addr)
             sys.exit(1)
 
         # check token to check global directory
@@ -72,6 +74,8 @@ class Worker(object):
         logger.info ("worker registered and checked the token")
 
         # worker search all run nodes to judge how to init
+        # If the node in all node list, we will recover it.
+        # Otherwise, this node is new added in.
         value = 'init-new'
         [status, alllist] = self.etcd.listdir("machines/allnodes")
         for node in alllist:
@@ -117,7 +121,7 @@ class Worker(object):
         logger.info ("initialize rpcserver %s:%d" % (self.addr, int(self.port)))
         # logRequests=False : not print rpc log
         #self.rpcserver = xmlrpc.server.SimpleXMLRPCServer((self.addr, self.port), logRequests=False)
-        self.rpcserver = ThreadXMLRPCServer((self.addr, int(self.port)), allow_none=True)
+        self.rpcserver = ThreadXMLRPCServer((self.addr, int(self.port)), allow_none=True, logRequests=False)
         self.rpcserver.register_introspection_functions()
         self.rpcserver.register_instance(Containers)
         self.rpcserver.register_function(monitor.workerFetchInfo)
@@ -153,6 +157,7 @@ class Worker(object):
 
     # start service of worker
     def start(self):
+        # worker change it state itself. Independedntly from master.
         self.etcd.setkey("machines/runnodes/"+self.addr, "work")
         self.thread_sendheartbeat = threading.Thread(target=self.sendheartbeat)
         self.thread_sendheartbeat.start()
