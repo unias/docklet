@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# $1 Container name.
-# $2 Section (always 'lxc').
-# $3 The hook type (i.e. 'clone' or 'pre-mount').
-
-#cd $LXC_ROOTFS_PATH/root ; rm -rf nfs &&  ln -s ../nfs nfs
