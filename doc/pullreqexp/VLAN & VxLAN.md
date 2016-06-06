@@ -23,6 +23,7 @@ Source Code: https://github.com/jklj077/docklet/
 - **Goals**
     - Make it capable enough, 4094 is frustrating
     - Make it dynamic, do not set it up when not needed
+
 ---
 ## Design - Capability - Why VLAN
 - **Broadcast Storm due to flooding**
@@ -41,6 +42,7 @@ Source Code: https://github.com/jklj077/docklet/
     - A user owns a VLAN ID
     - A user owns a IP subnet
     - Support 4096 users at most
+
 ---
 ## Design - Capability
 - **Solution: Share**
@@ -65,6 +67,7 @@ Source Code: https://github.com/jklj077/docklet/
         - linux kernal supports VxLan completely
             - configure tunnels by hand
             - auto configure tunnels using multicast
+
 ---
 ## A little more about VLAN & VxLAN
 - **VLAN**
@@ -81,6 +84,7 @@ Source Code: https://github.com/jklj077/docklet/
 - **VxLAN is not a substitution of VLAN**
     - it cannot serve as the role of VLAN as far as docklet scenario is concerned
         - that is, to isolate L2 broadcast domain
+
 ---
 ## Design - Capability
 - **Solution: Extend Virtual Network Structure** *implemented*
@@ -94,6 +98,7 @@ Source Code: https://github.com/jklj077/docklet/
     - namespace: a namespace consists of several virtual switches, one on each host, connected by tunnels using key
     - vlan: a vlan is subject to a namespace and consists of containers belonging to a single user
     - This will allow (2^24 - 2) * (2^16 - 2) tenants at most 
+
 ---
 ## Design - Capability
 - **Introducing netid**
@@ -106,6 +111,7 @@ Source Code: https://github.com/jklj077/docklet/
     - netid is assigned the way vlanid is assigned
         - manage using pools
         - allow withdraw
+
 ---
 ## Design - On Demand
 - **The aforesaid design leads to new problems**
@@ -115,6 +121,7 @@ Source Code: https://github.com/jklj077/docklet/
        - it's fixed, it's not scalable, it's bad
 
 - **Make it dynamic**
+
 ---
 ## Design - On Demand
 - **Solution: New Managers** *implemented*
@@ -132,6 +139,7 @@ Source Code: https://github.com/jklj077/docklet/
             - check the virtual switch on the worker and the tunnel between the virtual swtich on the master and the virtual switch on the worker
         - if a worker is lost, the tunnels on master are not deleted
     - issues: observable delay
+
 ---
 ## Design - On Demand
 - **Solution: netid can reuse user id from user manager**
@@ -141,6 +149,7 @@ Source Code: https://github.com/jklj077/docklet/
 - **Solution: set up virtual switch and tunnels in container up script**
     - nice, in terms of workers to the master
     - issues: fixed number of virtual switches (the master to workers)
+
 ---
 ## Experiments
 - **Not much can be done, other than correctness check**
@@ -151,6 +160,7 @@ Source Code: https://github.com/jklj077/docklet/
 - **Performance**
     - Not Available
         - More than 4094 containers on one host?
+
 ---
 ## Summary
 - **Task is network related**
