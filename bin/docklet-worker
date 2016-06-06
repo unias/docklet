@@ -1,0 +1,145 @@
+#!/bin/sh 
+
+[ $(id -u) != '0' ] && echo "root is needed" && exit 1
+
+# get some path of docklet
+
+bindir=${0%/*}
+# $bindir maybe like /opt/docklet/src/../bin
+# use command below to make $bindir in normal absolute path
+DOCKLET_BIN=$(cd $bindir; pwd)
+DOCKLET_HOME=${DOCKLET_BIN%/*}
+DOCKLET_CONF=$DOCKLET_HOME/conf
+LXC_SCRIPT=$DOCKLET_CONF/lxc-script
+DOCKLET_SRC=$DOCKLET_HOME/src
+DOCKLET_LIB=$DOCKLET_SRC
+DOCKLET_WEB=$DOCKLET_HOME/web
+
+# working directory, default to /opt/docklet
+FS_PREFIX=/opt/docklet
+
+# cluster net ip range,  default is 172.16.0.1/16
+CLUSTER_NET="172.16.0.1/16"
+
+RUN_DIR=$FS_PREFIX/local/run
+LOG_DIR=$FS_PREFIX/local/log
+
+. $DOCKLET_CONF/docklet.conf
+
+export FS_PREFIX
+
+# This next line determines what user the script runs as.
+DAEMON_USER=root
+
+# settings for docklet worker
+DAEMON=$DOCKLET_LIB/worker.py
+DAEMON_NAME=docklet-worker
+DAEMON_OPTS=
+# The process ID of the script when it runs is stored here:
+PIDFILE=$RUN_DIR/$DAEMON_NAME.pid
+
+DOCKMETER_NAME=$DAEMON_NAME-metering
+DOCKMETER_PIDFILE=$RUN_DIR/$DOCKMETER_NAME.pid
+
+. /lib/lsb/init-functions
+
+###########
+
+pre_start () {
+    [ ! -d $FS_PREFIX/global ] && mkdir -p $FS_PREFIX/global
+    [ ! -d $FS_PREFIX/local ] && mkdir -p $FS_PREFIX/local
+    [ ! -d $FS_PREFIX/global/users ] && mkdir -p $FS_PREFIX/global/users
+    [ ! -d $FS_PREFIX/local/volume ] && mkdir -p $FS_PREFIX/local/volume
+    [ ! -d $FS_PREFIX/local/temp ] && mkdir -p $FS_PREFIX/local/temp
+    [ ! -d $FS_PREFIX/local/run ] && mkdir -p $FS_PREFIX/local/run
+    [ ! -d $FS_PREFIX/local/log ] && mkdir -p $FS_PREFIX/local/log
+
+    tempdir=/opt/docklet/local/temp
+
+    RUNNING_CONFIG=$FS_PREFIX/local/docklet-running.conf
+
+    grep -P "^[\s]*[a-zA-Z]" $DOCKLET_CONF/docklet.conf > $RUNNING_CONFIG
+
+    echo "DOCKLET_HOME=$DOCKLET_HOME" >> $RUNNING_CONFIG
+    echo "DOCKLET_BIN=$DOCKLET_BIN" >> $RUNNING_CONFIG
+    echo "DOCKLET_CONF=$DOCKLET_CONF" >> $RUNNING_CONFIG
+    echo "LXC_SCRIPT=$LXC_SCRIPT" >> $RUNNING_CONFIG
+    echo "DOCKLET_SRC=$DOCKLET_SRC" >> $RUNNING_CONFIG
+    echo "DOCKLET_LIB=$DOCKLET_LIB" >> $RUNNING_CONFIG
+
+    export CONFIG=$RUNNING_CONFIG
+
+    # iptables for NAT network for containers to access web
+    iptables -t nat -F
+    iptables -t nat -A POSTROUTING -s $CLUSTER_NET -j MASQUERADE
+
+	if [ ! -d $FS_PREFIX/local/basefs ]; then
+		log_daemon_msg "create basefs ..."
+		[ ! -f $tempdir/basefs.tar.bz ] && log_daemon_msg "$tempdir/basefs.tar.bz not exist, run prepare.sh first" && exit 1
+		tar xvf $tempdir/basefs.tar.bz -C $FS_PREFIX/local > /dev/null
+	fi
+}
+
+do_start() {
+    pre_start
+    log_daemon_msg "Starting $DAEMON_NAME in $FS_PREFIX"
+    start-stop-daemon --start --oknodo --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
+    log_end_msg $?
+}
+
+do_stop () {
+    log_daemon_msg "Stopping $DAEMON_NAME daemon"
+    start-stop-daemon --stop --quiet --oknodo --remove-pidfile --pidfile $PIDFILE --retry 10
+    log_end_msg $?
+}
+
+do_start_meter() {
+    log_daemon_msg "Starting $DOCKMETER_NAME in $FS_PREFIX"
+    start-stop-daemon --start --background --pidfile $DOCKMETER_PIDFILE --make-pidfile --exec $DOCKLET_HOME/meter/main.py
+    log_end_msg $?
+}
+
+do_stop_meter() {
+    log_daemon_msg "Stopping $DOCKMETER_NAME daemon"
+    start-stop-daemon --stop --pidfile $DOCKMETER_PIDFILE --remove-pidfile
+    log_end_msg $?
+}
+
+
+
+
+case "$1" in
+    start)
+        do_start
+        ;;
+
+    stop)
+        do_stop
+        ;;
+    start-meter)
+        do_start_meter
+        ;;
+
+    stop-meter)
+        do_stop_meter
+        ;;
+
+    console)
+        pre_start
+        cprofilev $DAEMON $DAEMON_OPTS
+        ;;
+
+    restart)
+        do_stop
+        do_start
+        ;;
+
+    status)
+        status_of_proc -p $PIDFILE "$DAEMON" "$DAEMON_NAME" && exit 0 || exit $?
+        ;;
+    *)
+        echo "Usage: $DAEMON_NAME {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+exit 0

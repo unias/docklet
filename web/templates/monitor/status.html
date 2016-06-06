@@ -1,0 +1,200 @@
+{% extends 'base_AdminLTE.html' %}
+
+{% block title %}Docklet | Status{% endblock %}
+
+{% block panel_title %}Workspace VCluster Status{% endblock %}
+
+{% block panel_list %}
+<ol class="breadcrumb">
+  <li>
+      <a href="/dashboard/"><i class="fa fa-dashboard"></i>Home</a>
+  </li>
+      <li class="active">
+      <strong>VClusterStatus</strong>
+  </li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+         <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">Your Quotas</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+              </div>
+                     <div class="box-body table-responsive">
+
+                         <table class="table table-bordered">
+                             <thead>
+                             <tr>
+				                <th>CPU</th>
+				                <th>Memory</th>
+                                <th>Disk</th>
+                                <th>Vnode</th>
+                                <th>Image</th>
+                                <th>Idletime</th>
+                             </tr>
+                             </thead>
+                             <tbody>
+                             <tr>
+                                {% if quotainfo['cpu'] > 1 %}
+                                    <th>{{ quotainfo['cpu'] }} Cores</th>
+                                {% else %}
+                                    <th>{{ quotainfo['cpu'] }} Core</th>
+                                {% endif %}
+                                <th>{{ quotainfo['memory'] }} MB</th>
+                                <th>{{ quotainfo['disk'] }} MB</th>
+                                <th>{{ quotainfo['vnode'] }}</th>
+                                <th>{{ quotainfo['image'] }}</th>
+                                <th>{{ quotainfo['idletime'] }} hours</th>
+			                 </tr>
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+	   </div>
+
+{% for cluster in clusters %}
+	  <div class="row">
+	     <div class="col-md-12">
+         <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">VCluster Name: {{ cluster }}</h3>
+
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+              </div>
+                     <div class="box-body table-responsive">
+
+                         <table class="table table-bordered">
+                             <thead>
+                             <tr>
+				                 <th>Node ID</th>
+				                 <th>Node Name</th>
+                                 <th>IP Address</th>
+                                 <th>Status</th>
+                                 <th>Running Time</th>
+				                 <th>Cpu Usage</th>
+				                 <th>Mem Usage</th>
+				                 <th>Disk Usage</th>
+				                 <th>Summary</th>
+                             </tr>
+                             </thead>
+                             <tbody>
+                             {% for container in containers[cluster]['containers'] %}
+                             <tr>
+                                 <td>{{ loop.index }}</td>
+                                 <td>{{ container['containername'] }}</td>
+                                 <td>{{ container['ip'] }}</td>
+
+                                 {% if containers[cluster]['status'] == 'stopped' %}
+                                 <td><div id='{{cluster}}_{{ loop.index }}_state' class="label label-danger">Stopped</div></td>
+                                 {% else %}
+                                 <td><div id='{{cluster}}_{{ loop.index }}_state' class="label label-primary">Running</div></td>
+                                 {% endif %}
+                                 <td id='{{cluster}}_{{ loop.index }}_time'>--</td>
+                                 <td id='{{cluster}}_{{ loop.index }}_cpu'>--</td>
+                                 <td id='{{cluster}}_{{ loop.index }}_mem'>--</td>
+                                 <td id='{{cluster}}_{{ loop.index }}_disk'>--</td>
+                                 <td><a class="btn btn-info btn-xs" href='/vclusters/{{ cluster }}/{{ container['containername'] }}/'>Realtime</a></td>
+			     </tr>
+                             {% endfor %}
+                             </tbody>
+                         </table>
+
+                     </div>
+                 </div>
+             </div>
+	   </div>
+
+{% endfor %}
+{% endblock %}
+
+{% block script_src %}
+<script type='text/javascript'>
+   function update(url,index)
+   {
+
+       $.post(url+"/basic_info/",{},function(data){
+
+       		$.post(url+"/disk_use/",{},function(data){
+                var diskuse = data.monitor.disk_use;
+		       	var usedp = diskuse.percent;
+                var total = diskuse.total/1024.0/1024.0;
+                var used = diskuse.used/1024.0/1024.0;
+			    var detail = "("+used.toFixed(2)+"MiB/"+total.toFixed(2)+"MiB)";
+		       	$("#"+index+"_disk").html(usedp+"%<br/>"+detail);
+		       	},"json");
+            $("#"+index+"_time").html(data.monitor.basic_info.RunningTime+"s")
+
+		var state = data.monitor.basic_info.State;
+		    if(state == 'RUNNING')
+       		{
+           	    var tmp = $("#"+index+"_state");
+                    tmp.removeClass();
+	            tmp.addClass("label label-primary");
+	   	    tmp.html("Running");
+		    $("#"+index+"_pid").html(data.monitor.basic_info.PID);
+		    $("#"+index+"_ip").html(data.monitor.basic_info.IP);
+       		}
+       		else if(state == 'STOPPED')
+       		{
+           	    var tmp = $("#"+index+"_state");
+           	    tmp.removeClass();
+	   	    tmp.addClass("label label-danger");
+	   	    tmp.html("Stopped");
+		    $("#"+index+"_pid").html('--');
+		    $("#"+index+"_ip").html('--');
+		    $("#"+index+"_cpu").html('--');
+		    $("#"+index+"_mem").html('--');
+		    return;
+       		}
+
+       		$.post(url+"/cpu_use/",{},function(data){
+		       	var usedp = data.monitor.cpu_use.usedp;
+                var quota = data.monitor.cpu_use.quota.cpu;
+                var quotaout = "("+quota;
+                if(quota == 1)
+                    quotaout += " Core)";
+                else
+                    quotaout += " Cores)";
+		       	$("#"+index+"_cpu").html((usedp/0.01).toFixed(2)+"%<br/>"+quotaout);
+		       	},"json");
+
+       		$.post(url+"/mem_use/",{},function(data){
+		       	var usedp = data.monitor.mem_use.usedp;
+			var unit = data.monitor.mem_use.unit;
+			var quota = data.monitor.mem_use.quota.memory/1024.0;
+			var val = data.monitor.mem_use.val;
+			var out = "("+val+unit+"/"+quota.toFixed(2)+"MiB)";
+		       	$("#"+index+"_mem").html((usedp/0.01).toFixed(2)+"%<br/>"+out);
+		       	},"json");
+
+       		},"json");
+   }
+
+   function updateAll()
+   {
+        var host = window.location.host;
+        var url0 = "http://" + host + "/monitor/vnodes/";
+
+	{% for cluster in clusters %}
+	{% for container in containers[cluster]['containers'] %}
+        url = url0 + '{{ container['containername'] }}';
+   	update(url,'{{cluster}}_{{ loop.index }}');
+	{% endfor %}
+	{% endfor %}
+   }
+   setInterval(updateAll,5000);
+
+</script>
+{% endblock %}
