@@ -20,7 +20,6 @@ Source Code: https://github.com/jklj077/docklet/
         - virtual switches & virtual tunnels
 
 
---
 - **Goals**
     - Make it capable enough, 4094 is frustrating
     - Make it dynamic, do not set it up when not needed
@@ -38,7 +37,6 @@ Source Code: https://github.com/jklj077/docklet/
         - A virtual LAN is an IP subnet
 
 
---
 - **Docklet - using VLAN to deal with storm**
     - A user owns a VLAN ID
     - A user owns a IP subnet
@@ -51,7 +49,6 @@ Source Code: https://github.com/jklj077/docklet/
     - Divide users into groups, provide diversified service
 
 
---
 - **Solution: Withdraw those that are not used** *implemented*
     - Users who have no workspace do not need a VLAN ID
     - The limitation still exists but is alleviated
@@ -59,7 +56,6 @@ Source Code: https://github.com/jklj077/docklet/
         - If the users use workspace on a varied time bases
 
 
---
 - **Solution: Subsititue VLAN**
     - VxLAN, millions of IDs(VNI)
         - A tunnel technique, based on UDP and IP muliticast
@@ -81,7 +77,7 @@ Source Code: https://github.com/jklj077/docklet/
         - subnet -> net, "merge"
     - VxLAN ID (VNI) is also "local"
         - the valid domain ("namespace") is the nets specified by an IP multicast address
---
+
 - **VxLAN is not a substitution of VLAN**
     - it cannot serve as the role of VLAN as far as docklet scenario is concerned
         - that is, to isolate L2 broadcast domain
@@ -92,7 +88,7 @@ Source Code: https://github.com/jklj077/docklet/
         - VLAN ID is local
         - If switches are not connected via links, their VLAN configuration will be independent
             - we can make multiple "namespace"s
---
+
 - **Final Design**
     - two level: namespace(switch), vlan
     - namespace: a namespace consists of several virtual switches, one on each host, connected by tunnels using key
