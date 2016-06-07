@@ -116,6 +116,7 @@ class ipcontrol(object):
 # ovs-vsctl list-ports <Bridge>
 # ovs-vsctl del-port <Bridge> <Port>
 # ovs-vsctl add-port <Bridge> <Port> -- set interface <Port> type=gre options:remote_ip=<RemoteIP>
+# ovs-vsctl add-port <Bridge> <Port> -- set interface <Port> type=vxlan options:remote_ip=<RemoteIP> options:key=<Key>
 # ovs-vsctl add-port <Bridge> <Port> tag=<ID> -- set interface <Port> type=internal
 # ovs-vsctl port-to-br <Port>
 # ovs-vsctl set Port <Port> tag=<ID>
@@ -207,6 +208,14 @@ class ovscontrol(object):
             return [False, "add port failed : %s" % suberror.stdout.decode('utf-8')]
 
     @staticmethod
+    def add_port_vxlan(bridge, port, remote, key):
+         try:
+            subprocess.run(['ovs-vsctl', 'add-port', str(bridge), str(port), '--', 'set', 'interface', str(port), 'type=vxlan', 'options:remote_ip='+str(remote), 'options:key='+str(key)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+            return [True, str(port)]
+         except subprocess.CalledProcessError as suberror:
+            return [False, "add port failed : %s" % suberror.stdout.decode('utf-8')]
+                   
+    @staticmethod
     def set_port_tag(port, tag):
         try:
             subprocess.run(['ovs-vsctl', 'set', 'Port', str(port), 'tag='+str(tag)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
@@ -232,11 +241,20 @@ class netcontrol(object):
     def gre_exists(bridge, remote):
         # port is unique, bridge is not necessary
         return ovscontrol.port_exists('gre-'+str(remote))
-
+    
+    @staticmethod
+    def vxlan_exists(bridge, remote):
+        # port is unique, bridge is not necessary
+        return ovscontrol.port_exists('vxlan-'+str(remote))
+    
     @staticmethod
     def setup_gre(bridge, remote):
         return ovscontrol.add_port_gre(bridge, 'gre-'+str(remote), remote)
 
+    @staticmethod
+    def setup_vxlan(bridge, remote, key):
+        return ovscontrol.add_port_vxlan(bridge, 'vxlan-'+str(key)+"-"+str(remote), remote, key)
+        
     @staticmethod
     def gw_exists(bridge, gwport):
         return ovscontrol.port_exists(gwport)

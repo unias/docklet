@@ -20,6 +20,10 @@ class Container(object):
 
         self.lxcpath = "/var/lib/lxc"
         self.imgmgr = imagemgr.ImageMgr()
+        # get Master IP
+        self.masterIP = self.etcd.getkey("service/master")[1]
+        # get the size of users in a bridge
+        self.bridgeUserSize = int(env.getenv("VNET_COUNT"))
 
     def create_container(self, lxc_name, username, user_info, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
@@ -30,6 +34,7 @@ class Container(object):
             disk = user_info["data"]["groupinfo"]["disk"]
             image = json.loads(image) 
             status = self.imgmgr.prepareFS(username,image,lxc_name,disk)
+            vlanid = int(vlanid)
             if not status:
                 return [False, "Create container failed when preparing filesystem, possibly insufficient space"]
             
@@ -58,9 +63,16 @@ class Container(object):
                 content = content.replace("%CLUSTERID%",str(clusterid))
                 content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%",lxc_name)
-                content = content.replace("%VLANID%",str(vlanid))
+                # tag = 0 is not allowed
+                content = content.replace("%VLANID%", str((vlanid % self.bridgeUserSize) + 1))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
+                if self.addr != self.masterIP:
+                    content = content.replace("%MASTER%", str(self.masterIP))
+                else:
+                    #don't set the tunnel to itself
+                    content = content.replace("%MASTER%", "ERROR")
+                content = content.replace("%BRIDGEID%", str(vlanid // self.bridgeUserSize + 1))
                 return content
 
             conffile = open(self.confpath+"/container.conf", 'r')

@@ -142,18 +142,18 @@ class Worker(object):
             #self.bridgeip = result
             # create bridges for worker
             #network.netsetup("init", self.bridgeip)
-            if self.mode == 'new':
-                if netcontrol.bridge_exists('docklet-br'):
-                    netcontrol.del_bridge('docklet-br')
-                netcontrol.new_bridge('docklet-br')
-            else:
-                if not netcontrol.bridge_exists('docklet-br'):
-                    logger.error("docklet-br not found")
-                    sys.exit(1)
-            logger.info ("setup GRE tunnel to master %s" % self.master)
+            #if self.mode == 'new':
+            #    if netcontrol.bridge_exists('docklet-br'):
+            #        netcontrol.del_bridge('docklet-br')
+            #    netcontrol.new_bridge('docklet-br')
+            #else:
+            #    if not netcontrol.bridge_exists('docklet-br'):
+            #        logger.error("docklet-br not found")
+            #        sys.exit(1)
+            #logger.info ("setup GRE tunnel to master %s" % self.master)
             #network.netsetup("gre", self.master)
-            if not netcontrol.gre_exists('docklet-br', self.master):
-                netcontrol.setup_gre('docklet-br', self.master)
+            #if not netcontrol.gre_exists('docklet-br', self.master):
+            #    netcontrol.setup_gre('docklet-br', self.master)
 
     # start service of worker
     def start(self):

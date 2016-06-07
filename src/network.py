@@ -2,7 +2,7 @@
 
 import json, sys, netifaces
 from nettools import netcontrol
-
+import env
 from log import logger
 
 # getip : get ip from network interface
@@ -108,7 +108,7 @@ class IntervalPool(object):
             #self.pool[str(i)].sort(key=ip_to_int)  # cidr between thiscidr and upcidr are null, no need to sort
         return [True, upinterval]
 
-    # check whether the addr/cidr overlaps the self.pool 
+    # check whether the addr/cidr overlaps the self.pool
     # for example, addr/cidr=172.16.0.48/29 overlaps self.pool['24']=[172.16.0.0]
     def overlap(self, addr, cidr):
         cidr=int(cidr)
@@ -226,7 +226,7 @@ class EnumPool(object):
             ips = [ ip_or_ips ]
         else:
             ips = ip_or_ips
-        # check whether all IPs are not in the pool but in the range of pool 
+        # check whether all IPs are not in the pool but in the range of pool
         for ip in ips:
             ip = ip.split('/')[0]
             if (ip in self.pool) or (not self.inrange(ip)):
@@ -240,7 +240,7 @@ class EnumPool(object):
 # wrap EnumPool with vlanid and gateway
 class UserPool(EnumPool):
     def __init__(self, addr_cidr=None, vlanid=None, copy=None):
-        if addr_cidr and vlanid:
+        if addr_cidr and vlanid != None:
             EnumPool.__init__(self, addr_cidr = addr_cidr)
             self.vlanid=vlanid
             self.pool.sort(key=ip_to_int)
@@ -277,6 +277,7 @@ class UserPool(EnumPool):
 #   users : set of users' enumeration pools to manage users' ip address
 class NetworkMgr(object):
     def __init__(self, addr_cidr, etcdclient, mode):
+        self.bridgeUserSize = env.getenv("VNET_COUNT")
         self.etcd = etcdclient
         if mode == 'new':
             logger.info("init network manager with %s" % addr_cidr)
@@ -291,9 +292,7 @@ class NetworkMgr(object):
             # But, EnumPool drop the last IP address in its pool -- it is not important
             self.system = EnumPool(sysaddr+"/"+str(syscidr))
             self.users = {}
-            self.vlanids = {}
-            self.init_vlanids(4095, 60)
-            self.init_shared_vlanids()
+            self.init_vlanids(16777215)
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -301,67 +300,14 @@ class NetworkMgr(object):
             self.center = None
             self.system = None
             self.users = {}
-            self.vlanids = {}
             self.load_center()
             self.load_system()
-            self.load_vlanids()
-            self.load_shared_vlanids()
         else:
             logger.error("mode: %s not supported" % mode)
 
-    def init_vlanids(self, total, block):
-        self.vlanids['block'] = block
-        self.etcd.setkey("network/vlanids/info", str(total)+"/"+str(block))
-        for i in range(1, int((total-1)/block)):
-            self.etcd.setkey("network/vlanids/"+str(i), json.dumps(list(range(1+block*(i-1), block*i+1))))
-        self.vlanids['currentpool'] = list(range(1+block*i, total+1))
-        self.vlanids['currentindex'] = i+1
-        self.etcd.setkey("network/vlanids/"+str(i+1), json.dumps(self.vlanids['currentpool']))
-        self.etcd.setkey("network/vlanids/current", str(i+1))
-    
-    # Data Structure:
-    # shared_vlanids = [{vlanid = ..., sharenum = ...}, {vlanid = ..., sharenum = ...}, ...]
-    def init_shared_vlanids(self, vlannum = 128, sharenum = 128):
-        self.shared_vlanids = []
-        for i in range(vlannum):
-            shared_vlanid = {}
-            [status, shared_vlanid['vlanid']] = self.acquire_vlanid()
-            shared_vlanid['sharenum'] = sharenum
-            self.shared_vlanids.append(shared_vlanid)
-        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
-
-
-
-    def load_vlanids(self):
-        [status, info] = self.etcd.getkey("network/vlanids/info")
-        self.vlanids['block'] = int(info.split("/")[1])
-        [status, current] = self.etcd.getkey("network/vlanids/current")
-        self.vlanids['currentindex'] = int(current)
-        if self.vlanids['currentindex'] == 0:
-            self.vlanids['currentpool'] = []
-        else:
-            [status, pool]= self.etcd.getkey("network/vlanids/"+str(self.vlanids['currentindex']))
-            self.vlanids['currentpool'] = json.loads(pool)
-
-    def dump_vlanids(self):
-        if self.vlanids['currentpool'] == []:
-            if self.vlanids['currentindex'] != 0:
-                self.etcd.delkey("network/vlanids/"+str(self.vlanids['currentindex']))
-                self.etcd.setkey("network/vlanids/current", str(self.vlanids['currentindex']-1))
-            else:
-                pass
-        else:
-            self.etcd.setkey("network/vlanids/"+str(self.vlanids['currentindex']), json.dumps(self.vlanids['currentpool']))
-    
-    def load_shared_vlanids(self):
-        [status, shared_vlanids] = self.etcd.getkey("network/shared_vlanids")
-        if not status:
-            self.init_shared_vlanids()
-        else:
-            self.shared_vlanids = json.loads(shared_vlanids)
-
-    def dump_shared_vlanids(self):
-        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
+    def init_vlanids(self, total):
+        self.etcd.setkey("network/vlanids/total", str(total))
+        self.etcd.setkey("network/vlanids/current", str('0'))
 
     def load_center(self):
         [status, centerdata] = self.etcd.getkey("network/center")
@@ -384,7 +330,7 @@ class NetworkMgr(object):
         usercopy = json.loads(userdata)
         user = UserPool(copy = usercopy)
         self.users[username] = user
-        
+
     def dump_user(self, username):
         self.etcd.setkey("network/users/"+username, json.dumps({'info':self.users[username].info, 'vlanid':self.users[username].vlanid, 'gateway':self.users[username].gateway, 'pool':self.users[username].pool}))
 
@@ -396,54 +342,35 @@ class NetworkMgr(object):
         print ("<users>")
         print ("    users in users is in etcd, not in memory")
         print ("<vlanids>")
-        print (str(self.vlanids['currentindex'])+":"+str(self.vlanids['currentpool']))
+        [status, currentid] = self.etcd.getkey("network/vlanids/current")
+        print ("Current vlanid:"+currentid)
 
-    def acquire_vlanid(self, isshared = False):
-        if isshared:
-            # only share vlanid of the front entry
-            # if sharenum is reduced to 0, move the front entry to the back
-            # if sharenum is still equal to 0, one round of sharing is complete, start another one
-            if self.shared_vlanids[0]['sharenum'] == 0:
-                self.shared_vlanids.append(self.shared_vlanids.pop(0))
-            if self.shared_vlanids[0]['sharenum'] == 0:
-                logger.info("shared vlanids not enough, add user to full vlanids")
-                for shared_vlanid in self.shared_vlanids:
-                    shared_vlanid['sharenum'] = 128
-            self.shared_vlanids[0]['sharenum'] -= 1
-            self.dump_shared_vlanids()
-            return [True, self.shared_vlanids[0]['vlanid']]
+    def acquire_vlanid(self):
+        [status, currentid] = self.etcd.getkey("network/vlanids/current")
+        if not status:
+            logger.error("acquire_vlanid get key error")
+            return [False, currentid]
+        currentid = int(currentid)
+        [status, maxid] = self.etcd.getkey("network/vlanids/total")
+        if not status:
+            logger.error("acquire_vlanid get key error")
+            return [False, currentid]
+        if int(maxid) < currentid:
+            logger.error("No more VlanID")
+            return [False, currentid]
+        nextid = currentid + 1
+        self.etcd.setkey("network/vlanids/current", str(nextid))
+        return [True, currentid]
 
-        if self.vlanids['currentpool'] == []:
-            if self.vlanids['currentindex'] == 0:
-                return [False, "No VLAN IDs"]
-            else:
-                logger.error("vlanids current pool is empty with current index not zero")
-                return [False, "internal error"]
-        vlanid = self.vlanids['currentpool'].pop()
-        self.dump_vlanids()
-        if self.vlanids['currentpool'] == []:
-            self.load_vlanids()
-        return [True, vlanid]
-
-    def release_vlanid(self, vlanid):
-        if len(self.vlanids['currentpool']) == self.vlanids['block']:
-            self.vlanids['currentpool'] = [vlanid]
-            self.vlanids['currentindex'] = self.vanids['currentindex']+1
-            self.dump_vlanids()
-        else:
-            self.vlanids['currentpool'].append(vlanid)
-            self.dump_vlanids()
-        return [True, "Release VLAN ID success"]
-
-    def add_user(self, username, cidr, isshared = False):
+    def add_user(self, username, cidr):
         logger.info ("add user %s with cidr=%s" % (username, str(cidr)))
         if self.has_user(username):
             return [False, "user already exists in users set"]
-        [status, result] = self.center.allocate(cidr) 
+        [status, result] = self.center.allocate(cidr)
         self.dump_center()
         if status == False:
             return [False, result]
-        [status, vlanid] = self.acquire_vlanid(isshared)
+        [status, vlanid] = self.acquire_vlanid()
         if status:
             vlanid = int(vlanid)
         else:
@@ -452,12 +379,30 @@ class NetworkMgr(object):
             return [False, vlanid]
         self.users[username] = UserPool(addr_cidr = result+"/"+str(cidr), vlanid=vlanid)
         logger.info("setup gateway for %s with %s and vlan=%s" % (username, self.users[username].get_gateway_cidr(), str(vlanid)))
-        netcontrol.setup_gw('docklet-br', username, self.users[username].get_gateway_cidr(), str(vlanid))
+        bridgeid = vlanid // self.bridgeUserSize + 1
+        hasBridge = netcontrol.bridge_exists("docklet-br-"+str(bridgeid))
+        # if there is not a bridge then create it
+        if not hasBridge:
+            netcontrol.new_bridge("docklet-br-"+str(bridgeid));
+            [status, nodeinfo]=self.etcd.listdir("machines/allnodes")
+            # if get the nodes
+            if status:
+                # get the master ip
+                masterIP = self.etcd.getkey("service/master")[1]
+                for node in nodeinfo:
+                    nodeip = node["key"].rsplit('/', 1)[1];
+                    # don't setup the tunnel to itself
+                    if masterIP != nodeip:
+                        netcontrol.setup_vxlan("docklet-br-"+str(bridgeid), nodeip, bridgeid);
+            else:
+                return [False, nodeinfo]
+        
+        netcontrol.setup_gw("docklet-br-"+str(bridgeid), username, self.users[username].get_gateway_cidr(), str((vlanid % self.bridgeUserSize) + 1))
         self.dump_user(username)
         del self.users[username]
         return [True, 'add user success']
 
-    def del_user(self, username, isshared = False):
+    def del_user(self, username):
         if not self.has_user(username):
             return [False, username+" not in users set"]
         self.load_user(username)
@@ -465,16 +410,20 @@ class NetworkMgr(object):
         logger.info ("delete user %s with cidr=%s" % (username, int(cidr)))
         self.center.free(addr, int(cidr))
         self.dump_center()
-        if not isshared:
-            self.release_vlanid(self.users[username].vlanid)
-        netcontrol.del_gw('docklet-br', username)
+        vlanid = self.users[username].vlanid
+        bridgeid = vlanid // self.bridgeUserSize + 1
+        netcontrol.del_gw('docklet-br'+str(bridgeid), username)
+        #netcontrol.del_bridge('docklet-br'+str(self.users[username].vlanid));
         self.etcd.deldir("network/users/"+username)
         del self.users[username]
         return [True, 'delete user success']
 
     def check_usergw(self, username):
         self.load_user(username)
-        netcontrol.check_gw('docklet-br', username, self.users[username].get_gateway_cidr(), str(self.users[username].vlanid))
+        vlanid = self.users[username].vlanid
+        bridgeid = vlanid // self.bridgeUserSize + 1
+        tag = (vlanid % self.bridgeUserSize) + 1
+        netcontrol.check_gw('docklet-br'+str(bridgeid), username, self.users[username].get_gateway_cidr(), tag)
         del self.users[username]
         return [True, 'check gw ok']
 
@@ -556,6 +505,6 @@ class NetworkMgr(object):
         logger.info ("acquire system ips: %s" % str(ip_or_ips))
         result = self.system.release(ip_or_ips)
         self.dump_system()
-        return result 
+        return result
 
 

@@ -7,4 +7,10 @@
 # $4 : network type, for example, veth
 # $5 : value of lxc.network.veth.pair 
 
+#ovs-vsctl --may-exist add-port $Bridge $5 tag=$VLANID
+ovs-vsctl --may-exist add-br $Bridge
+ovs-vsctl --if-exists del-port $Bridge $5
 ovs-vsctl --may-exist add-port $Bridge $5 tag=$VLANID
+if [ "ERROR" != "$MasterIP" ]; then
+    ovs-vsctl --may-exist add-port $Bridge vxlan-$Bridgeid-$MasterIP -- set interface vxlan-$Bridgeid-$MasterIP type=vxlan options:remote_ip=$MasterIP options:key=$Bridgeid
+fi

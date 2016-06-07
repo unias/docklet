@@ -34,6 +34,8 @@ CLUSTER_NAME=docklet-vc
 WEB_PORT=8888
 #cluster net, default is 172.16.0.1/16
 CLUSTER_NET="172.16.0.1/16"
+#virtual network number, default is 4094
+VNET_COUNT=4094
 
 . $DOCKLET_CONF/docklet.conf
 
