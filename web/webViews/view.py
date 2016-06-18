@@ -24,6 +24,7 @@ class normalView():
 
     @classmethod
     def as_view(self):
+        # type: () -> object
         if request.method == 'GET':
             return self.get()
         elif request.method == 'POST':

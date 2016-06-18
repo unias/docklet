@@ -137,3 +137,22 @@ class UserGroup(db.Model):
 
     def __repr__(self):
         return '<UserGroup %r>' % self.name
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    content = db.Column(db.String(1000))
+    from_user = db.Column(db.Integer)
+    to_user = db.Column(db.Integer)
+    send_date = db.Column(db.String(10))
+    type = db.Column(db.String(20))
+
+    def __init__(self, content, from_user, to_user, type):
+        self.content = content
+        self.from_user = from_user
+        self.to_user = to_user
+        self.send_date = datetime.utcnow()
+        self.type = type
+
+    def __repr__(self):
+        return '<Message %r from %r to %r>' % self.content, self.from_person, self.to_person

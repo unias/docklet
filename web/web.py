@@ -19,6 +19,7 @@ initlogging("docklet-web")
 from webViews.log import logger
 
 from flask import Flask, request, session, render_template, redirect, send_from_directory, make_response, url_for, abort
+from webViews.message import createmessageView, querymessagelistView, querymessageView
 from webViews.dashboard import dashboardView
 from webViews.user.userlist import userlistView, useraddView, usermodifyView, userdataView, userqueryView
 from webViews.user.userinfo import userinfoView
@@ -38,7 +39,6 @@ from webViews import cookie_tool
 
 
 
-
 external_login = env.getenv('EXTERNAL_LOGIN')
 #default config
 external_login_url = '/external_auth/'
@@ -52,7 +52,6 @@ if (external_login == 'True'):
 
 
 app = Flask(__name__)
-
 
 
 @app.route("/", methods=['GET'])
@@ -83,7 +82,7 @@ def logout():
     return logoutView.as_view()
 
 @app.route("/register/", methods=['GET', 'POST'])
-@administration_required
+#@administration_required
 #now forbidden,only used by SEI & PKU Staffs and students.
 #can be used by admin for testing
 def register():
@@ -347,6 +346,21 @@ def userinfo():
 @administration_required
 def userquery():
     return userqueryView.as_view()
+
+@app.route("/message/create/", methods=['POST'])
+@login_required
+def createmessage():
+    return createmessageView.as_view()
+
+@app.route("/message/queryList/", methods=['POST'])
+@administration_required
+def querymessagelist():
+    return querymessagelistView.as_view()
+
+@app.route("/message/query/", methods=['POST'])
+@login_required
+def querymessage():
+    return querymessageView.as_view()
 
 @app.route("/system/modify/", methods=['POST'])
 @administration_required

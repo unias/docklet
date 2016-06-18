@@ -1,10 +1,11 @@
 from flask import session, request, abort, redirect
 from functools import wraps
-
+from webViews.log import logger
 
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+
         if request.method == 'POST' :
             if not is_authenticated():
                 abort(401)

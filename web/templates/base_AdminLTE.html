@@ -25,6 +25,8 @@
 
   <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
 
+  <link rel="stylesheet" href="/static/css/message.css"/>
+
 
   {%block css_src %}{% endblock %}
 
@@ -32,6 +34,7 @@
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+
 <div class="wrapper">
 
   <!-- Main Header -->
@@ -194,6 +197,37 @@
 </div>
 <!-- ./wrapper -->
 
+<div id="talk"></div>
+<div id="talk_box">
+    <h2 class="talk_title">
+        {% if mysession['usergroup'] == 'root' or mysession['usergroup'] == 'admin'%}
+            <span id="talk_back"></span>
+        {% endif %}
+        {% if mysession['usergroup'] == 'root' or mysession['usergroup'] == 'admin'%}
+            <span id="title">回复</span>
+        {% else %}
+            <span id="title">联系我们</span>
+        {% endif %}
+        <span id="talk_exc"></span>
+    </h2>
+    <div id="talk_content">
+        <div id="talk_content_box">
+
+        </div>
+
+    </div>
+    <div id="talk_contacts">
+        <ul id="talk_contacts_box">
+
+        </ul>
+    </div>
+
+    <div class="talk_edit" id = "talk_component">
+        <input id="talk_txt" type="text" placeholder="请输入...">
+        <input type="button" id="talk_send" value="发送"/>
+    </div>
+</div>
+
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.2.1 -->
@@ -202,6 +236,8 @@
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/dist/js/app.min.js"></script>
+<!-- message about -->
+<script src="/static/js/message.js"></script>
 
 <script src="//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js"></script>
 <script src="//cdn.bootcss.com/jQuery-slimScroll/1.3.7/jquery.slimscroll.min.js"></script>
@@ -282,9 +318,10 @@
 
 {% endif %}
 
-
 {% block script_src %}
+
 {% endblock %}
+
 </body>
 
 </html>

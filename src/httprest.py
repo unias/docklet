@@ -23,6 +23,7 @@ import http.server, cgi, json, sys, shutil
 from socketserver import ThreadingMixIn
 import nodemgr, vclustermgr, etcdlib, network, imagemgr
 import userManager
+import messageManager
 import monitor,traceback
 import threading
 import sysmgr
@@ -575,6 +576,30 @@ def selfModify_user(cur_user, user, form):
     result = G_usermgr.selfModify(cur_user = cur_user, newValue = form)
     return json.dumps(result)
 
+@app.route("/message/create/", methods=['POST'])
+@login_required
+def create_message(cur_user, user, form):
+    global G_messagemgr
+    logger.info("handle request: message/create/")
+    result = G_messagemgr.create_message(cur_user = cur_user, form = form)
+    return json.dumps(result)
+
+@app.route("/message/queryList/", methods=['POST'])
+@login_required
+def query_message_list(cur_user, user, form):
+    global G_messagemgr
+    logger.info("handle request: message/queryList/")
+    result = G_messagemgr.query_message_list(cur_user = cur_user, form = form)
+    return json.dumps(result)
+
+@app.route("/message/query/", methods=['POST'])
+@login_required
+def query_message(cur_user, user, form):
+    global G_messagemgr
+    logger.info('handle request: message/query/')
+    result = G_messagemgr.query_messages(cur_user = cur_user, form = form)
+    return json.dumps(result)
+
 @app.route("/system/parmList/", methods=['POST'])
 @login_required
 def parmList_system(cur_user, user, form):
@@ -654,6 +679,7 @@ def resetall_system(cur_user, user, form):
         return json.dumps({'success':'false', 'message': message})
     return json.dumps(result)
 
+
 @app.errorhandler(500)
 def internal_server_error(error):
     logger.debug("An internel server error occured")
@@ -685,6 +711,7 @@ if __name__ == '__main__':
     global G_nodemgr
     global G_vclustermgr
     global G_usermgr
+    global G_messagemgr
     global etcdclient
     global G_networkmgr
     global G_clustername
@@ -765,6 +792,8 @@ if __name__ == '__main__':
             etcdclient.deldir("_lock")
 
     G_usermgr = userManager.userManager('root')
+    G_messagemgr = messageManager.messageManager()
+
     clusternet = env.getenv("CLUSTER_NET")
     logger.info("using CLUSTER_NET %s" % clusternet)
 
