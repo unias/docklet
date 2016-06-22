@@ -54,7 +54,8 @@ class messageManager:
             'data' : [ {
                             'to_person_name' : db.session.query(User).filter(User.id == message.from_user).first().username,
                             'to_person_id' : message.from_user,
-                            'last_message_date' : message.last_message_date
+                            'last_message_date' : message.last_message_date,
+                            'last_message' : db.session.query(Message).filter(Message.id == db.session.query(db.func.max(Message.id).label('tmp_ans')).filter(db.or_(Message.from_user == message.from_user, Message.to_user == message.from_user)).first().tmp_ans).first().content
                        }  for message in messages ]
         }
         return res
@@ -70,9 +71,9 @@ class messageManager:
             user_id = cur_user.id
         if not user_id:
             return {'success': 'false', 'message': 'missing user_id parameter'}
-        # logger.info('cnm %d'%user_id)
+
         messages = db.session.query(Message).filter(db.or_(Message.from_user == user_id, Message.to_user == user_id)).all()
-        # messages.sort(lambda x: x)
+        # messages.sort(lambda x: x.)
         res = [
             {
                 'from_user_name': db.session.query(User).filter(User.id == message.from_user).first().username,

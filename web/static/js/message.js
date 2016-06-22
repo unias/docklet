@@ -13,6 +13,7 @@ $("#talk_exc").click(function(){
 })
 
 $("#talk_back").click(function(){
+    getMessageList()
     //点击返回聊天框隐藏
     $(this).hide();
     $("#talk_content").hide();
@@ -46,12 +47,12 @@ function getMessageList() {
 
                 var str = ''
                 for (var i = 0; i < data.data.length; ++i) {
-                    // console.log(data.data[i].type)
+                    // console.log(data.data[i].last_message)
                     var now = data.data[i]
                     str += '<div class="contacts_list" id = ' + now.to_person_id + ' name = ' + now.to_person_name + '>'
                     str += '<div class="contacts_portrait"></div>'
                     str += '<p class="contacts_name">' + now.to_person_name + '   <span class="contacts_time">' + now.last_message_date.substring(0, 16) + '</span></p>'
-                    str += '<p class="contacts_text">something... </p>'
+                    str += '<p class="contacts_text">' + now.last_message + ' </p>'
                     str += '</div>'
                 }
                 $("#talk_contacts_box").html(str)
