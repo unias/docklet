@@ -17,14 +17,24 @@ $("#talk_back").click(function(){
     //点击返回聊天框隐藏
     $(this).hide();
     $("#talk_content").hide();
-    $("#title").text("好友列表");
+    $("#title").text("消息列表");
     $("#talk_component").hide();
     //好友显示，接口在这获取信息
     $("#talk_contacts").show();
-    $("#talk_component").hide();
 })
 
 url = 'http://localhost:8000/'
+
+if (document.getElementById("talk_back")) {
+    getMessageList()
+    //点击返回聊天框隐藏
+    $("#talk_back").hide();
+    $("#talk_content").hide();
+    $("#title").text("消息列表");
+    $("#talk_component").hide();
+    //好友显示，接口在这获取信息
+    $("#talk_contacts").show();
+}
 
 $.fn.scrollBottom = function(scroll){
   if(typeof scroll === 'number'){
