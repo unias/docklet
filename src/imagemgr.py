@@ -133,7 +133,7 @@ class ImageMgr():
             sys_run("mount /dev/%s/%s %s" %(vgname,lxc,layer),True)
             #self.sys_call("mkdir -p %s/overlay %s/work" % (layer,layer))
             #self.sys_call("mount -t overlay overlay -olowerdir=%s/local/basefs,upperdir=%s/overlay,workdir=%s/work %s" % (self.NFS_PREFIX,layer,layer,rootfs))
-            sys_run("mount -t aufs -o br=%s=rw:%s/local/basefs=ro+wh none %s/" % (layer,self.NFS_PREFIX,rootfs),True)
+            sys_run("mount -t aufs -o br=%s=rw:%s/local/basefs=ro+wh -o udba=reval none %s/" % (layer,self.NFS_PREFIX,rootfs),True)
             sys_run("mkdir -p %s/local/temp/%s" % (self.NFS_PREFIX,lxc))
 
         except Exception as e:
@@ -178,7 +178,7 @@ class ImageMgr():
             sys_run("mount /dev/%s/%s %s" % (vgname,lxc,layer))
         Ret = sys_run("mountpoint %s" % rootfs)
         if Ret.returncode != 0:
-            sys_run("mount -t aufs -o br=%s=rw:%s/local/basefs=ro+wh none %s/" % (layer,self.NFS_PREFIX,rootfs))
+            sys_run("mount -t aufs -o br=%s=rw:%s/local/basefs=ro+wh -o udba=reval none %s/" % (layer,self.NFS_PREFIX,rootfs))
         return True
 
 

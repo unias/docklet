@@ -45,7 +45,7 @@ def initlogging(name='docklet'):
     logger.setLevel(LOG_LEVEL)
     # Make a handler that writes to a file, making a new file at midnight and keeping 3 backups
     handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME,
-            when="midnight", backupCount=0)
+            when="midnight", backupCount=0, encoding='utf-8')
     # Format each log message like this
     formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(module)s[%(lineno)d] %(message)s')
     # Attach the formatter to the handler

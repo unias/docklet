@@ -9,6 +9,7 @@ from flask import Flask, request
 # must first init loadenv
 import tools, env
 # default CONFIG=/opt/docklet/local/docklet-running.conf
+
 config = env.getenv("CONFIG")
 tools.loadenv(config)
 
@@ -21,7 +22,7 @@ from log import logger
 import os
 import http.server, cgi, json, sys, shutil
 from socketserver import ThreadingMixIn
-import nodemgr, vclustermgr, etcdlib, network, imagemgr
+import nodemgr, vclustermgr, etcdlib, network, imagemgr, notificationmgr
 import userManager
 import messageManager
 import monitor,traceback
@@ -500,6 +501,7 @@ def groupadd_user(cur_user, user, form):
     result = G_usermgr.groupadd(form = form, cur_user = cur_user)
     return json.dumps(result)
 
+
 @app.route("/user/chdefault/", methods=['POST'])
 @login_required
 def chdefault(cur_user, user, form):
@@ -535,6 +537,7 @@ def data_user(cur_user, user, form):
     result = G_usermgr.userList(cur_user = cur_user)
     return json.dumps(result)
 
+
 @app.route("/user/groupNameList/", methods=['POST'])
 @login_required
 def groupNameList_user(cur_user, user, form):
@@ -552,6 +555,7 @@ def groupList_user(cur_user, user, form):
     result = G_usermgr.groupList(cur_user = cur_user)
     return json.dumps(result)
 
+
 @app.route("/user/groupQuery/", methods=['POST'])
 @login_required
 def groupQuery_user(cur_user, user, form):
@@ -559,6 +563,7 @@ def groupQuery_user(cur_user, user, form):
     logger.info("handle request: user/groupQuery/")
     result = G_usermgr.groupQuery(name = form.get("name"), cur_user = cur_user)
     return json.dumps(result)
+
 
 @app.route("/user/selfQuery/", methods=['POST'])
 @login_required
@@ -568,6 +573,7 @@ def selfQuery_user(cur_user, user, form):
     result = G_usermgr.selfQuery(cur_user = cur_user)
     return json.dumps(result)
 
+
 @app.route("/user/selfModify/", methods=['POST'])
 @login_required
 def selfModify_user(cur_user, user, form):
@@ -575,6 +581,70 @@ def selfModify_user(cur_user, user, form):
     logger.info("handle request: user/selfModify/")
     result = G_usermgr.selfModify(cur_user = cur_user, newValue = form)
     return json.dumps(result)
+
+
+@app.route("/notification/list/", methods=['POST'])
+@login_required
+def list_notifications(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/list/")
+    result = G_notificationmgr.list_notifications(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/create/", methods=['POST'])
+@login_required
+def create_notification(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/create/")
+    result = G_notificationmgr.create_notification(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/modify/", methods=['POST'])
+@login_required
+def modify_notification(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/modify/")
+    result = G_notificationmgr.modify_notification(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/delete/", methods=['POST'])
+@login_required
+def delete_notification(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/delete/")
+    result = G_notificationmgr.delete_notification(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/query_self/", methods=['POST'])
+@login_required
+def query_self_notification_simple_infos(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/query_self/")
+    result = G_notificationmgr.query_self_notification_simple_infos(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/query/", methods=['POST'])
+@login_required
+def query_notification(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/query/")
+    result = G_notificationmgr.query_notification(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
+
+@app.route("/notification/query/all/", methods=['POST'])
+@login_required
+def query_self_notifications_infos(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/query/all/")
+    result = G_notificationmgr.query_self_notifications_infos(cur_user=cur_user, form=form)
+    return json.dumps(result)
+
 
 @app.route("/message/create/", methods=['POST'])
 @login_required
@@ -707,10 +777,10 @@ if __name__ == '__main__':
     runcmd = sys.argv[0]
     app.runpath = runcmd.rsplit('/', 1)[0]
 
-
     global G_nodemgr
     global G_vclustermgr
     global G_usermgr
+    global G_notificationmgr
     global G_messagemgr
     global etcdclient
     global G_networkmgr
@@ -792,6 +862,8 @@ if __name__ == '__main__':
             etcdclient.deldir("_lock")
 
     G_usermgr = userManager.userManager('root')
+    G_notificationmgr = notificationmgr.NotificationMgr()
+
     G_messagemgr = messageManager.messageManager()
 
     clusternet = env.getenv("CLUSTER_NET")

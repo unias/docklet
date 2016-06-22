@@ -58,7 +58,26 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
-
+          <li class="dropdown notifications-menu">
+          <a id='notificationIcon' href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-bell-o"></i>
+{#            <span class="label label-warning">0</span>#}
+          </a>
+          <ul class="dropdown-menu">
+            <li id="notificationHeader" class="header">You have 0 notifications</li>
+            <li>
+              <!-- inner menu: contains the actual data -->
+              <ul id='notificationList' class="menu">
+{#                <li>#}
+{#                  <a href="#">#}
+{#                    <i class="fa fa-envelop"></i> Notification title#}
+{#                  </a>#}
+{#                </li>#}
+              </ul>
+            </li>
+            <li class="footer"><a href="/notification/detail/all/">View all</a></li>
+          </ul>
+          </li>
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -137,15 +156,18 @@
 
   {% if mysession['usergroup'] == 'root' or mysession['usergroup'] == 'admin'%}
         <li class="header">ADMIN OPERATIONS</li>
-    		<li id="nav_Hosts">
-    		    <a href='/hosts/'><i class="fa fa-sitemap"></i> <span class="nav-label">Hosts</span></a>
-    		</li>
+        <li id="nav_Hosts">
+            <a href='/hosts/'><i class="fa fa-sitemap"></i> <span class="nav-label">Hosts</span></a>
+        </li>
         <li id="user_List">
-    		    <a href='/user/list/'><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
-    		</li>
+            <a href='/user/list/'><i class="fa fa-users"></i> <span class="nav-label">Users</span></a>
+        </li>
+        <li id="nav_Notification">
+            <a href='/notification/'><i class="fa fa-envelope"></i> <span class="nav-label">Notifications</span></a>
+        </li>
         <li id="admin">
-    		    <a href='/admin/'><i class="fa fa-gears"></i> <span class="nav-label">Admin</span></a>
-    		</li>
+            <a href='/admin/'><i class="fa fa-user"></i> <span class="nav-label">Admin</span></a>
+        </li>
   {% endif %}
 
       </ul>
@@ -261,7 +283,65 @@
   		  if (pathname[2] == 'list')
           $("#user_List").addClass("active");
     }
+    else if(pathname[1] == 'notification')
+        $("#nav_Notification").addClass('active');
+    else if(pathname[1] == 'admin')
+        $("#admin").addClass('active');
 
+</script>
+
+<script type="text/javascript">
+    var ajaxCfg = {
+        type : "post",
+        url : '/notification/query_self/',
+        dataType : "json",
+        data : {},
+        success : function(data) {
+            console.log(data);
+            var notifies = data.data;
+            var len = notifies.length;
+            var cnt = 0;
+
+            var now = new Date().getTime();
+            for(var t = 0; t < len; t++) {
+                var notify = notifies[t];
+                var createDate = notify.create_date.substring(0, 19);
+                createDate = createDate.replace(/-/g,'/');
+                var from = new Date(createDate).getTime();
+                var delta = now - from;
+                if(delta <= 604800000) {
+                    cnt ++;
+                }
+            }
+
+            $('#notificationIcon').find('span').remove();
+            $('#notificationList').empty();
+
+            if(cnt != 0) {
+                $("<span class=\"label label-warning\">"+cnt+"</span>").appendTo($('#notificationIcon'));
+            }
+            $("#notificationHeader").html("You have " + len + " notifications, "+cnt+" in 1 week");
+            for(var i = 0; i < len; i++) {
+                notify = notifies[i];
+                console.log(notify);
+                var a = $("<a href=\"/notification/detail/"+ notify.id +"/\"><i class=\"fa fa-envelope\"></i> "+ notify.title +"</a>")
+                var item = $("<li></li>");
+                item.append(a);
+                $("#notificationList").append(item);
+            }
+
+        },
+        error: function (xhr, type) {
+            console.log(xhr);
+        }
+    }
+
+    $(document).ready(function(){
+        $.ajax(ajaxCfg);
+        var refresh = setInterval(function(){
+            $.ajax(ajaxCfg);
+        }, 10000);
+    });
 </script>
 
 
