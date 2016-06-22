@@ -25,6 +25,15 @@ $("#talk_back").click(function(){
 
 url = 'http://localhost:8000/'
 
+$.fn.scrollBottom = function(scroll){
+  if(typeof scroll === 'number'){
+    window.scrollTo(0,$(document).height() - $(window).height() - scroll);
+    return $(document).height() - $(window).height() - scroll;
+  } else {
+    return $(document).height() - $(window).height() - $(window).scrollTop();
+  }
+}
+
 function getMessageList() {
     // console.log('getMessageList begin')
     if (document.getElementById("talk_back")) {
@@ -39,7 +48,7 @@ function getMessageList() {
                 for (var i = 0; i < data.data.length; ++i) {
                     // console.log(data.data[i].type)
                     var now = data.data[i]
-                    str += '<div class="contacts_list" id = ' + i + '>'
+                    str += '<div class="contacts_list" id = ' + now.to_person_id + ' name = ' + now.to_person_name + '>'
                     str += '<div class="contacts_portrait"></div>'
                     str += '<p class="contacts_name">' + now.to_person_name + '   <span class="contacts_time">' + now.last_message_date.substring(0, 16) + '</span></p>'
                     str += '<p class="contacts_text">something... </p>'
@@ -49,6 +58,14 @@ function getMessageList() {
 
                 $('.contacts_list').each(function () {
                     $(this).click(function() {
+                        selected_id = $(this).attr("id")
+                        $("#talk_back").show();
+                        $("#talk_content").show();
+                        $("#title").text($(this).attr("name"));
+                        $("#talk_component").show();
+                        $("#talk_contacts").hide();
+                        $("#talk_component").show();
+                        getMessages(true)
                         console.log($(this).attr("id") + ' clicked ')
                     })
                 })
@@ -61,14 +78,14 @@ function getMessageList() {
     }
 }
 
-function getMessages() {
+function getMessages(scrollToBottom) {
     $.ajax(
         {
             type:'post',
             url:url + 'message/query/',
             dataType: "json",
             data: {
-                user_id: 2
+                user_id: selected_id
             },
             success:function(data) {
                 // console.log(data);
@@ -86,6 +103,9 @@ function getMessages() {
                     str += '</li>'
                 }
                 $("#talk_content_box").html(str)
+                if (scrollToBottom) {
+                    $("#talk_content_box").scrollTop(99999)
+                }
             },
             error: function (xhr, type) {
                 console.log("数据不能加载！")
@@ -108,8 +128,8 @@ function sendMessage() {
                 to_user:selected_id
             },
             success:function(data){
-                console.log(data);
-                getMessages();
+                // console.log(data);
+                getMessages(true);
             }
         }
     )
@@ -142,11 +162,11 @@ $('#talk_send').click(function(){
 
 });
 
-getMessages();
+getMessages(true);
 getMessageList();
 
 setInterval(function(){
     // console.log('refreshing..')
-    getMessages();
+    getMessages(false);
     getMessageList();
 },30000);

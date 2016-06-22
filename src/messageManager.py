@@ -47,7 +47,7 @@ class messageManager:
         if cur_user.user_group != 'root' and cur_user.user_group != 'admin':
             return { 'success' : 'false', 'message' : 'invalid request', 'Unauthorized': 'True'}
 
-        messages = db.session.query(Message.from_user, db.func.max(Message.send_date).label('last_message_date')).group_by(Message.from_user).all()
+        messages = db.session.query(Message.from_user, db.func.max(Message.send_date).label('last_message_date')).filter(Message.type == 'question').group_by(Message.from_user).all()
         #messages = Message.query.filter_by(from_user = cur_user.id).all()
         res = {
             'success' : 'true',
