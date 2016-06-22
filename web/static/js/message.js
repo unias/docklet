@@ -170,4 +170,4 @@ setInterval(function(){
     // console.log('refreshing..')
     getMessages(false);
     getMessageList();
-},30000);
+},1000);
