@@ -10,9 +10,12 @@ GIT_ADDRESS=$2
 WORKER_DIR=$3
 do_update () {
     source $DOCKLET_CONF/docklet.conf
-    arr=(${WORKER_ADDRESSES/ / })
     echo "" > $DOCKLET_HOME/tools/update_output.txt
-    echo "$WORKER_DIR"
+    echo `$DOCKLET_HOME/bin/docklet-master stop` >> $DOCKLET_HOME/tools/update_output.txt
+    echo `git pull origin master:master` >> $DOCKLET_HOME/tools/update_output.txt
+    echo `$DOCKLET_HOME/bin/docklet-master init` >> $DOCKLET_HOME/tools/update_output.txt
+    echo `$DOCKLET_HOME/bin/docklet-master status` >> $DOCKLET_HOME/tools/update_output.txt
+    arr=(${WORKER_ADDRESSES/ / })
     for i in ${arr[@]}  
     do  
         echo $i >> $DOCKLET_HOME/tools/update_output.txt

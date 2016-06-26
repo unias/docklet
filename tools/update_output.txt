@@ -1,6 +1,16 @@
 
+auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Stopping docklet-web daemon ...done. auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Stopping docklet-proxy daemon ...done. auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Stopping docklet-master daemon ...done.
+
+auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Starting docklet-master in /opt/docklet ...done. auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Starting docklet-proxy daemon in /opt/docklet ...done. auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local Starting docklet-web in /opt/docklet ...done.
+auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local docklet-master is running auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local docklet-proxy is running auto_update_master.sh auto_update_worker.sh default.etcd dl_start_spark.sh dl_stop_spark.sh DOCKLET_NOTES.txt etcd_1.etcd etcd-multi-nodes.sh etcd-one-node.sh npmrc pip.conf q resolv.conf sources.list start_jupyter.sh update-basefs.sh update_output.txt vimrc.local docklet-web is running
 45.55.190.101
 hello world!
  * Stopping docklet-worker daemon
    ...done.
-docklet-1 docklet-worker is not running
+stop test!
+ * docklet-worker is not running
+Already up-to-date.
+ * Starting docklet-worker in /opt/docklet
+   ...done.
+start test!
+ * docklet-worker is running
