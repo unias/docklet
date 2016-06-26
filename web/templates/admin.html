@@ -25,6 +25,30 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-md-12">
+    <div class="box box-info">
+      <div class="box-header with-border">
+          <h3 class="box-title">Updates Codes</h3>
+
+          <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+              </button>
+          </div>
+      </div>
+      <div class="box-body">
+        <form class="" action="/update-codes" method="post">
+          <b>Git Repository Address:</b> 
+          <input type="text" name="git-repo">
+          <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+        </form>
+      </div>
+      
+    </div>  
+  </div>
+</div>:
+<div class="row">
  <div class="col-md-12">
      <div class="box box-info">
          <div class="box-header with-border">

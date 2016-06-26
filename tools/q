@@ -1,0 +1,18 @@
+● etcd.service - etcd - highly-available key value store
+   Loaded: loaded (/lib/systemd/system/etcd.service; enabled; vendor preset: enabled)
+   Active: inactive (dead) since Sat 2016-06-18 13:14:58 EDT; 1min 16s ago
+     Docs: https://github.com/coreos/etcd
+           man:etcd
+  Process: 2985 ExecStart=/usr/bin/etcd $DAEMON_ARGS (code=killed, signal=TERM)
+ Main PID: 2985 (code=killed, signal=TERM)
+
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 systemd[1]: Started etcd - highly-available key value store.
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: ce2a822cea30bfca is starting a new election at term 4
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: ce2a822cea30bfca became candidate at term 5
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: ce2a822cea30bfca received vote from ce2a822cea30bfca at term 5
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: ce2a822cea30bfca became leader at term 5
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: raft.node: ce2a822cea30bfca elected leader ce2a822cea30bfca at term 5
+Jun 18 13:14:36 ubuntu-512mb-nyc3-01 etcd[2985]: published {Name:ubuntu-512mb-nyc3-01 ClientURLs:[http://localhost:2379 http://localhost:4001]} to cluster 7e27652122e8b2ae
+Jun 18 13:14:58 ubuntu-512mb-nyc3-01 systemd[1]: Stopping etcd - highly-available key value store...
+Jun 18 13:14:58 ubuntu-512mb-nyc3-01 etcd[2985]: [0;1;39mreceived terminated signal, shutting down...[0m
+Jun 18 13:14:58 ubuntu-512mb-nyc3-01 systemd[1]: Stopped etcd - highly-available key value store.

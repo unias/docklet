@@ -1,0 +1,6 @@
+
+45.55.190.101
+hello world!
+ * Stopping docklet-worker daemon
+   ...done.
+docklet-1 docklet-worker is not running
