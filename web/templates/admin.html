@@ -39,10 +39,12 @@
       </div>
       <div class="box-body">
         <form class="" action="/update-codes" method="post">
-          <b>Git Repository Address:</b> 
-          <input type="text" name="git-repo">
-          <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+          <b>Working Directory of Worker(eg:/root/docklet): &nbsp </b> 
+          <input name="working_dir_of_worker"> 
+          <input type="submit" value="Fire update!" onclick='alert("Please wait for updating codes!");' class="btn btn-primary btn-sm">
         </form>
+	<div class="text-info"><br>Last update log</div>
+	<pre id="update_log">Update Log</pre>
       </div>
       
     </div>  
@@ -216,5 +218,10 @@
         $("#mLifecycle").val(result.lifeCycle);
       });
     }
+    $( document ).ready(function() {
+	$.get("../static/update_log.txt", function(result){
+    		$("#update_log").text(result);
+  	});
+    });
 </script>
 {% endblock %}

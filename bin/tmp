@@ -1,0 +1,8 @@
+docklet-master docklet-worker docklet-master is running docklet-master docklet-worker docklet-proxy is running docklet-master docklet-worker docklet-web is running
+docklet-master docklet-worker tmp Stopping docklet-web daemon ...done. docklet-master docklet-worker tmp Stopping docklet-proxy daemon ...done. docklet-master docklet-worker tmp Stopping docklet-master daemon ...done.
+ * Stopping docklet-web daemon
+   ...done.
+ * Stopping docklet-proxy daemon
+   ...done.
+ * Stopping docklet-master daemon
+   ...done.

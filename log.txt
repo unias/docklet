@@ -1,0 +1,34 @@
+total 64
+drwxr-xr-x 9 root root 4096 Jun 26 12:24 ./
+drwx------ 7 root root 4096 Jun 26 12:24 ../
+drwxr-xr-x 8 root root 4096 Jun 26 12:17 .git/
+-rw-r--r-- 1 root root   57 Jun 17 21:55 .gitignore
+-rw-r--r-- 1 root root  117 Jun 17 21:55 CHANGES
+-rw-r--r-- 1 root root 1512 Jun 17 21:55 LICENSE
+-rw-r--r-- 1 root root 5452 Jun 17 21:55 README.md
+-rw-r--r-- 1 root root    6 Jun 17 21:55 VERSION
+drwxr-xr-x 2 root root 4096 Jun 26 12:17 bin/
+drwxr-xr-x 3 root root 4096 Jun 26 11:28 conf/
+drwxr-xr-x 5 root root 4096 Jun 17 21:55 doc/
+-rw-r--r-- 1 root root    0 Jun 26 12:25 log.txt
+-rwxr-xr-x 1 root root 2825 Jun 17 21:55 prepare.sh*
+drwxr-xr-x 3 root root 4096 Jun 18 03:52 src/
+drwxr-xr-x 4 root root 4096 Jun 26 12:18 tools/
+drwxr-xr-x 5 root root 4096 Jun 26 11:07 web/
+total 68
+drwxr-xr-x 9 root root 4096 Jun 26 12:24 ./
+drwx------ 7 root root 4096 Jun 26 12:24 ../
+drwxr-xr-x 8 root root 4096 Jun 26 12:17 .git/
+-rw-r--r-- 1 root root   57 Jun 17 21:55 .gitignore
+-rw-r--r-- 1 root root  117 Jun 17 21:55 CHANGES
+-rw-r--r-- 1 root root 1512 Jun 17 21:55 LICENSE
+-rw-r--r-- 1 root root 5452 Jun 17 21:55 README.md
+-rw-r--r-- 1 root root    6 Jun 17 21:55 VERSION
+drwxr-xr-x 2 root root 4096 Jun 26 12:17 bin/
+drwxr-xr-x 3 root root 4096 Jun 26 11:28 conf/
+drwxr-xr-x 5 root root 4096 Jun 17 21:55 doc/
+-rw-r--r-- 1 root root  776 Jun 26 12:25 log.txt
+-rwxr-xr-x 1 root root 2825 Jun 17 21:55 prepare.sh*
+drwxr-xr-x 3 root root 4096 Jun 18 03:52 src/
+drwxr-xr-x 4 root root 4096 Jun 26 12:18 tools/
+drwxr-xr-x 5 root root 4096 Jun 26 11:07 web/
