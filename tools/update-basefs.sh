@@ -124,3 +124,8 @@ echo "[*] Generating $BASEFS/home/spark/sbin/dl_{start|stop}_spark.sh for Spark"
 if [ -d $BASEFS/home/spark/sbin ] ; then
     cp dl_*_spark.sh $BASEFS/home/spark/sbin
 fi
+
+echo "[*] Generating $BASEFS/root/{R|python}_demo.ipynb"
+if [ -d $BASEFS/root/ ] ; then
+    cp R_demo.ipynb python_demo.ipynb $BASEFS/root/
+fi

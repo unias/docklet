@@ -134,3 +134,14 @@
 # If this address i "", no email will be sent to admin.
 # default: ""
 # ADMIN_EMAIL_ADDRESS=""
+
+# DATA_QUOTA : whether enable the quota of data volume or not
+# True or False, default: False
+# DATA_QUOTA=False
+
+# DATA_QUOTA_CMD : the cmd to set the quota of a given directory. It accepts two arguments:
+# arg1: the directory name, relative path from the data volume root, e.g, "/users/bob/data"
+# arg2: the quota value in GB of string, e.g., "100"
+# default: "gluster volume quota docklet-volume limit-usage %s %s"
+# DATA_QUOTA_CMD="gluster volume quota docklet-volume limit-usage %s %s"
+

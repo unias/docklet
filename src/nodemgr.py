@@ -13,7 +13,7 @@ import env
 #               2. update node list when new node joins
 # ETCD table :
 #         machines/allnodes  -- all nodes in docklet, for recovery
-#         machines/runnodes  -- run nodes of this start up 
+#         machines/runnodes  -- run nodes of this start up
 ##############################################
 class NodeMgr(object):
     def __init__(self, networkmgr, etcdclient, addr, mode):
@@ -22,6 +22,7 @@ class NodeMgr(object):
         self.networkmgr = networkmgr
         self.etcd = etcdclient
         self.mode = mode
+        self.workerport = env.getenv('WORKER_PORT')
 
         # initialize the network
         logger.info ("initialize network")
@@ -45,21 +46,29 @@ class NodeMgr(object):
                 logger.error("docklet-br not found")
                 sys.exit(1)
 
-        # get allnodes
-        self.allnodes = self._nodelist_etcd("allnodes")
-        self.runnodes = self._nodelist_etcd("runnodes")
-        logger.info ("all nodes are: %s" % self.allnodes)
-        logger.info ("run nodes are: %s" % self.runnodes)
-        if len(self.runnodes)>0:
-            logger.error ("init runnodes is not null, need to be clean")
-            sys.exit(1)
         # init rpc list 
         self.rpcs = []
+
+        # get allnodes
+        self.allnodes = self._nodelist_etcd("allnodes")
+        self.runnodes = []
+        [status, runlist] = self.etcd.listdir("machines/runnodes")
+        for node in runlist:
+            nodeip = node['key'].rsplit('/',1)[1]
+            if node['value'] == 'ok':
+                logger.info ("running node %s" % nodeip)
+                self.runnodes.append(nodeip)
+                self.rpcs.append(xmlrpc.client.ServerProxy("http://%s:%s" % (nodeip, self.workerport)))
+                logger.info ("add %s:%s in rpc client list" % (nodeip, self.workerport))
+           
+        logger.info ("all nodes are: %s" % self.allnodes)
+        logger.info ("run nodes are: %s" % self.runnodes)
+
         # start new thread to watch whether a new node joins
         logger.info ("start thread to watch new nodes ...")
         self.thread_watchnewnode = threading.Thread(target=self._watchnewnode)
         self.thread_watchnewnode.start()
-        # wait for all nodes joins 
+        # wait for all nodes joins
         while(True):
             allin = True
             for node in self.allnodes:
@@ -73,7 +82,7 @@ class NodeMgr(object):
         logger.info ("run nodes are: %s" % self.runnodes)
 
 
-    # get nodes list from etcd table 
+    # get nodes list from etcd table
     def _nodelist_etcd(self, which):
         if which == "allnodes" or which == "runnodes":
             [status, nodeinfo]=self.etcd.listdir("machines/"+which)
@@ -86,36 +95,19 @@ class NodeMgr(object):
 
     # thread target : watch whether a new node joins
     def _watchnewnode(self):
-        workerport = env.getenv('WORKER_PORT')
         while(True):
             time.sleep(0.1)
             [status, runlist] = self.etcd.listdir("machines/runnodes")
             if not status:
-                logger.warning ("get runnodes list failed from etcd ")    
+                logger.warning ("get runnodes list failed from etcd ")
                 continue
             for node in runlist:
                 nodeip = node['key'].rsplit('/',1)[1]
                 if node['value']=='waiting':
+                    #   waiting state can be deleted, there is no use to let master check 
+                    # this state because worker will change it and master will not change it now.
+                    # it is only preserved for compatible.
                     logger.info ("%s want to joins, call it to init first" % nodeip)
-                    # 'docklet-br' of worker do not need IP Addr. Not need to allocate an IP to it
-                    #if nodeip != self.addr:
-                    #    [status, result] = self.networkmgr.acquire_sysips_cidr()
-                    #    self.networkmgr.printpools()
-                    #    if not status:
-                    #        logger.error("no IP for worker bridge, please check network system pool")
-                    #        continue
-                    #    bridgeip = result[0]
-                    #    self.etcd.setkey("network/workbridge", bridgeip)
-                    if nodeip in self.allnodes:
-                        ######## HERE MAYBE NEED TO FIX ###############
-                        # here we must use "machines/runnodes/nodeip"
-                        # we cannot use node['key'], node['key'] is absolute 
-                        # path, etcd client will append the path to prefix, 
-                        # which is wrong
-                        ###############################################
-                        self.etcd.setkey("machines/runnodes/"+nodeip, "init-"+self.mode)
-                    else:
-                        self.etcd.setkey('machines/runnodes/'+nodeip, "init-new")
                 elif node['value']=='work':
                     logger.info ("new node %s joins" % nodeip)
                     # setup GRE tunnels for new nodes
@@ -127,18 +119,19 @@ class NodeMgr(object):
                             logger.debug("GRE for %s already exists, reuse it" % nodeip)
                         else:
                             netcontrol.setup_gre('docklet-br', nodeip)
-                    self.runnodes.append(nodeip)
                     self.etcd.setkey("machines/runnodes/"+nodeip, "ok")
-                    if nodeip not in self.allnodes:
-                        self.allnodes.append(nodeip)
-                        self.etcd.setkey("machines/allnodes/"+nodeip, "ok")
-                    logger.debug ("all nodes are: %s" % self.allnodes)
-                    logger.debug ("run nodes are: %s" % self.runnodes)
-                    self.rpcs.append(xmlrpc.client.ServerProxy("http://%s:%s"
-                        % (nodeip, workerport)))
-                    logger.info ("add %s:%s in rpc client list" %
-                        (nodeip, workerport))
-                    
+                    if nodeip not in self.runnodes:
+                        self.runnodes.append(nodeip)
+                        # node not in all node list is a new node.
+                        if nodeip not in self.allnodes:
+                            self.allnodes.append(nodeip)
+                            self.etcd.setkey("machines/allnodes/"+nodeip, "ok")
+                        logger.debug ("all nodes are: %s" % self.allnodes)
+                        logger.debug ("run nodes are: %s" % self.runnodes)
+                        self.rpcs.append(xmlrpc.client.ServerProxy("http://%s:%s"
+                            % (nodeip, self.workerport)))
+                        logger.info ("add %s:%s in rpc client list" %
+                            (nodeip, self.workerport))
     # get all run nodes' IP addr
     def get_nodeips(self):
         return self.allnodes

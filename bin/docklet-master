@@ -3,7 +3,6 @@
 [ $(id -u) != '0' ] && echo "root is needed" && exit 1
 
 # get some path of docklet
-
 bindir=${0%/*}
 # $bindir maybe like /opt/docklet/src/../sbin
 # use command below to make $bindir in normal absolute path
@@ -76,7 +75,8 @@ pre_start_master () {
     [ ! -d $FS_PREFIX/local ] && mkdir -p $FS_PREFIX/local
     [ ! -d $FS_PREFIX/global/users ] && mkdir -p $FS_PREFIX/global/users
     [ ! -d $FS_PREFIX/global/sys ] && mkdir -p $FS_PREFIX/global/sys
-    [ ! -d $FS_PREFIX/global/images ] && mkdir -p $FS_PREFIX/global/images
+    [ ! -d $FS_PREFIX/global/images/private ] && mkdir -p $FS_PREFIX/global/images/private
+    [ ! -d $FS_PREFIX/global/images/public ] && mkdir -p $FS_PREFIX/global/images/public
     [ ! -d $FS_PREFIX/local/volume ] && mkdir -p $FS_PREFIX/local/volume
     [ ! -d $FS_PREFIX/local/temp ] && mkdir -p $FS_PREFIX/local/temp
     [ ! -d $FS_PREFIX/local/run ] && mkdir -p $FS_PREFIX/local/run

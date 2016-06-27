@@ -1,7 +1,8 @@
-from flask import session
+from flask import session, redirect
 from webViews.view import normalView
 from webViews.dockletrequest import dockletRequest
 from webViews.dashboard import *
+from webViews.checkname import checkname
 import time, re
 
 class addClusterView(normalView):
@@ -24,6 +25,7 @@ class createClusterView(normalView):
     def post(self):
         index1 = self.image.rindex("_")
         index2 = self.image[:index1].rindex("_")
+        checkname(self.clustername)
         data = {
             "clustername": self.clustername,
             'imagename': self.image[:index2],
@@ -32,7 +34,7 @@ class createClusterView(normalView):
         }
         result = dockletRequest.post("/cluster/create/", data)
         if(result.get('success', None) == "true"):
-            return dashboardView.as_view()
+           return redirect("/dashboard/")
             #return self.render(self.template_path, user = session['username'])
         else:
             return self.render(self.error_path, message = result.get('message'))
@@ -71,7 +73,7 @@ class scaleoutView(normalView):
         }
         result = dockletRequest.post("/cluster/scaleout/", data)
         if(result.get('success', None) == "true"):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             return self.render(self.error_path, message = result.get('message'))
 
@@ -84,7 +86,7 @@ class scaleinView(normalView):
         }
         result = dockletRequest.post("/cluster/scalein/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 
@@ -110,7 +112,7 @@ class startClusterView(normalView):
         }
         result = dockletRequest.post("/cluster/start/", data)
         if(result):
-            return dashboardView.as_view()
+            return redirect("/dashboard/")
         else:
             return self.error()
 
@@ -124,7 +126,7 @@ class stopClusterView(normalView):
         }
         result = dockletRequest.post("/cluster/stop/", data)
         if(result):
-            return dashboardView.as_view()
+            return redirect("/dashboard/")
         else:
             return self.error()
 
@@ -158,7 +160,7 @@ class deleteClusterView(normalView):
         }
         result = dockletRequest.post("/cluster/delete/", data)
         if(result):
-            return dashboardView.as_view()
+            return redirect("/dashboard/")
         else:
             return self.error()
 
@@ -197,7 +199,7 @@ class saveImageView(normalView):
         if(result):
             if result.get('success') == 'true':
                 #return self.render(self.success_path, user = session['username'])
-                return configView.as_view()
+                return redirect("/config/") 
                 #res = detailClusterView()
                 #res.clustername = self.clustername
                 #return res.as_view()
@@ -219,7 +221,7 @@ class shareImageView(normalView):
         }
         result = dockletRequest.post("/image/share/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 
@@ -233,7 +235,7 @@ class unshareImageView(normalView):
         }
         result = dockletRequest.post("/image/unshare/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 
@@ -247,7 +249,7 @@ class deleteImageView(normalView):
         }
         result = dockletRequest.post("/image/delete/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 
@@ -262,7 +264,7 @@ class addproxyView(normalView):
         }
         result = dockletRequest.post("/addproxy/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 
@@ -275,7 +277,7 @@ class deleteproxyView(normalView):
         }
         result = dockletRequest.post("/deleteproxy/", data)
         if(result):
-            return configView.as_view()
+            return redirect("/config/")
         else:
             self.error()
 

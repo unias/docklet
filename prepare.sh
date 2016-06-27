@@ -39,7 +39,9 @@ apt-get install -y etcd
 which configurable-http-proxy &>/dev/null || npm install -g configurable-http-proxy
 which configurable-http-proxy &>/dev/null || { echo "Error: install configurable-http-proxy failed, you should try again" && exit 1; }
 
+echo ""
 [[ -f conf/docklet.conf ]] || { echo "Generating docklet.conf from template" && cp conf/docklet.conf.template conf/docklet.conf; }
+[[ -f web/templates/home.html ]] || { echo "Generating HomePage from home.template" && cp web/templates/home.template web/templates/home.html; }
 
 echo ""
 echo "All preparation installations are done."
@@ -56,7 +58,7 @@ echo "you will get a dicectory structure like"
 echo "  /opt/docklet/local/basefs/etc "
 echo "  /opt/docklet/local/basefs/bin "
 echo "  /opt/docklet/local/basefs/..."
-echo " "
+echo "you may want to custom home page of docklet. Please modify web/templates/home.html"
 
 echo "Next, make sure exim4 can deliver mail out. To enable, run:"
 echo "dpkg-reconfigure exim4-config"

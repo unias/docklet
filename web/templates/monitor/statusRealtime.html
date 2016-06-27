@@ -27,7 +27,7 @@
 <div class="col-md-12">
 <div class="box box-info">
      <div class="box-header with-border">
-       <h3 class="box-title">Current Status</h3>
+       <h3 class="box-title">Current Status of {{ container['Name'] }}</h3>
 
        <div class="box-tools pull-right">
          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -39,27 +39,27 @@
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>Name</th>
                         <th>State</th>
                         <th>IP Address</th>
-                        <th>CPU Use</th>
-                        <th>CPU Quota</th>
-                        <th>Mem Use</th>
+                        <th>Running Time</th>
+                        <th>CPU Usage</th>
+                        <th>Mem Usage</th>
+                        <th>Disk Usage</th>
                     </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{{ container['Name'] }}</td>
                         {% if container['State'] == 'STOPPED' %}
-                        <td><div id='con_state' class="label label-danger">Stopped</div></td>
+                        <td id='con_state'><div class="label label-danger">Stopped</div></td>
                         <td id='con_ip'>--</td>
                         {% else %}
-                        <td><div id='con_state' class="label label-primary">Running</div></td>
+                        <td id='con_state'><div class="label label-primary">Running</div></td>
                         <td id='con_ip'>{{ container['IP'] }}</td>
                         {% endif %}
+                        <td id='con_time'>{{ container['RunningTime'] }}s</td>
                         <td id='con_cpu'>--</td>
-                        <td id='con_cpuquota'>--</td>
                         <td id='con_mem'>--</td>
+                        <td id='con_disk'>--</td>
                       </tr>
                     </tbody>
                 </table>

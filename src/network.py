@@ -108,10 +108,38 @@ class IntervalPool(object):
             #self.pool[str(i)].sort(key=ip_to_int)  # cidr between thiscidr and upcidr are null, no need to sort
         return [True, upinterval]
 
+    # check whether the addr/cidr overlaps the self.pool 
+    # for example, addr/cidr=172.16.0.48/29 overlaps self.pool['24']=[172.16.0.0]
+    def overlap(self, addr, cidr):
+        cidr=int(cidr)
+        start_cidr=int(self.info.split('/')[1])
+        # test self.pool[cidr] from first cidr pool to last cidr pool
+        for cur_cidr in range(start_cidr, 33):
+            if not self.pool[str(cur_cidr)]:
+                continue
+            # for every cur_cidr, test every possible element covered by pool[cur_cidr] in range of addr/cidr
+            cur_addr=fix_ip(addr, min(cidr, cur_cidr))
+            last_addr=next_interval(addr, cidr)
+            while(ip_to_int(cur_addr)<ip_to_int(last_addr)):
+                if cur_addr in self.pool[str(cur_cidr)]:
+                    return  True
+                cur_addr=next_interval(cur_addr, cur_cidr)
+        return False
+
+    # whether addr/cidr is in the range of self.pool
+    def inrange(self, addr, cidr):
+         pool_addr,pool_cidr=self.info.split('/')
+         if int(cidr)>=int(pool_cidr) and fix_ip(addr,pool_cidr)==pool_addr:
+             return True
+         else:
+             return False
+
     # deallocate an interval with IP/CIDR
-    # ToDo : when free IP/CIDR, we donot check whether IP/CIDR is in pool
-    #        maybe we check this later
     def free(self, addr, cidr):
+        if not self.inrange(addr, cidr):
+            return [False, '%s/%s not in range of %s' % (addr, str(cidr), self.info)]
+        if self.overlap(addr, cidr):
+            return [False, '%s/%s overlaps the center pool:%s' % (addr, str(cidr), self.__str__())]
         cidr = int(cidr)
         # cidr not in pool means CIDR out of pool range
         if str(cidr) not in self.pool:
@@ -185,14 +213,24 @@ class EnumPool(object):
             return [status, result]
         return [True, list(map(lambda x:x+"/"+self.info.split('/')[1], result))]
 
-    # ToDo : when release :
-    #               not check whether IP is in the range of pool
-    #               not check whether IP is already in the pool
+    def inrange(self, ip):
+        addr = self.info.split('/')[0]
+        addrint = ip_to_int(addr)
+        cidr = int(self.info.split('/')[1])
+        if addrint+1 <= ip_to_int(ip) <= addrint+pow(2, 32-cidr)-2:
+            return True
+        return False
+
     def release(self, ip_or_ips):
         if type(ip_or_ips) == str:
             ips = [ ip_or_ips ]
         else:
             ips = ip_or_ips
+        # check whether all IPs are not in the pool but in the range of pool 
+        for ip in ips:
+            ip = ip.split('/')[0]
+            if (ip in self.pool) or (not self.inrange(ip)):
+                return [False, 'release IPs failed for ip already existing or ip exceeding the network pool, ips to be released: %s, ip pool is: %s and content is : %s' % (ips, self.info, self.pool)]
         for ip in ips:
             # maybe ip is in format IP/CIDR
             ip = ip.split('/')[0]
@@ -221,6 +259,14 @@ class UserPool(EnumPool):
     def get_gateway_cidr(self):
         return self.gateway+"/"+self.info.split('/')[1]
 
+    def inrange(self, ip):
+        addr = self.info.split('/')[0]
+        addrint = ip_to_int(addr)
+        cidr = int(self.info.split('/')[1])
+        if addrint+2 <= ip_to_int(ip) <= addrint+pow(2, 32-cidr)-2:
+            return True
+        return False
+
     def printpool(self):
         print("users ID:"+str(self.vlanid)+",  net info:"+self.info+",  gateway:"+self.gateway)
         print (str(self.pool))
@@ -247,6 +293,7 @@ class NetworkMgr(object):
             self.users = {}
             self.vlanids = {}
             self.init_vlanids(4095, 60)
+            self.init_shared_vlanids()
             self.dump_center()
             self.dump_system()
         elif mode == 'recovery':
@@ -258,6 +305,7 @@ class NetworkMgr(object):
             self.load_center()
             self.load_system()
             self.load_vlanids()
+            self.load_shared_vlanids()
         else:
             logger.error("mode: %s not supported" % mode)
 
@@ -270,6 +318,19 @@ class NetworkMgr(object):
         self.vlanids['currentindex'] = i+1
         self.etcd.setkey("network/vlanids/"+str(i+1), json.dumps(self.vlanids['currentpool']))
         self.etcd.setkey("network/vlanids/current", str(i+1))
+    
+    # Data Structure:
+    # shared_vlanids = [{vlanid = ..., sharenum = ...}, {vlanid = ..., sharenum = ...}, ...]
+    def init_shared_vlanids(self, vlannum = 128, sharenum = 128):
+        self.shared_vlanids = []
+        for i in range(vlannum):
+            shared_vlanid = {}
+            [status, shared_vlanid['vlanid']] = self.acquire_vlanid()
+            shared_vlanid['sharenum'] = sharenum
+            self.shared_vlanids.append(shared_vlanid)
+        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
+
+
 
     def load_vlanids(self):
         [status, info] = self.etcd.getkey("network/vlanids/info")
@@ -291,6 +352,16 @@ class NetworkMgr(object):
                 pass
         else:
             self.etcd.setkey("network/vlanids/"+str(self.vlanids['currentindex']), json.dumps(self.vlanids['currentpool']))
+    
+    def load_shared_vlanids(self):
+        [status, shared_vlanids] = self.etcd.getkey("network/shared_vlanids")
+        if not status:
+            self.init_shared_vlanids()
+        else:
+            self.shared_vlanids = json.loads(shared_vlanids)
+
+    def dump_shared_vlanids(self):
+        self.etcd.setkey("network/shared_vlanids", json.dumps(self.shared_vlanids))
 
     def load_center(self):
         [status, centerdata] = self.etcd.getkey("network/center")
@@ -327,7 +398,21 @@ class NetworkMgr(object):
         print ("<vlanids>")
         print (str(self.vlanids['currentindex'])+":"+str(self.vlanids['currentpool']))
 
-    def acquire_vlanid(self):
+    def acquire_vlanid(self, isshared = False):
+        if isshared:
+            # only share vlanid of the front entry
+            # if sharenum is reduced to 0, move the front entry to the back
+            # if sharenum is still equal to 0, one round of sharing is complete, start another one
+            if self.shared_vlanids[0]['sharenum'] == 0:
+                self.shared_vlanids.append(self.shared_vlanids.pop(0))
+            if self.shared_vlanids[0]['sharenum'] == 0:
+                logger.info("shared vlanids not enough, add user to full vlanids")
+                for shared_vlanid in self.shared_vlanids:
+                    shared_vlanid['sharenum'] = 128
+            self.shared_vlanids[0]['sharenum'] -= 1
+            self.dump_shared_vlanids()
+            return [True, self.shared_vlanids[0]['vlanid']]
+
         if self.vlanids['currentpool'] == []:
             if self.vlanids['currentindex'] == 0:
                 return [False, "No VLAN IDs"]
@@ -350,7 +435,7 @@ class NetworkMgr(object):
             self.dump_vlanids()
         return [True, "Release VLAN ID success"]
 
-    def add_user(self, username, cidr):
+    def add_user(self, username, cidr, isshared = False):
         logger.info ("add user %s with cidr=%s" % (username, str(cidr)))
         if self.has_user(username):
             return [False, "user already exists in users set"]
@@ -358,7 +443,7 @@ class NetworkMgr(object):
         self.dump_center()
         if status == False:
             return [False, result]
-        [status, vlanid] = self.acquire_vlanid()
+        [status, vlanid] = self.acquire_vlanid(isshared)
         if status:
             vlanid = int(vlanid)
         else:
@@ -372,15 +457,16 @@ class NetworkMgr(object):
         del self.users[username]
         return [True, 'add user success']
 
-    def del_user(self, username):
-        logger.info ("delete user %s with cidr=%s" % (username))
+    def del_user(self, username, isshared = False):
         if not self.has_user(username):
             return [False, username+" not in users set"]
         self.load_user(username)
         [addr, cidr] = self.users[username].info.split('/')
+        logger.info ("delete user %s with cidr=%s" % (username, int(cidr)))
         self.center.free(addr, int(cidr))
         self.dump_center()
-        self.release_vlanid(self.users[username].vlanid)
+        if not isshared:
+            self.release_vlanid(self.users[username].vlanid)
         netcontrol.del_gw('docklet-br', username)
         self.etcd.deldir("network/users/"+username)
         del self.users[username]

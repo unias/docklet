@@ -16,5 +16,5 @@ class userActivateView(normalView):
 
     @classmethod
     def post(self):
-        dockletRequest.post('/register', request.form)
+        dockletRequest.post('/register/', request.form)
         return redirect('/logout/')

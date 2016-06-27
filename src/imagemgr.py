@@ -63,7 +63,7 @@ class ImageMgr():
         fspath = self.NFS_PREFIX + "/local/volume/" + lxc
         imgpath = self.imgpath + "private/" + user + "/"
 
-        if not os.path.exists(imgpath+image):
+        if not os.path.exists(imgpath+image) and os.path.exists(imgpath):
             cur_imagenum = 0
             for filename in os.listdir(imgpath):
                 if os.path.isdir(imgpath+filename):

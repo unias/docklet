@@ -1,16 +1,24 @@
 var mem_usedp = 0;
 var cpu_usedp = 0;
-
+var is_running = true;
 
 function processMemData(data)
 {
-	mem_usedp = data.monitor.mem_use.usedp;
-	var usedp = data.monitor.mem_use.usedp;
-	var unit = data.monitor.mem_use.unit;
-	var quota = data.monitor.mem_use.quota.memory/1024.0;
-	var val = data.monitor.mem_use.val;
-	var out = "("+val+unit+"/"+quota.toFixed(2)+"MiB)";
-	$("#con_mem").html((usedp/0.01).toFixed(2)+"%<br/>"+out);
+    if(is_running)
+    {
+	    mem_usedp = data.monitor.mem_use.usedp;
+	    var usedp = data.monitor.mem_use.usedp;
+	    var unit = data.monitor.mem_use.unit;
+	    var quota = data.monitor.mem_use.quota.memory/1024.0;
+	    var val = data.monitor.mem_use.val;
+	    var out = "("+val+unit+"/"+quota.toFixed(2)+"MiB)";
+	    $("#con_mem").html((usedp/0.01).toFixed(2)+"%<br/>"+out);
+    }
+    else
+    {
+        mem_usedp = 0;
+        $("#con_mem").html("--");
+    }
 }
 function getMemY()
 {
@@ -18,12 +26,24 @@ function getMemY()
 }
 function processCpuData(data)
 {
-	cpu_usedp = data.monitor.cpu_use.usedp;
-	var val = data.monitor.cpu_use.val;
-	var unit = data.monitor.cpu_use.unit;
-    var quota = data.monitor.cpu_use.quota.cpu;
-	$("#con_cpu").html(val +" "+ unit);
-    $("#con_cpuquota").html(quota + " Cores");
+    if(is_running)
+    {
+	    cpu_usedp = data.monitor.cpu_use.usedp;
+	    var val = data.monitor.cpu_use.val;
+	    var unit = data.monitor.cpu_use.unit;
+        var quota = data.monitor.cpu_use.quota.cpu;
+        var quotaout = "("+quota;
+        if(quota == 1)
+            quotaout += " Core)";
+        else
+            quotaout += " Cores)";
+	    $("#con_cpu").html(val +" "+ unit+"<br/>"+quotaout);
+    }
+    else
+    {
+        cpu_usedp = 0;
+        $("#con_cpu").html("--");
+    }
 }
 function getCpuY()
 {
@@ -149,10 +169,45 @@ function plot_graph(container,url,processData,getY) {
 
 }
 
+
 var host = window.location.host;
 
 var node_name = $("#node_name").html();
 var url = "http://" + host + "/monitor/vnodes/" + node_name;
 
-plot_graph($("#mem-chart"),url + "/mem_use",processMemData,getMemY);
-plot_graph($("#cpu-chart"),url + "/cpu_use",processCpuData,getCpuY);
+function processDiskData()
+{
+    $.post(url+"/disk_use/",{},function(data){
+        var diskuse = data.monitor.disk_use;
+        var usedp = diskuse.percent;
+        var total = diskuse.total/1024.0/1024.0;
+        var used = diskuse.used/1024.0/1024.0;
+        var detail = "("+used.toFixed(2)+"MiB/"+total.toFixed(2)+"MiB)";
+        $("#con_disk").html(usedp+"%<br/>"+detail);
+    },"json");
+}
+setInterval(processDiskData,1000);
+
+function processBasicInfo()
+{
+    $.post(url+"/basic_info/",{},function(data){
+        basic_info = data.monitor.basic_info;
+        state = basic_info.State;
+        if(state == 'STOPPED')
+        {
+            is_running = false;
+            $("#con_state").html("<div class='label label-danger'>Stopped</div>");
+            $("#con_ip").html("--");
+        }
+        else
+        {
+            is_running = true;
+            $("#con_state").html("<div class='label label-primary'>Running</div>");
+            $("#con_ip").html(basic_info.IP);
+        }
+        $("#con_time").html(basic_info.RunningTime+"s");
+    },"json");
+}
+setInterval(processBasicInfo,1000);
+plot_graph($("#mem-chart"),url + "/mem_use/",processMemData,getMemY);
+plot_graph($("#cpu-chart"),url + "/cpu_use/",processCpuData,getCpuY);

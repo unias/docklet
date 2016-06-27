@@ -1,6 +1,37 @@
+v0.2.7,  May 17, 2016
+--------------------
+
+**Bug Fix**
+  * [#9] updating user profile taking effects immediately
+  * [#12] logging user's activity
+  * [#14] Can't stop vcluster by dashboard page
+  * [#18] subprocess call should check return status
+  * [#19] lxc config string in config file is limited in 16 bytes
+  * [#25] bug of external login
+  * [#30] support lxc.custom.conf in appending
+  * [#35] nfs mountpoint bug in imagemgr.py
+  * [#49] Fail to create container
+  * [#57] status page of normal user failed
+  * [#68] Not Found error when just click "Sign in" Button
+  * [#76] unable to show and edit user table in smartphone
+
+**Improvement**
+  * [#7] enhance quota management
+  * [#8] independent starting of master and workers
+  * [#20] check typing and input on web pages and web server
+  * [#23] add LXCFS for container
+  * [#41] move system data to global/sys
+  * [#42] check IP and network pool when releasing IPs
+  * [#48] token expires after some time
+  * [#54] display container owner
+  * [#61] rewrite httprest.py using flask routing
+
+**Notes**
+  * If you upgrade from former version, please run tools/upgrade.py first.
+
 v0.2.6,  Mar 31, 2016
 --------------------
 
 An initial release on github.com
 
-- Using the open source AdminLTE theme
+* Using the open source AdminLTE theme

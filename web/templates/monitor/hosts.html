@@ -78,7 +78,7 @@
    {
 
        var MB = 1024;
-       $.post(url+"/status",{},function(data){
+       $.post(url+"/status/",{},function(data){
 		var status = data.monitor.status;
 		if(status == 'RUNNING')
        		{
@@ -95,7 +95,7 @@
 	   	    tmp.html("Stopped");
        		}
 
-       		$.post(url+"/containers",{},function(data){
+       		$.post(url+"/containers/",{},function(data){
        			var containers = data.monitor.containers;
        			$("#"+index+"_contotal").html(containers.total);
        			$("#"+index+"_conrunning").html(containers.running);
@@ -109,20 +109,20 @@
 			return;
 		}
 
-       		$.post(url+"/cpuinfo",{},function(data){
+       		$.post(url+"/cpuinfo/",{},function(data){
 		       	var idle = data.monitor.cpuinfo.idle;
 			    var usedp = (100 - idle).toFixed(2);
 		       	$("#"+index+"_cpu").html(String(usedp)+"%");
 		       	},"json");
 
-       		$.post(url+"/meminfo",{},function(data){
+       		$.post(url+"/meminfo/",{},function(data){
 			var used = data.monitor.meminfo.used;
 			var total = data.monitor.meminfo.total;
 			var usedp = String(((used/total)*100).toFixed(2))+"%";
 		       	$("#"+index+"_mem").html(usedp);
 		       	},"json");
 
-  	     	$.post(url+"/diskinfo",{},function(data){
+  	     	$.post(url+"/diskinfo/",{},function(data){
 		       	var val = data.monitor.diskinfo;
                 var usedp = val[0].percent;
 		       	$("#"+index+"_disk").html(String(usedp)+"%");

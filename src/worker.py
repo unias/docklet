@@ -12,10 +12,11 @@ from log import logger
 
 import xmlrpc.server, sys, time
 from socketserver import ThreadingMixIn
+import threading
 import etcdlib, network, container
 from nettools import netcontrol
 import monitor
-from lvmtool import *
+from lvmtool import new_group, recover_group
 
 ##################################################################
 #                       Worker
@@ -31,6 +32,11 @@ from lvmtool import *
 #      setup GRE tunnel
 #      start rpc service
 ##################################################################
+
+# imitate etcdlib to genernate the key of etcdlib manually
+def generatekey(path):
+    clustername = env.getenv("CLUSTER_NAME")
+    return '/'+clustername+'/'+path
 
 class ThreadXMLRPCServer(ThreadingMixIn,xmlrpc.server.SimpleXMLRPCServer):
     pass
@@ -48,30 +54,35 @@ class Worker(object):
         self.master = self.etcd.getkey("service/master")[1]
         self.mode=None
 
-        # register self to master
+        # waiting state is preserved for compatible.
         self.etcd.setkey("machines/runnodes/"+self.addr, "waiting")
-        for f in range (0, 3):
-            [status, value] = self.etcd.getkey("machines/runnodes/"+self.addr)
-            if not value.startswith("init"):
-                # master wakesup every 0.1s  to check register
-                logger.debug("worker % register to master failed %d \
-                        time, sleep %fs" % (self.addr, f+1, 0.1))
-                time.sleep(0.1)
-            else:
-                break
-
-        if value.startswith("init"):
-            # check token to check global directory
-            [status, token_1] = self.etcd.getkey("token")
-            tokenfile = open(self.fspath+"/global/token", 'r')
-            token_2 = tokenfile.readline().strip()
-            if token_1 != token_2:
-                logger.error("check token failed, global directory is not a shared filesystem")
-                sys.exit(1)
+        # get this node's key to judge how to init.
+        [status, key] = self.etcd.getkey("machines/runnodes/"+self.addr)
+        if status:
+            self.key = generatekey("machines/allnodes/"+self.addr)
         else:
-            logger.error ("worker register in machines/runnodes failed, maybe master not start")
+            logger.error("get key failed. %s" % 'machines/runnodes/'+self.addr)
             sys.exit(1)
-        logger.info ("worker registered in master and checked the token")
+
+        # check token to check global directory
+        [status, token_1] = self.etcd.getkey("token")
+        tokenfile = open(self.fspath+"/global/token", 'r')
+        token_2 = tokenfile.readline().strip()
+        if token_1 != token_2:
+            logger.error("check token failed, global directory is not a shared filesystem")
+            sys.exit(1)
+        logger.info ("worker registered and checked the token")
+
+        # worker search all run nodes to judge how to init
+        # If the node in all node list, we will recover it.
+        # Otherwise, this node is new added in.
+        value = 'init-new'
+        [status, alllist] = self.etcd.listdir("machines/allnodes")
+        for node in alllist:
+            if node['key'] == self.key:
+                value = 'init-recovery'
+                break
+        logger.info("worker start in "+value+" mode")
 
         Containers = container.Container(self.addr, etcdclient)
         if value == 'init-new':
@@ -110,9 +121,10 @@ class Worker(object):
         logger.info ("initialize rpcserver %s:%d" % (self.addr, int(self.port)))
         # logRequests=False : not print rpc log
         #self.rpcserver = xmlrpc.server.SimpleXMLRPCServer((self.addr, self.port), logRequests=False)
-        self.rpcserver = ThreadXMLRPCServer((self.addr, int(self.port)), allow_none=True)
+        self.rpcserver = ThreadXMLRPCServer((self.addr, int(self.port)), allow_none=True, logRequests=False)
         self.rpcserver.register_introspection_functions()
         self.rpcserver.register_instance(Containers)
+        self.rpcserver.register_function(monitor.workerFetchInfo)
         # register functions or instances to server for rpc
         #self.rpcserver.register_function(function_name)
 
@@ -145,11 +157,27 @@ class Worker(object):
 
     # start service of worker
     def start(self):
+        # worker change it state itself. Independedntly from master.
         self.etcd.setkey("machines/runnodes/"+self.addr, "work")
+        self.thread_sendheartbeat = threading.Thread(target=self.sendheartbeat)
+        self.thread_sendheartbeat.start()
         # start serving for rpc
         logger.info ("begins to work")
         self.rpcserver.serve_forever()
-        
+
+    # send heardbeat package to keep alive in etcd, ttl=2s
+    def sendheartbeat(self):
+        while(True):
+            # check send heartbeat package every 1s
+            time.sleep(1)
+            [status, value] = self.etcd.getkey("machines/runnodes/"+self.addr)
+            if status:
+                # master has know the worker so we start send heartbeat package
+                if value=='ok':
+                    self.etcd.setkey("machines/runnodes/"+self.addr, "ok", ttl = 2)
+            else:
+                logger.error("get key %s failed, master crashed or initialized. restart worker please." % self.addr)
+                sys.exit(1)
     
 if __name__ == '__main__':
 
@@ -177,10 +205,6 @@ if __name__ == '__main__':
         sys.exit(1)
     else:
         logger.info("etcd connected")
-    
-    # init collector to collect monitor infomation
-    collector = monitor.Collector(etcdaddr,clustername,ipaddr)
-    collector.start()
 
     cpu_quota = env.getenv('CONTAINER_CPU')
     logger.info ("using CONTAINER_CPU %s" % cpu_quota )
@@ -191,9 +215,11 @@ if __name__ == '__main__':
     worker_port = env.getenv('WORKER_PORT')
     logger.info ("using WORKER_PORT %s" % worker_port )
 
-    con_collector = monitor.Container_Collector(etcdaddr, clustername,
-        ipaddr)
+    # init collector to collect monitor infomation
+    con_collector = monitor.Container_Collector()
     con_collector.start()
+    collector = monitor.Collector()
+    collector.start()
     logger.info("CPU and Memory usage monitor started")
 
     logger.info("Starting worker")

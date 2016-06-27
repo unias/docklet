@@ -34,20 +34,3 @@ class dashboardView(normalView):
     @classmethod
     def post(self):
         return self.get()
-
-class dashboard_guestView(normalView):
-    template_path = "dashboard_guest.html"
-
-    @classmethod
-    def get(self):
-        mysession = {}
-        mysession['avatar'] = "/static/avatar/default.png"
-        mysession['nickname'] = "guest"
-        mysession['description'] = "you are a guest"
-        mysession['status'] = "guest"
-        mysession['usergroup'] = "normal"
-        return render_template(self.template_path, mysession = mysession)
-
-    @classmethod
-    def post(self):
-        return self.get()

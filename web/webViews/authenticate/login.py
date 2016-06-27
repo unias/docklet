@@ -72,7 +72,7 @@ class loginView(normalView):
             else:
                 return redirect('/login/')
         else:
-            self.error()
+            return redirect('/login/')
 
 class logoutView(normalView):
 

@@ -4,8 +4,11 @@
 # because some modules need variables when import
 # for example, userManager/model.py
 
+from flask import Flask, request
+
 # must first init loadenv
 import tools, env
+# default CONFIG=/opt/docklet/local/docklet-running.conf
 config = env.getenv("CONFIG")
 tools.loadenv(config)
 
@@ -20,471 +23,672 @@ import http.server, cgi, json, sys, shutil
 from socketserver import ThreadingMixIn
 import nodemgr, vclustermgr, etcdlib, network, imagemgr
 import userManager
-import monitor
-import guest_control, threading
+import monitor,traceback
+import threading
+import sysmgr
 
+#default EXTERNAL_LOGIN=False
 external_login = env.getenv('EXTERNAL_LOGIN')
 if (external_login == 'TRUE'):
     from userDependence import external_auth
 
-class DockletHttpHandler(http.server.BaseHTTPRequestHandler):
-    def response(self, code, output):
-        self.send_response(code)
-        self.send_header("Content-type", "application/json")
-        self.end_headers()
-        # wfile/rfile are in byte/binary encoded. need to recode
-        self.wfile.write(json.dumps(output).encode('ascii'))
-        self.wfile.write("\n".encode('ascii'))
-        # do not wfile.close()
-        # because self.handle_one_request will call wfile.flush after calling do_*
-        # and self.handle_one_request will close this wfile after timeout automatically
-        # (see  /usr/lib/python3.4/http/server.py handle_one_request function)
-        #self.wfile.close()
+app = Flask(__name__)
 
-    # override log_request to not print default request log
-    # we use the log info by ourselves in our style
-    def log_request(code = '-', size = '-'):
-        pass
+from functools import wraps
 
-    def do_PUT(self):
-        self.response(400, {'success':'false', 'message':'Not supported methond'})
 
-    def do_GET(self):
-        self.response(400, {'success':'false', 'message':'Not supported methond'})
-
-    def do_DELETE(self):
-        self.response(400, {'success':'false', 'message':'Not supported methond'})
-
-    # handler POST request
-    def do_POST(self):
-        global G_vclustermgr
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
         global G_usermgr
-        #logger.info ("get request, header content:\n%s" % self.headers)
-        #logger.info ("read request content:\n%s" % self.rfile.read(int(self.headers["Content-Length"])))
-        logger.info ("get request, path: %s" % self.path)
-        # for test
-        if self.path == '/test':
-            logger.info ("return welcome for test")
-            self.response(200, {'success':'true', 'message':'welcome to docklet'})
-            return [True, 'test ok']
-
-        # check for not null content
-        if 'Content-Length' not in self.headers:
-            logger.info ("request content is null")
-            self.response(401, {'success':'false', 'message':'request content is null'})
-            return [False, 'content is null']
-
-        # auth the user
-        # cgi.FieldStorage need fp/headers/environ. (see /usr/lib/python3.4/cgi.py)
-        form = cgi.FieldStorage(fp=self.rfile, headers=self.headers,environ={'REQUEST_METHOD':'POST'})
-        cmds = self.path.strip('/').split('/')
-        if cmds[0] == 'register' and form.getvalue('activate', None) == None:
-            logger.info ("handle request : user register")
-            username = form.getvalue('username', '')
-            password = form.getvalue('password', '')
-            email = form.getvalue('email', '')
-            description = form.getvalue('description','')
-            if (username == '' or password == '' or email == ''):
-                self.response(500, {'success':'false'})
-            newuser = G_usermgr.newuser()
-            newuser.username = form.getvalue('username')
-            newuser.password = form.getvalue('password')
-            newuser.e_mail = form.getvalue('email')
-            newuser.student_number = form.getvalue('studentnumber')
-            newuser.department = form.getvalue('department')
-            newuser.nickname = form.getvalue('truename')
-            newuser.truename = form.getvalue('truename')
-            newuser.description = form.getvalue('description')
-            newuser.status = "init"
-            newuser.auth_method = "local"
-            result = G_usermgr.register(user = newuser)
-            self.response(200, result)
-            return [True, "register succeed"]
-        if cmds[0] == 'login':
-            logger.info ("handle request : user login")
-            user = form.getvalue("user")
-            key = form.getvalue("key")
-            if user == None or key == None:
-                self.response(401, {'success':'false', 'message':'user or key is null'})
-                return [False, "auth failed"]
-            auth_result = G_usermgr.auth(user, key)
-            if  auth_result['success'] == 'false':
-                self.response(401, {'success':'false', 'message':'auth failed'})
-                return [False, "auth failed"]
-            self.response(200, {'success':'true', 'action':'login', 'data': auth_result['data']})
-            return [True, "auth succeeded"]
-        if cmds[0] == 'external_login':
-            logger.info ("handle request : external user login")
-            try:
-                result = G_usermgr.auth_external(form)
-                self.response(200, result)
-                return result
-            except:
-                result = {'success': 'false', 'reason': 'Something wrong happened when auth an external account'}
-                self.response(200, result)
-                return result
-
-        token = form.getvalue("token")
-        if token == None:
-            self.response(401, {'success':'false', 'message':'user or key is null'})
-            return [False, "auth failed"]
+        logger.info ("get request, path: %s" % request.path)
+        token = request.form.get("token", None)
+        if (token == None):
+            return json.dumps({'success':'false', 'message':'user or key is null'})
         cur_user = G_usermgr.auth_token(token)
-        if cur_user == None:
-            self.response(401, {'success':'false', 'message':'token failed or expired', 'Unauthorized': 'True'})
-            return [False, "auth failed"]
-        
+        if (cur_user == None):
+            return json.dumps({'success':'false', 'message':'token failed or expired', 'Unauthorized': 'True'})
+        return func(cur_user, cur_user.username, request.form, *args, **kwargs)
+
+    return wrapper
+
+@app.route("/login/", methods=['POST'])
+def login():
+    global G_usermgr
+    logger.info ("handle request : user login")
+    user = request.form.get("user", None)
+    key = request.form.get("key", None)
+    if user == None or key == None:
+        return json.dumps({'success':'false', 'message':'user or key is null'})
+    auth_result = G_usermgr.auth(user, key)
+    if  auth_result['success'] == 'false':
+        return json.dumps({'success':'false', 'message':'auth failed'})
+    return json.dumps({'success':'true', 'action':'login', 'data': auth_result['data']})
+
+@app.route("/external_login/", methods=['POST'])
+def external_login():
+    global G_usermgr
+    logger.info ("handle request : external user login")
+    try:
+        result = G_usermgr.auth_external(request.form)
+        return json.dumps(result)
+    except:
+        result = {'success': 'false', 'reason': 'Something wrong happened when auth an external account'}
+        return json.dumps(result)
+
+@app.route("/register/", methods=['POST'])
+def register():
+    global G_usermgr
+    if request.form.get('activate', None) == None:
+        logger.info ("handle request : user register")
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        email = request.form.get('email', '')
+        description = request.form.get('description','')
+        if (username == '' or password == '' or email == ''):
+            return json.dumps({'success':'false'})
+        newuser = G_usermgr.newuser()
+        newuser.username = request.form.get('username')
+        newuser.password = request.form.get('password')
+        newuser.e_mail = request.form.get('email')
+        newuser.student_number = request.form.get('studentnumber')
+        newuser.department = request.form.get('department')
+        newuser.nickname = request.form.get('truename')
+        newuser.truename = request.form.get('truename')
+        newuser.description = request.form.get('description')
+        newuser.status = "init"
+        newuser.auth_method = "local"
+        result = G_usermgr.register(user = newuser)
+        return json.dumps(result)
+    else:
+        logger.info ("handle request, user activating")
+        token = request.form.get("token", None)
+        if (token == None):
+            return json.dumps({'success':'false', 'message':'user or key is null'})
+        cur_user = G_usermgr.auth_token(token)
+        if (cur_user == None):
+            return json.dumps({'success':'false', 'message':'token failed or expired', 'Unauthorized': 'True'})
+        newuser = G_usermgr.newuser()
+        newuser.username = cur_user.username
+        newuser.nickname = cur_user.truename
+        newuser.status = 'applying'
+        newuser.user_group = cur_user.user_group
+        newuser.auth_method = cur_user.auth_method
+        newuser.e_mail = request.form.get('email','')
+        newuser.student_number = request.form.get('studentnumber', '')
+        newuser.department = request.form.get('department', '')
+        newuser.truename = request.form.get('truename', '')
+        newuser.tel = request.form.get('tel', '')
+        newuser.description = request.form.get('description', '')
+        result = G_usermgr.register(user = newuser)
+        userManager.send_remind_activating_email(newuser.username)
+        return json.dumps(result)
 
 
-        user = cur_user.username
-        # parse the url and get to do actions
-        # /cluster/list
-        # /cluster/create  &  clustername
-        # /cluster/start    &  clustername
-        # /cluster/stop    &  clustername
-        # /cluster/delete    &  clustername
-        # /cluster/info    &  clustername
+@app.route("/cluster/create/", methods=['POST'])
+@login_required
+def create_cluster(cur_user, user, form):
+    global G_usermgr
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    image = {}
+    image['name'] = form.get("imagename", None)
+    image['type'] = form.get("imagetype", None)
+    image['owner'] = form.get("imageowner", None)
+    user_info = G_usermgr.selfQuery(cur_user = cur_user)
+    user_info = json.dumps(user_info)
+    logger.info ("handle request : create cluster %s with image %s " % (clustername, image['name']))
+    [status, result] = G_vclustermgr.create_cluster(clustername, user, image, user_info)
+    if status:
+        return json.dumps({'success':'true', 'action':'create cluster', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'create cluster', 'message':result})
+
+@app.route("/cluster/scaleout/", methods=['POST'])
+@login_required
+def scaleout_cluster(cur_user, user, form):
+    global G_usermgr
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info("handle request : scale out %s" % clustername)
+    image = {}
+    image['name'] = form.get("imagename", None)
+    image['type'] = form.get("imagetype", None)
+    image['owner'] = form.get("imageowner", None)
+    logger.debug("imagename:" + image['name'])
+    logger.debug("imagetype:" + image['type'])
+    logger.debug("imageowner:" + image['owner'])
+    user_info = G_usermgr.selfQuery(cur_user = cur_user)
+    user_info = json.dumps(user_info)
+    [status, result] = G_vclustermgr.scale_out_cluster(clustername, user, image, user_info)
+    if status:
+        return json.dumps({'success':'true', 'action':'scale out', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'scale out', 'message':result})
+
+@app.route("/cluster/scalein/", methods=['POST'])
+@login_required
+def scalein_cluster(cur_user, user, form):
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info("handle request : scale in %s" % clustername)
+    containername = form.get("containername", None)
+    [status, result] = G_vclustermgr.scale_in_cluster(clustername, user, containername)
+    if status:
+        return json.dumps({'success':'true', 'action':'scale in', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'scale in', 'message':result})
+
+@app.route("/cluster/start/", methods=['POST'])
+@login_required
+def start_cluster(cur_user, user, form):
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info ("handle request : start cluster %s" % clustername)
+    [status, result] = G_vclustermgr.start_cluster(clustername, user)
+    if status:
+        return json.dumps({'success':'true', 'action':'start cluster', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'start cluster', 'message':result})
+
+@app.route("/cluster/stop/", methods=['POST'])
+@login_required
+def stop_cluster(cur_user, user, form):
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info ("handle request : start cluster %s" % clustername)
+    [status, result] = G_vclustermgr.stop_cluster(clustername, user)
+    if status:
+        return json.dumps({'success':'true', 'action':'stop cluster', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'stop cluster', 'message':result})
+
+@app.route("/cluster/delete/", methods=['POST'])
+@login_required
+def delete_cluster(cur_user, user, form):
+    global G_vclustermgr
+    global G_usermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info ("handle request : delete cluster %s" % clustername)
+    user_info = G_usermgr.selfQuery(cur_user=cur_user)
+    user_info = json.dumps(user_info)
+    [status, result] = G_vclustermgr.delete_cluster(clustername, user, user_info)
+    if status:
+        return json.dumps({'success':'true', 'action':'delete cluster', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'delete cluster', 'message':result})
+
+@app.route("/cluster/info/", methods=['POST'])
+@login_required
+def info_cluster(cur_user, user, form):
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    logger.info ("handle request : info cluster %s" % clustername)
+    [status, result] = G_vclustermgr.get_clusterinfo(clustername, user)
+    if status:
+        return json.dumps({'success':'true', 'action':'info cluster', 'message':result})
+    else:
+        return json.dumps({'success':'false', 'action':'info cluster', 'message':result})
+
+@app.route("/cluster/list/", methods=['POST'])
+@login_required
+def list_cluster(cur_user, user, form):
+    global G_vclustermgr
+    logger.info ("handle request : list clusters for %s" % user)
+    [status, clusterlist] = G_vclustermgr.list_clusters(user)
+    if status:
+        return json.dumps({'success':'true', 'action':'list cluster', 'clusters':clusterlist})
+    else:
+        return json.dumps({'success':'false', 'action':'list cluster', 'message':clusterlist})
+
+@app.route("/cluster/flush/", methods=['POST'])
+@login_required
+def flush_cluster(cur_user, user, form):
+    global G_vclustermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+    from_lxc = form.get('from_lxc', None)
+    G_vclustermgr.flush_cluster(user,clustername,from_lxc)
+    return json.dumps({'success':'true', 'action':'flush'})
+
+@app.route("/cluster/save/", methods=['POST'])
+@login_required
+def save_cluster(cur_user, user, form):
+    global G_vclustermgr
+    global G_usermgr
+    clustername = form.get('clustername', None)
+    if (clustername == None):
+        return json.dumps({'success':'false', 'message':'clustername is null'})
+
+    imagename = form.get("image", None)
+    description = form.get("description", None)
+    containername = form.get("containername", None)
+    isforce = form.get("isforce", None)
+    if not isforce == "true":
+        [status,message] = G_vclustermgr.image_check(user,imagename)
+        if not status:
+            return json.dumps({'success':'false','reason':'exists', 'message':message})
+
+    user_info = G_usermgr.selfQuery(cur_user = cur_user)
+    [status,message] = G_vclustermgr.create_image(user,clustername,containername,imagename,description,user_info["data"]["groupinfo"]["image"])
+    if status:
+        logger.info("image has been saved")
+        return json.dumps({'success':'true', 'action':'save'})
+    else:
+        logger.debug(message)
+        return json.dumps({'success':'false', 'reason':'exceed', 'message':message})
 
 
-        if cmds[0] == 'cluster':
-            clustername = form.getvalue('clustername')
-            # check for 'clustername' : all actions except 'list' need 'clustername'
-            if (cmds[1] != 'list') and clustername == None:
-                self.response(401, {'success':'false', 'message':'clustername is null'})
-                return [False, "clustername is null"]
-            if cmds[1] == 'create':
-                image = {}
-                image['name'] = form.getvalue("imagename")
-                image['type'] = form.getvalue("imagetype")
-                image['owner'] = form.getvalue("imageowner")
-                user_info = G_usermgr.selfQuery(cur_user = cur_user)
-                user_info = json.dumps(user_info)
-                logger.info ("handle request : create cluster %s with image %s " % (clustername, image['name']))
-                [status, result] = G_vclustermgr.create_cluster(clustername, user, image, user_info)
-                if status:
-                    self.response(200, {'success':'true', 'action':'create cluster', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'create cluster', 'message':result})
-            elif cmds[1] == 'scaleout':
-                logger.info("handle request : scale out %s" % clustername)
-                image = {}
-                image['name'] = form.getvalue("imagename")
-                image['type'] = form.getvalue("imagetype")
-                image['owner'] = form.getvalue("imageowner")
-                logger.debug("imagename:" + image['name'])
-                logger.debug("imagetype:" + image['type'])
-                logger.debug("imageowner:" + image['owner'])
-                user_info = G_usermgr.selfQuery(cur_user = cur_user)
-                user_info = json.dumps(user_info)
-                [status, result] = G_vclustermgr.scale_out_cluster(clustername, user, image, user_info)
-                if status:
-                    self.response(200, {'success':'true', 'action':'scale out', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'scale out', 'message':result})
-            elif cmds[1] == 'scalein':
-                logger.info("handle request : scale in %s" % clustername)
-                containername = form.getvalue("containername")
-                [status, result] = G_vclustermgr.scale_in_cluster(clustername, user, containername)
-                if status:
-                    self.response(200, {'success':'true', 'action':'scale in', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'scale in', 'message':result})
-            elif cmds[1] == 'start':
-                logger.info ("handle request : start cluster %s" % clustername)
-                [status, result] = G_vclustermgr.start_cluster(clustername, user)
-                if status:
-                    self.response(200, {'success':'true', 'action':'start cluster', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'start cluster', 'message':result})
-            elif cmds[1] == 'stop':
-                logger.info ("handle request : stop cluster %s" % clustername)
-                [status, result] = G_vclustermgr.stop_cluster(clustername, user)
-                if status:
-                    self.response(200, {'success':'true', 'action':'stop cluster', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'stop cluster', 'message':result})
-            elif cmds[1] == 'delete':
-                logger.info ("handle request : delete cluster %s" % clustername)
-                [status, result] = G_vclustermgr.delete_cluster(clustername, user)
-                if status:
-                    self.response(200, {'success':'true', 'action':'delete cluster', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'delete cluster', 'message':result})
-            elif cmds[1] == 'info':
-                logger.info ("handle request : info cluster %s" % clustername)
-                [status, result] = G_vclustermgr.get_clusterinfo(clustername, user)
-                if status:
-                    self.response(200, {'success':'true', 'action':'info cluster', 'message':result})
-                else:
-                    self.response(200, {'success':'false', 'action':'info cluster', 'message':result})
-            elif cmds[1] == 'list':
-                logger.info ("handle request : list clusters for %s" % user)
-                [status, clusterlist] = G_vclustermgr.list_clusters(user)
-                if status:
-                    self.response(200, {'success':'true', 'action':'list cluster', 'clusters':clusterlist})
-                else:
-                    self.response(400, {'success':'false', 'action':'list cluster', 'message':clusterlist})
+@app.route("/image/list/", methods=['POST'])
+@login_required
+def list_image(cur_user, user, form):
+    global G_imagemgr
+    images = G_imagemgr.list_images(user)
+    return json.dumps({'success':'true', 'images': images})
 
-            elif cmds[1] == 'flush':
-                from_lxc = form.getvalue('from_lxc')
-                G_vclustermgr.flush_cluster(user,clustername,from_lxc)
-                self.response(200, {'success':'true', 'action':'flush'})
+@app.route("/image/description/", methods=['POST'])
+@login_required
+def description_image(cur_user, user, form):
+    global G_imagemgr
+    image = {}
+    image['name'] = form.get("imagename", None)
+    image['type'] = form.get("imagetype", None)
+    image['owner'] = form.get("imageowner", None)
+    description = G_imagemgr.get_image_description(user,image)
+    return json.dumps({'success':'true', 'message':description})
 
-            elif cmds[1] == 'save':
-                imagename = form.getvalue("image")
-                description = form.getvalue("description")
-                containername = form.getvalue("containername")
-                isforce = form.getvalue("isforce")
-                if not isforce == "true":
-                    [status,message] = G_vclustermgr.image_check(user,imagename)
-                    if not status:
-                        self.response(200, {'success':'false','reason':'exists', 'message':message})
-                        return [False, "image already exists"]
-                user_info = G_usermgr.selfQuery(cur_user = cur_user)
-                [status,message] = G_vclustermgr.create_image(user,clustername,containername,imagename,description,user_info["data"]["groupinfo"]["image"])
-                if status:
-                    logger.info("image has been saved")
-                    self.response(200, {'success':'true', 'action':'save'})
-                else:
-                    logger.debug(message)
-                    self.response(200, {'success':'false', 'reason':'exceed', 'message':message})
+@app.route("/image/share/", methods=['POST'])
+@login_required
+def share_image(cur_user, user, form):
+    global G_imagemgr
+    image = form.get('image')
+    G_imagemgr.shareImage(user,image)
+    return json.dumps({'success':'true', 'action':'share'})
 
-            else:
-                logger.warning ("request not supported ")
-                self.response(400, {'success':'false', 'message':'not supported request'})
+@app.route("/image/unshare/", methods=['POST'])
+@login_required
+def unshare_image(cur_user, user, form):
+    global G_imagemgr
+    image = form.get('image', None)
+    G_imagemgr.unshareImage(user,image)
+    return json.dumps({'success':'true', 'action':'unshare'})
 
-        # Request for Image
-        elif cmds[0] == 'image':
-            if cmds[1] == 'list':
-                images = G_imagemgr.list_images(user)
-                self.response(200, {'success':'true', 'images': images})
-            elif cmds[1] == 'description':
-                image = {}
-                image['name'] = form.getvalue("imagename")
-                image['type'] = form.getvalue("imagetype")
-                image['owner'] = form.getvalue("imageowner")
-                description = G_imagemgr.get_image_description(user,image)
-                self.response(200, {'success':'true', 'message':description})
-            elif cmds[1] == 'share':
-                image = form.getvalue('image')
-                G_imagemgr.shareImage(user,image)
-                self.response(200, {'success':'true', 'action':'share'})
-            elif cmds[1] == 'unshare':
-                image = form.getvalue('image')
-                G_imagemgr.unshareImage(user,image)
-                self.response(200, {'success':'true', 'action':'unshare'})
-            elif cmds[1] == 'delete':
-                image = form.getvalue('image')
-                G_imagemgr.removeImage(user,image)
-                self.response(200, {'success':'true', 'action':'delete'})
-            else:
-                logger.warning("request not supported ")
-                self.response(400, {'success':'false', 'message':'not supported request'})
+@app.route("/image/delete/", methods=['POST'])
+@login_required
+def delete_image(cur_user, user, form):
+    global G_imagemgr
+    image = form.get('image', None)
+    G_imagemgr.removeImage(user,image)
+    return json.dumps({'success':'true', 'action':'delete'})
 
-        # Add Proxy
-        elif cmds[0] == 'addproxy':
-            logger.info ("handle request : add proxy")
-            proxy_ip = form.getvalue("ip")
-            proxy_port = form.getvalue("port")
-            clustername = form.getvalue("clustername")
-            [status, message] = G_vclustermgr.addproxy(user,clustername,proxy_ip,proxy_port)
-            if status is True:
-                self.response(200, {'success':'true', 'action':'addproxy'})
-            else:
-                self.response(400, {'success':'false', 'message': message})
-        # Delete Proxy
-        elif cmds[0] == 'deleteproxy':
-            logger.info ("handle request : delete proxy")
-            clustername = form.getvalue("clustername")
-            G_vclustermgr.deleteproxy(user,clustername)
-            self.response(200, {'success':'true', 'action':'deleteproxy'})
+@app.route("/addproxy/", methods=['POST'])
+@login_required
+def addproxy(cur_user, user, form):
+    global G_vclustermgr
+    logger.info ("handle request : add proxy")
+    proxy_ip = form.get("ip", None)
+    proxy_port = form.get("port", None)
+    clustername = form.get("clustername", None)
+    [status, message] = G_vclustermgr.addproxy(user,clustername,proxy_ip,proxy_port)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'addproxy'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
 
-        # Request for Monitor
-        elif cmds[0] == 'monitor':
-            logger.info("handle request: monitor")
-            res = {}
-            if cmds[1] == 'hosts':
-                com_id = cmds[2]
-                fetcher = monitor.Fetcher(etcdaddr,G_clustername,com_id)
-                if cmds[3] == 'meminfo':
-                    res['meminfo'] = fetcher.get_meminfo()
-                elif cmds[3] == 'cpuinfo':
-                    res['cpuinfo'] = fetcher.get_cpuinfo()
-                elif cmds[3] == 'cpuconfig':
-                    res['cpuconfig'] = fetcher.get_cpuconfig()
-                elif cmds[3] == 'diskinfo':
-                    res['diskinfo'] = fetcher.get_diskinfo()
-                elif cmds[3] == 'osinfo':
-                    res['osinfo'] = fetcher.get_osinfo()
-                elif cmds[3] == 'containers':
-                    res['containers'] = fetcher.get_containers()
-                elif cmds[3] == 'status':
-                    res['status'] = fetcher.get_status()
-                elif cmds[3] == 'containerslist':
-                    res['containerslist'] = fetcher.get_containerslist()
-                elif cmds[3] == 'containersinfo':
-                    res = []
-                    conlist = fetcher.get_containerslist()
-                    for container in conlist:
-                        ans = {}
-                        confetcher = monitor.Container_Fetcher(etcdaddr,G_clustername)
-                        ans = confetcher.get_basic_info(container)
-                        ans['cpu_use'] = confetcher.get_cpu_use(container)
-                        ans['mem_use'] = confetcher.get_mem_use(container)
-                        res.append(ans)
-                else:
-                    self.response(400, {'success':'false', 'message':'not supported request'})
-                    return
+@app.route("/deleteproxy/", methods=['POST'])
+@login_required
+def deleteproxy(cur_user, user, form):
+    global G_vclustermgr
+    logger.info ("handle request : delete proxy")
+    clustername = form.get("clustername", None)
+    G_vclustermgr.deleteproxy(user,clustername)
+    return json.dumps({'success':'true', 'action':'deleteproxy'})
 
-                self.response(200, {'success':'true', 'monitor':res})
-            elif cmds[1] == 'vnodes':
-                fetcher = monitor.Container_Fetcher(etcdaddr,G_clustername)
-                if cmds[3] == 'cpu_use':
-                    res['cpu_use'] = fetcher.get_cpu_use(cmds[2])
-                elif cmds[3] == 'mem_use':
-                    res['mem_use'] = fetcher.get_mem_use(cmds[2])
-                elif cmds[3] == 'basic_info':
-                    res['basic_info'] = fetcher.get_basic_info(cmds[2])
-                self.response(200, {'success':'true', 'monitor':res})
-            elif cmds[1] == 'user':
-                if not user == 'root':
-                    self.response(400, {'success':'false', 'message':'Root Required'})
-                if cmds[3] == 'clustercnt':
-                    flag = True
-                    clutotal = 0
-                    clurun = 0
-                    contotal = 0
-                    conrun = 0
-                    [status, clusterlist] = G_vclustermgr.list_clusters(cmds[2])
-                    if status:
-                        for clustername in clusterlist:
-                            clutotal += 1
-                            [status2, result] = G_vclustermgr.get_clusterinfo(clustername, cmds[2])
-                            if status2:
-                                contotal += result['size']
-                                if result['status'] == 'running':
-                                    clurun += 1
-                                    conrun += result['size']
-                    else:
-                         flag = False
-                    if flag:
-                         res = {}
-                         res['clutotal'] = clutotal
-                         res['clurun'] = clurun
-                         res['contotal'] = contotal
-                         res['conrun'] = conrun
-                         self.response(200, {'success':'true', 'monitor':{'clustercnt':res}})
-                    else:
-                         self.response(200, {'success':'false','message':clusterlist})
-                elif cmds[3] == 'cluster':
-                    if cmds[4] == 'list':
-                        [status, clusterlist] = G_vclustermgr.list_clusters(cmds[2])
-                        if status:
-                            self.response(200, {'success':'true', 'monitor':{'clusters':clusterlist}})
-                        else:
-                            self.response(400, {'success':'false', 'message':clusterlist})
-                    elif cmds[4] == 'info':
-                        clustername = form.getvalue('clustername')
-                        logger.info ("handle request : info cluster %s" % clustername)
-                        [status, result] = G_vclustermgr.get_clusterinfo(clustername, user)
-                        if status:
-                            self.response(200, {'success':'true', 'monitor':{'info':result}})
-                        else:
-                     	    self.response(200, {'success':'false','message':result})
-                    else:
-                        self.response(400, {'success':'false', 'message':'not supported request'})
+@app.route("/monitor/hosts/<com_id>/<issue>/", methods=['POST'])
+@login_required
+def hosts_monitor(cur_user, user, form, com_id, issue):
+    global G_clustername
 
-            elif cmds[1] == 'listphynodes':
-                res['allnodes'] = G_nodemgr.get_allnodes()
-                self.response(200, {'success':'true', 'monitor':res})
-        # Request for User
-        elif cmds[0] == 'user':
-            logger.info("handle request: user")
-            if cmds[1] == 'modify':
-                #user = G_usermgr.query(username = form.getvalue("username"), cur_user = cur_user).get('token',  None)
-                result = G_usermgr.modify(newValue = form, cur_user = cur_user)
-                self.response(200, result)
-            if cmds[1] == 'groupModify':
-                result = G_usermgr.groupModify(newValue = form, cur_user = cur_user)
-                self.response(200, result)
-            if cmds[1] == 'query':
-                result = G_usermgr.query(ID = form.getvalue("ID"), cur_user = cur_user)
-                if (result.get('success', None) == None or result.get('success', None) == "false"):
-                    self.response(301,result)
-                else:
-                    result = G_usermgr.queryForDisplay(user = result['token'])
-                    self.response(200,result)
+    logger.info("handle request: monitor/hosts")
+    res = {}
+    fetcher = monitor.Fetcher(com_id)
+    if issue == 'meminfo':
+        res['meminfo'] = fetcher.get_meminfo()
+    elif issue == 'cpuinfo':
+        res['cpuinfo'] = fetcher.get_cpuinfo()
+    elif issue == 'cpuconfig':
+        res['cpuconfig'] = fetcher.get_cpuconfig()
+    elif issue == 'diskinfo':
+        res['diskinfo'] = fetcher.get_diskinfo()
+    elif issue == 'osinfo':
+        res['osinfo'] = fetcher.get_osinfo()
+    elif issue == 'containers':
+        res['containers'] = fetcher.get_containers()
+    elif issue == 'status':
+        res['status'] = fetcher.get_status()
+    elif issue == 'containerslist':
+        res['containerslist'] = fetcher.get_containerslist()
+    elif issue == 'containersinfo':
+        res = []
+        conlist = fetcher.get_containerslist()
+        for container in conlist:
+            ans = {}
+            confetcher = monitor.Container_Fetcher(etcdaddr,G_clustername)
+            ans = confetcher.get_basic_info(container)
+            ans['cpu_use'] = confetcher.get_cpu_use(container)
+            ans['mem_use'] = confetcher.get_mem_use(container)
+            res.append(ans)
+    else:
+        return json.dumps({'success':'false', 'message':'not supported request'})
 
-            elif cmds[1] == 'add':
-                user = G_usermgr.newuser(cur_user = cur_user)
-                user.username = form.getvalue('username')
-                user.password = form.getvalue('password')
-                user.e_mail = form.getvalue('e_mail', '')
-                user.status = "normal"
-                result = G_usermgr.register(user = user, cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'groupadd':
-                result = G_usermgr.groupadd(form = form, cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'quotaadd':
-                result = G_usermgr.quotaadd(form = form, cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'groupdel':
-                result = G_usermgr.groupdel(name = form.getvalue('name', None), cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'data':
-                logger.info("handle request: user/data")
-                result = G_usermgr.userList(cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'groupNameList':
-                result = G_usermgr.groupListName(cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'groupList':
-                result = G_usermgr.groupList(cur_user = cur_user)
-                self.response(200, result)
-            elif cmds[1] == 'groupQuery':
-                result = G_usermgr.groupQuery(name = form.getvalue("name"), cur_user = cur_user)
-                if (result.get('success', None) == None or result.get('success', None) == "false"):
-                    self.response(301,result)
-                else:
-                    self.response(200,result)
-            elif cmds[1] == 'selfQuery':
-                result = G_usermgr.selfQuery(cur_user = cur_user)
-                self.response(200,result)
-            elif cmds[1] == 'selfModify':
-                result = G_usermgr.selfModify(cur_user = cur_user, newValue = form)
-                self.response(200,result)
-        elif cmds[0] == 'register' :
-            #activate
-            logger.info("handle request: user/activate")
-            newuser = G_usermgr.newuser()
-            newuser.username = cur_user.username
-            newuser.nickname = cur_user.truename
-            newuser.status = 'applying'
-            newuser.user_group = cur_user.user_group
-            newuser.auth_method = cur_user.auth_method
-            newuser.e_mail = form.getvalue('email','')
-            newuser.student_number = form.getvalue('studentnumber', '')
-            newuser.department = form.getvalue('department', '')
-            newuser.truename = form.getvalue('truename', '')
-            newuser.tel = form.getvalue('tel', '')
-            newuser.description = form.getvalue('description', '')
-            result = G_usermgr.register(user = newuser)
-            userManager.send_remind_activating_email(newuser.username)
-            self.response(200,result)
+    return json.dumps({'success':'true', 'monitor':res})
+
+
+@app.route("/monitor/vnodes/<con_id>/<issue>/", methods=['POST'])
+@login_required
+def vnodes_monitor(cur_user, user, form, con_id, issue):
+    global G_clustername
+    logger.info("handle request: monitor/vnodes")
+    res = {}
+    fetcher = monitor.Container_Fetcher(con_id)
+    if issue == 'cpu_use':
+        res['cpu_use'] = fetcher.get_cpu_use()
+    elif issue == 'mem_use':
+        res['mem_use'] = fetcher.get_mem_use()
+    elif issue == 'disk_use':
+        res['disk_use'] = fetcher.get_disk_use()
+    elif issue == 'basic_info':
+        res['basic_info'] = fetcher.get_basic_info()
+    elif issue == 'owner':
+        names = con_id.split('-')
+        result = G_usermgr.query(username = names[0], cur_user = cur_user)
+        if result['success'] == 'false':
+            res['username'] = ""
+            res['truename'] = ""
         else:
-            logger.warning ("request not supported ")
-            self.response(400, {'success':'false', 'message':'not supported request'})
+            res['username'] = result['data']['username']
+            res['truename'] = result['data']['truename']
+    else:
+        res = "Unspported Method!"
+    return json.dumps({'success':'true', 'monitor':res})
 
-class ThreadingHttpServer(ThreadingMixIn, http.server.HTTPServer):
-    pass
+
+@app.route("/monitor/user/quotainfo/", methods=['POST'])
+@login_required
+def user_quotainfo_monitor(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: monitor/user/quotainfo/")
+    user_info = G_usermgr.selfQuery(cur_user = cur_user)
+    quotainfo = user_info['data']['groupinfo']
+    return json.dumps({'success':'true', 'quotainfo':quotainfo})
+
+@app.route("/monitor/listphynodes/", methods=['POST'])
+@login_required
+def listphynodes_monitor(cur_user, user, form):
+    global G_nodemgr
+    logger.info("handle request: monitor/listphynodes/")
+    res = {}
+    res['allnodes'] = G_nodemgr.get_allnodes()
+    return json.dumps({'success':'true', 'monitor':res})
+
+
+@app.route("/user/modify/", methods=['POST'])
+@login_required
+def modify_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/modify/")
+    result = G_usermgr.modify(newValue = form, cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/groupModify/", methods=['POST'])
+@login_required
+def groupModify_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupModify/")
+    result = G_usermgr.groupModify(newValue = form, cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/query/", methods=['POST'])
+@login_required
+def query_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/query/")
+    result = G_usermgr.query(ID = form.get("ID"), cur_user = cur_user)
+    if (result.get('success', None) == None or result.get('success', None) == "false"):
+        return json.dumps(result)
+    else:
+        result = G_usermgr.queryForDisplay(user = result['token'])
+        return json.dumps(result)
+
+
+@app.route("/user/add/", methods=['POST'])
+@login_required
+def add_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/add/")
+    user = G_usermgr.newuser(cur_user = cur_user)
+    user.username = form.get('username', None)
+    user.password = form.get('password', None)
+    user.e_mail = form.get('e_mail', '')
+    user.status = "normal"
+    result = G_usermgr.register(user = user, cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/groupadd/", methods=['POST'])
+@login_required
+def groupadd_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupadd/")
+    result = G_usermgr.groupadd(form = form, cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/chdefault/", methods=['POST'])
+@login_required
+def chdefault(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/chdefault/")
+    result = G_usermgr.change_default_group(form = form, cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/quotaadd/", methods=['POST'])
+@login_required
+def quotaadd_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/quotaadd/")
+    result = G_usermgr.quotaadd(form = form, cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/groupdel/", methods=['POST'])
+@login_required
+def groupdel_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupdel/")
+    result = G_usermgr.groupdel(name = form.get('name', None), cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/data/", methods=['POST'])
+@login_required
+def data_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/data/")
+    result = G_usermgr.userList(cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/groupNameList/", methods=['POST'])
+@login_required
+def groupNameList_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupNameList/")
+    result = G_usermgr.groupListName(cur_user = cur_user)
+    return json.dumps(result)
+
+
+@app.route("/user/groupList/", methods=['POST'])
+@login_required
+def groupList_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupList/")
+    result = G_usermgr.groupList(cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/groupQuery/", methods=['POST'])
+@login_required
+def groupQuery_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/groupQuery/")
+    result = G_usermgr.groupQuery(name = form.get("name"), cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/selfQuery/", methods=['POST'])
+@login_required
+def selfQuery_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/selfQuery/")
+    result = G_usermgr.selfQuery(cur_user = cur_user)
+    return json.dumps(result)
+
+@app.route("/user/selfModify/", methods=['POST'])
+@login_required
+def selfModify_user(cur_user, user, form):
+    global G_usermgr
+    logger.info("handle request: user/selfModify/")
+    result = G_usermgr.selfModify(cur_user = cur_user, newValue = form)
+    return json.dumps(result)
+
+@app.route("/system/parmList/", methods=['POST'])
+@login_required
+def parmList_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/parmList/")
+    result = G_sysmgr.getParmList()
+    return json.dumps(result)
+
+@app.route("/system/modify/", methods=['POST'])
+@login_required
+def modify_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/modify/")
+    field = form.get("field", None)
+    parm = form.get("parm", None)
+    val = form.get("val", None)
+    [status, message] = G_sysmgr.modify(field,parm,val)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'modify_system'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
+    return json.dumps(result)
+
+@app.route("/system/clear_history/", methods=['POST'])
+@login_required
+def clear_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/clear_history/")
+    field = form.get("field", None)
+    parm = form.get("parm", None)
+    [status, message] = G_sysmgr.clear(field,parm)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'clear_history'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
+    return json.dumps(result)
+
+@app.route("/system/add/", methods=['POST'])
+@login_required
+def add_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/add/")
+    field = form.get("field", None)
+    parm = form.get("parm", None)
+    val = form.get("val", None)
+    [status, message] = G_sysmgr.add(field, parm, val)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'add_parameter'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
+    return json.dumps(result)
+
+@app.route("/system/delete/", methods=['POST'])
+@login_required
+def delete_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/delete/")
+    field = form.get("field", None)
+    parm = form.get("parm", None)
+    [status, message] = G_sysmgr.delete(field,parm)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'delete_parameter'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
+    return json.dumps(result)
+
+@app.route("/system/reset_all/", methods=['POST'])
+@login_required
+def resetall_system(cur_user, user, form):
+    global G_sysmgr
+    logger.info("handle request: system/reset_all/")
+    field = form.get("field", None)
+    [status, message] = G_sysmgr.reset_all(field)
+    if status is True:
+        return json.dumps({'success':'true', 'action':'reset_all'})
+    else:
+        return json.dumps({'success':'false', 'message': message})
+    return json.dumps(result)
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    logger.debug("An internel server error occured")
+    logger.error(traceback.format_exc())
+    return json.dumps({'success':'false', 'message':'500 Internal Server Error', 'Unauthorized': 'True'})
+
 
 if __name__ == '__main__':
+    logger.info('Start Flask...:')
+    try:
+        secret_key_file = open(env.getenv('FS_PREFIX') + '/local/httprest_secret_key.txt')
+        app.secret_key = secret_key_file.read()
+        secret_key_file.close()
+    except:
+        from base64 import b64encode
+        from os import urandom
+        secret_key = urandom(24)
+        secret_key = b64encode(secret_key).decode('utf-8')
+        app.secret_key = secret_key
+        secret_key_file = open(env.getenv('FS_PREFIX') + '/local/httprest_secret_key.txt', 'w')
+        secret_key_file.write(secret_key)
+        secret_key_file.close()
+
+    os.environ['APP_KEY'] = app.secret_key
+    runcmd = sys.argv[0]
+    app.runpath = runcmd.rsplit('/', 1)[0]
+
+
     global G_nodemgr
     global G_vclustermgr
     global G_usermgr
     global etcdclient
     global G_networkmgr
     global G_clustername
+    global G_sysmgr
     # move 'tools.loadenv' to the beginning of this file
 
     fs_path = env.getenv("FS_PREFIX")
@@ -524,6 +728,7 @@ if __name__ == '__main__':
             etcdclient.clean()
         else:
             etcdclient.createdir("")
+        # token is saved at fs_path/golbal/token
         token = tools.gen_token()
         tokenfile = open(fs_path+"/global/token", 'w')
         tokenfile.write(token)
@@ -558,13 +763,12 @@ if __name__ == '__main__':
         etcdclient.setkey("service/mode", mode)
         if etcdclient.isdir("_lock")[0]:
             etcdclient.deldir("_lock")
-        if etcdclient.isdir("machines/runnodes")[0]:
-            etcdclient.deldir("machines/runnodes")
-        etcdclient.createdir("machines/runnodes")
 
     G_usermgr = userManager.userManager('root')
     clusternet = env.getenv("CLUSTER_NET")
     logger.info("using CLUSTER_NET %s" % clusternet)
+
+    G_sysmgr = sysmgr.SystemManager()
 
     G_networkmgr = network.NetworkMgr(clusternet, etcdclient, mode)
     G_networkmgr.printpools()
@@ -576,9 +780,8 @@ if __name__ == '__main__':
     logger.info("vclustermgr started")
     G_imagemgr = imagemgr.ImageMgr()
     logger.info("imagemgr started")
-    Guest_control = guest_control.Guest(G_vclustermgr,G_nodemgr)
-    logger.info("guest control started")
-    threading.Thread(target=Guest_control.work, args=()).start()
+    master_collector = monitor.Master_Collector(G_nodemgr)
+    master_collector.start()
 
     logger.info("startting to listen on: ")
     masterip = env.getenv('MASTER_IP')
@@ -587,7 +790,7 @@ if __name__ == '__main__':
     masterport = env.getenv('MASTER_PORT')
     logger.info("using MASTER_PORT %d", int(masterport))
 
-#   server = http.server.HTTPServer((masterip, masterport), DockletHttpHandler)
-    server = ThreadingHttpServer((masterip, int(masterport)), DockletHttpHandler)
+    # server = http.server.HTTPServer((masterip, masterport), DockletHttpHandler)
     logger.info("starting master server")
-    server.serve_forever()
+
+    app.run(host = masterip, port = masterport, threaded=True)

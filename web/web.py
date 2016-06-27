@@ -19,7 +19,7 @@ from webViews.log import logger
 
 from flask import Flask, request, session, render_template, redirect, send_from_directory, make_response, url_for, abort
 from webViews.dashboard import dashboardView
-from webViews.user.userlist import userlistView, useraddView, usermodifyView, userdataView, userqueryView 
+from webViews.user.userlist import userlistView, useraddView, usermodifyView, userdataView, userqueryView
 from webViews.user.userinfo import userinfoView
 from webViews.user.userActivate import userActivateView
 from webViews.user.grouplist import grouplistView, groupqueryView, groupdetailView, groupmodifyView
@@ -99,12 +99,6 @@ def activate():
 @login_required
 def dashboard():
     return dashboardView.as_view()
-
-@app.route("/dashboard_guest/", methods=['GET'])
-def dashboard_guest():
-    resp = make_response(dashboard_guestView.as_view())
-    resp.set_cookie('guest-cookie', cookie_tool.generate_cookie('guest', app.secret_key))
-    return resp
 
 @app.route("/document/", methods=['GET'])
 def redirect_dochome():
@@ -264,8 +258,8 @@ def statusRealtime(vcluster_name,node_name):
     statusRealtimeView.node_name = node_name
     return statusRealtimeView.as_view()
 
-@app.route("/monitor/hosts/<comid>/<infotype>", methods=['POST'])
-@app.route("/monitor/vnodes/<comid>/<infotype>", methods=['POST'])
+@app.route("/monitor/hosts/<comid>/<infotype>/", methods=['POST'])
+@app.route("/monitor/vnodes/<comid>/<infotype>/", methods=['POST'])
 @login_required
 def monitor_request(comid,infotype):
     data = {
@@ -274,11 +268,11 @@ def monitor_request(comid,infotype):
     result = dockletRequest.post(request.path, data)
     return json.dumps(result)
 
-@app.route("/monitor/User/", methods=['GET'])
+'''@app.route("/monitor/User/", methods=['GET'])
 @administration_required
 def monitorUserAll():
     return monitorUserAllView.as_view()
-
+'''
 
 
 
@@ -327,6 +321,11 @@ def usermodify():
 def quotaadd():
     return quotaaddView.as_view()
 
+@app.route("/quota/chdefault/", methods=['POST'])
+@administration_required
+def chdefault():
+    return chdefaultView.as_view()
+
 @app.route("/group/add/", methods=['POST'])
 @administration_required
 def groupadd():
@@ -348,6 +347,30 @@ def userinfo():
 def userquery():
     return userqueryView.as_view()
 
+@app.route("/system/modify/", methods=['POST'])
+@administration_required
+def systemmodify():
+    return systemmodifyView.as_view()
+
+@app.route("/system/clear_history/", methods=['POST'])
+@administration_required
+def systemclearhistory():
+    return systemclearView.as_view()
+
+@app.route("/system/add/", methods=['POST'])
+@administration_required
+def systemadd():
+    return systemaddView.as_view()
+
+@app.route("/system/delete/", methods=['POST'])
+@administration_required
+def systemdelete():
+    return systemdeleteView.as_view()
+
+@app.route("/system/resetall/", methods=['POST'])
+@administration_required
+def systemresetall():
+    return systemresetallView.as_view()
 
 @app.route("/admin/", methods=['GET', 'POST'])
 @administration_required
@@ -409,6 +432,11 @@ def jupyter_auth(cookie_name, cookie_content):
 @app.errorhandler(401)
 def not_authorized(error):
     if "username" in session:
+        if "401" in session:
+            reason = session['401']
+            session.pop('401', None)
+            if (reason == 'Token Expired'):
+                return redirect('/logout/')
         return render_template('error/401.html', mysession = session)
     else:
         return redirect('/login/')
@@ -416,7 +444,16 @@ def not_authorized(error):
 @app.errorhandler(500)
 def internal_server_error(error):
     if "username" in session:
-        return render_template('error/500.html', mysession = session)
+        if "500" in session and "500_title" in session:
+            reason = session['500']
+            title = session['500_title']
+            session.pop('500', None)
+            session.pop('500_title', None)
+        else:
+            reason = '''The server encountered something unexpected that didn't allow it to complete the request. We apologize.You can go back to
+<a href="/dashboard/">dashboard</a> or <a href="/logout">log out</a>'''
+            title = 'Internal Server Error'
+        return render_template('error/500.html', mysession = session, reason = reason, title = title)
     else:
         return redirect('/login/')
 if __name__ == '__main__':
@@ -466,7 +503,4 @@ if __name__ == '__main__':
         elif opt in ("-p", "--port"):
             webport = int(arg)
 
-
-    app.run(host = webip, port = webport, debug = True, threaded=True)
-
-
+    app.run(host = webip, port = webport, threaded=True)

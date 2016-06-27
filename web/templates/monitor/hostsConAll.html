@@ -35,14 +35,16 @@
                          <table class="table table-bordered">
                              <thead>
                              <tr>
-				 <th>NO</th>
-				 <th>Name</th>
+				                 <th>NO</th>
+				                 <th>Name</th>
+                                 <th>Owner</th>
+                                 <th>Owner's Truename</th>
                                  <th>State</th>
                                  <th>PID</th>
                                  <th>IP Address</th>
-				 <th>Cpu used</th>
-				 <th>Mem used</th>
-				 <th>Summary</th>
+				                 <th>Cpu used</th>
+                                 <th>Mem used</th>
+                                 <th>Summary</th>
                              </tr>
                              </thead>
                              <tbody>
@@ -50,6 +52,8 @@
                              <tr>
                                  <td>{{ loop.index }}</td>
                                  <td>{{ container['Name'] }}</td>
+                                 <td>{{ container['owner']['username'] }}</td>
+                                 <td>{{ container['owner']['truename'] }}</td>
                                  {% if container['State'] == 'STOPPED' %}
                                  <td><div id='{{ loop.index }}_state' class="label label-danger">Stopped</div></td>
                                  <td id='{{ loop.index }}_pid'>--</td>
@@ -81,7 +85,7 @@
    function update(url,index)
    {
 
-       $.post(url+"/basic_info",{},function(data){
+       $.post(url+"/basic_info/",{},function(data){
 		var state = data.monitor.basic_info.State;
 		if(state == 'RUNNING')
        		{
@@ -105,13 +109,13 @@
 		    return;
        		}
 
-       		$.post(url+"/cpu_use",{},function(data){
+       		$.post(url+"/cpu_use/",{},function(data){
 		       	var val = data.monitor.cpu_use.val;
 			var unit = data.monitor.cpu_use.unit;
 		       	$("#"+index+"_cpu").html(val +" "+ unit);
 		       	},"json");
 
-       		$.post(url+"/mem_use",{},function(data){
+       		$.post(url+"/mem_use/",{},function(data){
 		       	var val = data.monitor.mem_use.val;
 			var unit = data.monitor.mem_use.unit
 		       	$("#"+index+"_mem").html(val+" "+unit);

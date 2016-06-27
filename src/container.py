@@ -25,7 +25,7 @@ class Container(object):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
         try:
             user_info = json.loads(user_info) 
-            cpu = user_info["data"]["groupinfo"]["cpu"]
+            cpu = int(user_info["data"]["groupinfo"]["cpu"]) * 100000
             memory = user_info["data"]["groupinfo"]["memory"]
             disk = user_info["data"]["groupinfo"]["disk"]
             image = json.loads(image) 
@@ -95,10 +95,8 @@ class Container(object):
                 else:
                     logger.error ("get AUTH COOKIE URL failed for jupyter")
                     authurl = "error"
-            if (username=='guest'):
-                cookiename='guest-cookie'
-            else:
-                cookiename='docklet-jupyter-cookie'
+            
+            cookiename='docklet-jupyter-cookie'
 
             rundir = self.lxcpath+'/'+lxc_name+'/rootfs' + self.rundir
 
@@ -331,10 +329,6 @@ IP=%s
     def create_image(self,username,imagename,containername,description="not thing",imagenum=10):
         return self.imgmgr.createImage(username,imagename,containername,description,imagenum)
 
-    def flush_container(self,username,imagename,containername):
-        self.imgmgr.flush_one(username,imagename,containername)
-        logger.info("container: %s has been flushed" % containername)
-        return 0
     # check all local containers
     def check_allcontainers(self):
         [both, onlylocal, onlyglobal] = self.diff_containers()

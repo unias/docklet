@@ -38,13 +38,14 @@ DAEMON_OPTS=
 # The process ID of the script when it runs is stored here:
 PIDFILE=$RUN_DIR/$DAEMON_NAME.pid
 
+DOCKMETER_NAME=$DAEMON_NAME-metering
+DOCKMETER_PIDFILE=$RUN_DIR/$DOCKMETER_NAME.pid
+
 . /lib/lsb/init-functions
 
 ###########
 
 pre_start () {
-    log_daemon_msg "Starting $DAEMON_NAME in $FS_PREFIX"
-
     [ ! -d $FS_PREFIX/global ] && mkdir -p $FS_PREFIX/global
     [ ! -d $FS_PREFIX/local ] && mkdir -p $FS_PREFIX/local
     [ ! -d $FS_PREFIX/global/users ] && mkdir -p $FS_PREFIX/global/users
@@ -81,6 +82,7 @@ pre_start () {
 
 do_start() {
     pre_start
+    log_daemon_msg "Starting $DAEMON_NAME in $FS_PREFIX"
     start-stop-daemon --start --oknodo --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
     log_end_msg $?
 }
@@ -91,6 +93,19 @@ do_stop () {
     log_end_msg $?
 }
 
+do_start_meter() {
+    log_daemon_msg "Starting $DOCKMETER_NAME in $FS_PREFIX"
+    start-stop-daemon --start --background --pidfile $DOCKMETER_PIDFILE --make-pidfile --exec $DOCKLET_HOME/meter/main.py
+    log_end_msg $?
+}
+
+do_stop_meter() {
+    log_daemon_msg "Stopping $DOCKMETER_NAME daemon"
+    start-stop-daemon --stop --pidfile $DOCKMETER_PIDFILE --remove-pidfile
+    log_end_msg $?
+}
+
+
 
 
 case "$1" in
@@ -100,6 +115,13 @@ case "$1" in
 
     stop)
         do_stop
+        ;;
+    start-meter)
+        do_start_meter
+        ;;
+
+    stop-meter)
+        do_stop_meter
         ;;
 
     console)
@@ -115,7 +137,6 @@ case "$1" in
     status)
         status_of_proc -p $PIDFILE "$DAEMON" "$DAEMON_NAME" && exit 0 || exit $?
         ;;
-
     *)
         echo "Usage: $DAEMON_NAME {start|stop|restart|status}"
         exit 1

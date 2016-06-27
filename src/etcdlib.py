@@ -199,4 +199,3 @@ class Client(object):
                 return [False, 'you are not lock holder']
         else:
             return [False, 'no one holds this lock']
-    
