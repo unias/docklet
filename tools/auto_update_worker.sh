@@ -1,4 +1,7 @@
-echo "hello world!"
-WORKER=$2/bin/docklet-worker
+WORKER=$1/bin/docklet-worker
 $WORKER stop
-echo `$WORKER status`
+$WORKER status
+cd $1
+git pull origin master:master
+$WORKER start
+$WORKER status
