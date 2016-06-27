@@ -6,29 +6,37 @@ bindir=${0%/*}
 DOCKLET_BIN=$(cd $bindir; pwd)
 DOCKLET_HOME=${DOCKLET_BIN%/*}
 DOCKLET_CONF=$DOCKLET_HOME/conf
-GIT_ADDRESS=$2
-WORKER_DIR=$3
+FS_PREFIX=/opt/docklet
+WORKER_DIR=$2
 do_update () {
     source $DOCKLET_CONF/docklet.conf
-    arr=(${WORKER_ADDRESSES/ / })
     echo "" > $DOCKLET_HOME/tools/update_output.txt
-    echo "$WORKER_DIR"
+    $DOCKLET_HOME/bin/docklet-master stop >> $DOCKLET_HOME/tools/update_output.txt
+    date '+%Y-%m-%d %T INFO' | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+    git pull origin master:master 2>&1 | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+    $DOCKLET_HOME/bin/docklet-master init >> $DOCKLET_HOME/tools/update_output.txt
+    date '+%Y-%m-%d %T INFO' | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+    $DOCKLET_HOME/bin/docklet-master status | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+    $DOCKLET_HOME/bin/docklet-worker stop >> $DOCKLET_HOME/tools/update_output.txt
+    if [ $LOCAL_WORKER == True ]
+    then
+        date '+%Y-%m-%d %T INFO' | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+        $DOCKLET_HOME/bin/docklet-worker start | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+    fi
+    
+    arr=(${WORKER_ADDRESSES//,/ })  
     for i in ${arr[@]}  
-    do  
-        echo $i >> $DOCKLET_HOME/tools/update_output.txt
-        ssh root@$i "${WORKER_DIR}/tools/auto_update_worker.sh $GIT_ADDRESS $WORKER_DIR" >> $DOCKLET_HOME/tools/update_output.txt
-        exit
+    do
+        date '+%Y-%m-%d %T INFO worker at ' | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+        echo -n "$i" | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
+        ssh root@$i "${WORKER_DIR}/tools/auto_update_worker.sh $WORKER_DIR" | tee -a $FS_PREFIX/local/log/docklet-master.log $DOCKLET_HOME/tools/update_output.txt > /dev/null
     done  
+    mv $DOCKLET_HOME/tools/update_output.txt $DOCKLET_HOME/web/static/update_log.txt
 }
 
 case $1 in
-   # update)
-    #    do_update
-     #   ;;
     *)
         do_update
-       # ;;
-       #echo "Parameter error, usage: <scipt_name> update <new_code_address> <working_directory_of_worker>" 
         ;;
 esac
 exit 0

@@ -2,12 +2,13 @@
 import json
 import os
 import getopt
+os.system("touch wawaw")
 import sys, inspect
-import threading
 this_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe()))[0]))
 src_folder = os.path.realpath(os.path.abspath(os.path.join(this_folder,"..", "src")))
 if src_folder not in sys.path:
     sys.path.insert(0, src_folder)
+
 # must first init loadenv
 import tools, env
 config = env.getenv("CONFIG")
@@ -354,16 +355,15 @@ def userquery():
 def adminpage():
     return adminView.as_view()
 
-@app.route("/update-codes", methods=['GET', 'POST'])
+@app.route("/update-codes", methods=['POST'])
 @administration_required
 def update_codes_page():
+    f = open("/root/my_log_file","w")
     git = request.form.get('working_dir_of_worker')
-    #thread.start_new_thread( os.system, ("bash " + this_folder + "/../tools/auto_update_master.sh update "+git) )
-    t = threading.Thread(target=os.system, args=["bash " + this_folder + "/../tools/auto_update_master.sh update "+git])
-    t.start()
-    #os.system("bash " + this_folder + "/../tools/auto_update_master.sh update "+git)
+    print("sh ../tools/auto_update_master.sh "+git, file=f)
+    os.system("bash ../tools/auto_update_master.sh update "+git)
+    print(git,file=f)
     return redirect('/admin/')
-    #return adminView.as_view()
 
 @app.route('/index/', methods=['GET'])
 def jupyter_control():
@@ -466,7 +466,4 @@ if __name__ == '__main__':
         elif opt in ("-p", "--port"):
             webport = int(arg)
 
-
     app.run(host = webip, port = webport, debug = True, threaded=True)
-
-
