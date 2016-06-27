@@ -96,12 +96,10 @@ do_stop () {
 case "$1" in
     start)
         do_start
-        echo "start test!"
         ;;
 
     stop)
         do_stop
-        echo "stop test!"
         ;;
 
     console)
