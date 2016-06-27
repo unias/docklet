@@ -3,68 +3,30 @@
    ...done.
  * Stopping docklet-proxy daemon
    ...done.
- * Stopping docklet-proxy daemon
-   ...done.
  * Stopping docklet-master daemon
    ...done.
- * Stopping docklet-master daemon
-   ...done.
-2016-06-26 22:21:48 INFO
+2016-06-27 09:20:38 INFO
 fatal: Not a git repository (or any of the parent directories): .git
-   ...done.
-2016-06-26 22:21:48 INFO
-fatal: Not a git repository (or any of the parent directories): .git
- * Starting docklet-master in /opt/docklet
  * Starting docklet-master in /opt/docklet
    ...done.
  * Starting docklet-proxy daemon in /opt/docklet
    ...done.
  * Starting  docklet-web in /opt/docklet
-process already running.
    ...done.
- * Starting docklet-proxy daemon in /opt/docklet
-process already running.
-   ...fail!
- * Starting  docklet-web in /opt/docklet
-   ...done.
-   ...done.
-2016-06-26 22:21:48 INFO
-2016-06-26 22:21:48 INFO
- * docklet-master is running
+2016-06-27 09:20:38 INFO
  * docklet-master is running
  * docklet-proxy is running
- * docklet-proxy is running
- * docklet-web is running
  * docklet-web is running
  * Stopping docklet-worker daemon
- * Stopping docklet-worker daemon
    ...done.
-stop test!
-   ...done.
-stop test!
-2016-06-26 22:21:49 INFO
-2016-06-26 22:21:49 INFO
- * Starting docklet-worker in /opt/docklet
+2016-06-27 09:20:38 INFO
  * Starting docklet-worker in /opt/docklet
    ...done.
-start test!
-process already running.
-   ...done.
-start test!
-2016-06-26 22:21:49 INFO worker at 
-2016-06-26 22:21:49 INFO worker at 
-45.55.190.10145.55.190.101 * Stopping docklet-worker daemon
-   ...done.
- * Stopping docklet-worker daemon
+2016-06-27 09:20:38 INFO worker at 
+45.55.190.101 * Stopping docklet-worker daemon
    ...done.
  * docklet-worker is not running
- * docklet-worker is not running
-Already up-to-date.
 Already up-to-date.
  * Starting docklet-worker in /opt/docklet
- * Starting docklet-worker in /opt/docklet
    ...done.
-process already running.
-   ...done.
- * docklet-worker is running
  * docklet-worker is running
