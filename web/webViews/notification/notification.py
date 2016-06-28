@@ -57,6 +57,11 @@ class ModifyNotificationView(normalView):
         dockletRequest.post('/notification/modify/', request.form)
         return redirect('/notification/')
 
+class MailNotificationView(normalView):
+    @classmethod
+    def post(cls):
+        dockletRequest.post('/notification/mail/', request.form)
+        return redirect('/notification/')
 
 class DeleteNotificationView(normalView):
     @classmethod
