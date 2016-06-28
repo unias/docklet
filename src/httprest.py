@@ -608,6 +608,13 @@ def modify_notification(cur_user, user, form):
     result = G_notificationmgr.modify_notification(cur_user=cur_user, form=form)
     return json.dumps(result)
 
+@app.route("/notification/mail/", methods=['POST'])
+@login_required
+def mail_notification(cur_user, user, form):
+    global G_notificationmgr
+    logger.info("handle request: notification/mail/")
+    result = G_notificationmgr.mail_notification(cur_user=cur_user, form=form)
+    return json.dumps(result)
 
 @app.route("/notification/delete/", methods=['POST'])
 @login_required

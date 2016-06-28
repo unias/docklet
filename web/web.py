@@ -24,7 +24,7 @@ from flask import Flask, request, session, render_template, redirect, send_from_
 from webViews.dashboard import dashboardView
 from webViews.user.userlist import userlistView, useraddView, usermodifyView, userdataView, userqueryView
 from webViews.notification.notification import CreateNotificationView, NotificationView, QuerySelfNotificationsView, \
-    QueryNotificationView, ModifyNotificationView, DeleteNotificationView
+    QueryNotificationView, ModifyNotificationView, DeleteNotificationView, MailNotificationView
 from webViews.user.userinfo import userinfoView
 from webViews.user.userActivate import userActivateView
 from webViews.user.grouplist import grouplistView, groupqueryView, groupdetailView, groupmodifyView
@@ -369,6 +369,12 @@ def create_notification():
 @administration_required
 def modify_notification():
     return ModifyNotificationView.as_view()
+
+
+@app.route("/notification/mail/", methods=['POST'])
+@administration_required
+def mail_notification():
+    return MailNotificationView.as_view()
 
 
 @app.route("/notification/delete/", methods=['POST'])
