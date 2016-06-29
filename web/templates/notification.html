@@ -68,8 +68,9 @@
                                 <td>{{ notify['status'] }}</td>
                                 <td>
                                     <a class="btn btn-xs btn-success" data-toggle="modal" data-target="#detailModal_{{ notify['id'] }}"><i class="fa fa-plus"></i> details</a>&nbsp;
-                                    <a class="btn btn-xs btn-info" data-toggle="modal" data-target="#editModal_{{ notify['id'] }}"><i class="fa fa-pencil"></i> edit</a>&nbsp;
-                                    <a class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteModal_{{ notify['id'] }}"><i class="fa fa-times"></i> delete</a>
+                                    <a class="btn btn-xs btn-info" data-toggle="modal" data-target="#editModal_{{ notify['id'] }}"><i class="fa fa-pencil"></i> edit</a><br>
+                                    <a class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteModal_{{ notify['id'] }}"><i class="fa fa-times"></i> delete</a>&nbsp;
+                                    <a class="btn btn-xs btn-primary" data-toggle="modal" data-target="#mailModal_{{ notify['id'] }}"><i class="fa fa-envelope"></i> mail</a>
                                 </td>
                             <!-- Modal Dialog -->
                                 <div class="modal inmodal" id="detailModal_{{ notify['id'] }}" role="dialog" aria-hidden="true">
@@ -164,6 +165,30 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="modal inmodal" id="mailModal_{{ notify['id'] }}" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    <span class="sr-only">Close</span>
+                                                </button>
+                                                <h4 class="modal-title">Mail Notification </h4>
+                                                <small class="font-bold">Send this notification by e-mail</small>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong class="text-center">Are you sure to send e-mail to users?</strong>
+                                                <form id="mailNotificationForm_{{ notify['id'] }}" style="display: none" action="/notification/mail/" method="post">
+                                                    <input type="text" class="form-control" name="notify_id" style="display: none" value="{{ notify['id'] }}">
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onClick="sendMailNotification({{ notify['id'] }});">Send</button>
+                                                <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="modal inmodal" id="deleteModal_{{ notify['id'] }}" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -207,6 +232,9 @@
         }
         function sendDeleteNotification(notifyId) {
             $('#deleteNotificationForm_'+notifyId).submit();
+        }
+        function sendMailNotification(notifyId) {
+            $('#mailNotificationForm_'+notifyId).submit();
         }
     </script>
 {% endblock %}

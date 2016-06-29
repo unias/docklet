@@ -150,7 +150,7 @@ class Notification(db.Model):
     def __init__(self, title, content=''):
         self.title = title
         self.content = content
-        self.create_date = datetime.utcnow()
+        self.create_date = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         self.status = 'open'
 
     def __repr__(self):
