@@ -68,9 +68,9 @@
                                 <td>{{ notify['status'] }}</td>
                                 <td>
                                     <a class="btn btn-xs btn-success" data-toggle="modal" data-target="#detailModal_{{ notify['id'] }}"><i class="fa fa-plus"></i> details</a>&nbsp;
-                                    <a class="btn btn-xs btn-info" data-toggle="modal" data-target="#editModal_{{ notify['id'] }}"><i class="fa fa-pencil"></i> edit</a>&nbsp;
-                                    <a class="btn btn-xs btn-primary" data-toggle="modal" data-target="#mailModal_{{ notify['id'] }}"><i class="fa fa-envelope"></i> mail</a>&nbsp;
-                                    <a class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteModal_{{ notify['id'] }}"><i class="fa fa-times"></i> delete</a>
+                                    <a class="btn btn-xs btn-info" data-toggle="modal" data-target="#editModal_{{ notify['id'] }}"><i class="fa fa-pencil"></i> edit</a><br>
+                                    <a class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteModal_{{ notify['id'] }}"><i class="fa fa-times"></i> delete</a>&nbsp;
+                                    <a class="btn btn-xs btn-primary" data-toggle="modal" data-target="#mailModal_{{ notify['id'] }}"><i class="fa fa-envelope"></i> mail</a>
                                 </td>
                             <!-- Modal Dialog -->
                                 <div class="modal inmodal" id="detailModal_{{ notify['id'] }}" role="dialog" aria-hidden="true">
