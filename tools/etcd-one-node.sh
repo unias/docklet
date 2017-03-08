@@ -5,7 +5,7 @@
 #which etcd &>/dev/null || { echo "etcd not installed, please install etcd first" && exit 1; }
 which etcd >/dev/null || { echo "etcd not installed, please install etcd first" && exit 1; }
 
-etcd_1=localhost
+etcd_1=104.236.59.112
 
 if [ $# -gt 0 ] ; then
     etcd_1=$1

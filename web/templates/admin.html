@@ -25,6 +25,32 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-md-12">
+    <div class="box box-info">
+      <div class="box-header with-border">
+          <h3 class="box-title">Updates Codes</h3>
+
+          <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+              </button>
+          </div>
+      </div>
+      <div class="box-body">
+        <form class="" action="/update-codes" method="post">
+          <b>Working Directory of Worker(eg:/root/docklet): &nbsp </b> 
+          <input name="working_dir_of_worker"> 
+          <input type="submit" value="Fire update!" onclick='alert("Please wait for updating codes!");' class="btn btn-primary btn-sm">
+        </form>
+	<div class="text-info"><br>Last update log</div>
+	<pre id="update_log">Update Log</pre>
+      </div>
+      
+    </div>  
+  </div>
+</div>:
+<div class="row">
  <div class="col-md-12">
      <div class="box box-info">
          <div class="box-header with-border">
@@ -468,5 +494,10 @@
         $("#mLifecycle").val(result.lifeCycle);
       });
     }
+    $( document ).ready(function() {
+	$.get("../static/update_log.txt", function(result){
+    		$("#update_log").text(result);
+  	});
+    });
 </script>
 {% endblock %}

@@ -1,0 +1,32 @@
+
+ * Stopping docklet-web daemon
+   ...done.
+ * Stopping docklet-proxy daemon
+   ...done.
+ * Stopping docklet-master daemon
+   ...done.
+2016-06-27 09:20:38 INFO
+fatal: Not a git repository (or any of the parent directories): .git
+ * Starting docklet-master in /opt/docklet
+   ...done.
+ * Starting docklet-proxy daemon in /opt/docklet
+   ...done.
+ * Starting  docklet-web in /opt/docklet
+   ...done.
+2016-06-27 09:20:38 INFO
+ * docklet-master is running
+ * docklet-proxy is running
+ * docklet-web is running
+ * Stopping docklet-worker daemon
+   ...done.
+2016-06-27 09:20:38 INFO
+ * Starting docklet-worker in /opt/docklet
+   ...done.
+2016-06-27 09:20:38 INFO worker at 
+45.55.190.101 * Stopping docklet-worker daemon
+   ...done.
+ * docklet-worker is not running
+Already up-to-date.
+ * Starting docklet-worker in /opt/docklet
+   ...done.
+ * docklet-worker is running
