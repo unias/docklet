@@ -322,7 +322,7 @@ class Master_Collector(threading.Thread):
                 except Exception as err:
                     logger.warning(traceback.format_exc())
                     logger.warning(err)
-            time.sleep(2)
+            time.sleep(2000)
         return
 
     def stop(self):

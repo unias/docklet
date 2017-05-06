@@ -137,3 +137,35 @@ class UserGroup(db.Model):
 
     def __repr__(self):
         return '<UserGroup %r>' % self.name
+
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    content = db.Column(db.String(8000))
+    create_date = db.Column(db.String(10))
+    # Status: 'open' -> Open to user, 'closed' -> Closed to user
+    status = db.Column(db.String(20))
+
+    def __init__(self, title, content=''):
+        self.title = title
+        self.content = content
+        self.create_date = datetime.utcnow()
+        self.status = 'open'
+
+    def __repr__(self):
+        return '<Notification %r>' % self.title
+
+
+class NotificationGroups(db.Model):
+    # __tablename__ = 'notification_groups'
+    id = db.Column(db.Integer, primary_key=True)
+    notification_id = db.Column(db.Integer)
+    group_name = db.Column(db.String(100))
+
+    def __init__(self, notification_id, group_name):
+        self.notification_id = notification_id
+        self.group_name = group_name
+
+    def __repr__(self):
+        return '<Notification: %r, Group: %r>' % (self.notification_id, self.group_name)

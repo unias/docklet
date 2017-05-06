@@ -1,0 +1,76 @@
+{% extends "base_AdminLTE.html" %}
+{% block title %}Docklet | Create Notification{% endblock %}
+
+{% block panel_title %}Add New Notifications{% endblock %}
+
+{% block panel_list %}
+<ol class="breadcrumb">
+    <li>
+        <a href="/dashboard/"><i class="fa fa-dashboard"></i>Home</a>
+    </li>
+    <li>
+        <a href="/notification/"><i class="fa fa-envelope"></i>Notifications</a>
+    </li>
+    <li class="active">
+        <strong>Add New Notifications</strong>
+    </li>
+</ol>
+{% endblock %}
+
+{##}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Add New Notifications</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="box-body">
+                <form id="notificationForm" class="form-horizontal" action="/notification/create/" method="post">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" id="title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Content</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="content" id="title"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Groups</label>
+                        <div class="checkbox col-sm-10">
+                            <label style="display: none"><input type="checkbox" checked name="groups" value="none" style="display: none"></label>
+                            <label><input type="checkbox" name="groups" value="all">all&nbsp;&nbsp;</label>
+                            {% for group_name in groups %}
+                            <label><input type="checkbox" name="groups" value="{{ group_name }}">{{ group_name }}&nbsp;&nbsp;</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+						    <button class="btn btn-primary" type="submit">Create</button>
+					    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_src %}
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base_AdminLTE.html" %}
+{% block title %}Docklet | Notification{% endblock %}
+
+{% block panel_title %}Notifications{% endblock %}
+
+{% block panel_list %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="/dashboard/"><i class="fa fa-dashboard"></i>Home</a>
+        </li>
+        <li class="active">
+            <strong>Notifications</strong>
+        </li>
+    </ol>
+{% endblock %}
+
+{##}
+{% block content %}
+    {% for notify in notifies %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{ notify['title'] }}</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="box-body" style="white-space:normal;word-break:break-all;word-wrap:break-word;">
+                        {{ notify['content'] }}
+                    </div>
+                    <div class="box-footer">
+                        <small>{{ notify['create_date'] }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block script_src %}
+
+{% endblock %}

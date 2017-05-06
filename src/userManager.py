@@ -7,7 +7,7 @@ Warning: in some early versions, "token" stand for the instance of class model.U
 Original author: Liu Peidong
 '''
 
-from model import db, User, UserGroup
+from model import db, User, UserGroup, Notification
 from functools import wraps
 import os, subprocess
 import hashlib
