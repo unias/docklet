@@ -440,6 +440,7 @@ class userManager:
             "success": 'true',
             "data":{
                 "username" : user.username,
+                "id": user.id,
                 "password" : user.password,
                 "avatar" : user.avatar,
                 "nickname" : user.nickname,
@@ -975,7 +976,7 @@ class userManager:
         accountfile.write(json.dumps(account))
         accountfile.close()
         return {"success": 'true'}
-    
+
     @administration_required
     def cloud_account_del(*args, **kwargs):
         form = kwargs.get('form')
@@ -991,7 +992,7 @@ class userManager:
         accountfile.write(json.dumps(account))
         accountfile.close()
         return {"success": 'true'}
-    
+
     @administration_required
     def cloud_account_modify(*args, **kwargs):
         form = kwargs.get('form')

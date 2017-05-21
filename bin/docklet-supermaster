@@ -198,16 +198,16 @@ do_stop_user () {
 
 case "$1" in
     init)
-        do_start_master "new"
+        do_start_user
         do_start_proxy
         do_start_web
-        do_start_user
+        do_start_master "new"
         ;;
     start)
-        do_start_master "recovery"
+        do_start_user
         do_start_proxy
         do_start_web
-        do_start_user
+        do_start_master "recovery"
         ;;
 
     stop)
@@ -218,14 +218,14 @@ case "$1" in
         ;;
 
     restart)
+        do_stop_user
         do_stop_web
         do_stop_proxy
         do_stop_master
-        do_stop_user
-        do_start_master "recovery"
+        do_start_user
         do_start_proxy
         do_start_web
-        do_start_user
+        do_start_master "recovery"
         ;;
 
     start_proxy)
@@ -249,10 +249,10 @@ case "$1" in
         do_stop_proxy
         do_stop_master
         do_stop_user
-        do_start_master "new"
+        do_start_user
         do_start_proxy
         do_start_web
-        do_start_user
+        do_start_master "new"
         ;;
 
     status)

@@ -2,6 +2,7 @@
 
 import subprocess, os, json
 import imagemgr
+import network
 from log import logger
 import env
 from lvmtool import sys_run, check_volume
@@ -23,7 +24,7 @@ class Container(object):
         self.imgmgr = imagemgr.ImageMgr()
         self.historymgr = History_Manager()
 
-    def create_container(self, lxc_name, proxy_server_ip, username, setting, clustername, clusterid, containerid, hostname, ip, gateway, vlanid, image):
+    def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, ip, gateway, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
         try:
             setting = json.loads(setting)
@@ -37,7 +38,7 @@ class Container(object):
 
             #Ret = subprocess.run([self.libpath+"/lxc_control.sh",
             #    "create", lxc_name, username, str(clusterid), hostname,
-            #    ip, gateway, str(vlanid), str(cpu), str(memory)], stdout=subprocess.PIPE,
+            #    ip, gateway, str(cpu), str(memory)], stdout=subprocess.PIPE,
             #    stderr=subprocess.STDOUT,shell=False, check=True)
 
             rootfs = "/var/lib/lxc/%s/rootfs" % lxc_name
@@ -61,7 +62,7 @@ class Container(object):
                 content = content.replace("%CLUSTERID%",str(clusterid))
                 content = content.replace("%LXCSCRIPT%",env.getenv("LXC_SCRIPT"))
                 content = content.replace("%LXCNAME%",lxc_name)
-                content = content.replace("%VLANID%",str(vlanid))
+                content = content.replace("%UserID%",str(uid))
                 content = content.replace("%CLUSTERNAME%", clustername)
                 content = content.replace("%VETHPAIR%", str(clusterid)+'-'+str(containerid))
                 return content

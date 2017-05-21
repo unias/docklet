@@ -323,6 +323,15 @@ def selfQuery_user(cur_user, user, form):
     result = G_usermgr.selfQuery(cur_user = cur_user)
     return json.dumps(result)
 
+@app.route("/user/uid/", methods=['POST'])
+@auth_key_required
+def get_userid():
+    username = request.form.get("username",None)
+    if username is None:
+        return json.dumps({'success':'false', 'message':'username field is required.'})
+    else:
+        user = User.query.filter_by(username=username).first()
+        return json.dumps({'success':'true', 'uid':user.id})
 
 @app.route("/user/selfModify/", methods=['POST'])
 @login_required

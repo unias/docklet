@@ -14,7 +14,7 @@ import xmlrpc.server, sys, time
 from socketserver import ThreadingMixIn
 import threading
 import etcdlib, network, container
-from nettools import netcontrol
+from nettools import netcontrol,ovscontrol
 import monitor, proxytool
 from lvmtool import new_group, recover_group
 
@@ -127,7 +127,10 @@ class Worker(object):
         self.rpcserver.register_function(monitor.workerFetchInfo)
         self.rpcserver.register_function(netcontrol.setup_gw)
         self.rpcserver.register_function(netcontrol.del_gw)
+        self.rpcserver.register_function(netcontrol.del_bridge)
+        self.rpcserver.register_function(ovscontrol.add_port_gre_withkey)
         self.rpcserver.register_function(netcontrol.check_gw)
+        self.rpcserver.register_function(netcontrol.recover_usernet)
         self.rpcserver.register_function(proxytool.set_route)
         self.rpcserver.register_function(proxytool.delete_route)
         # register functions or instances to server for rpc
@@ -137,10 +140,15 @@ class Worker(object):
         self.con_collector = monitor.Container_Collector()
         self.hosts_collector = monitor.Collector()
 
-        # initialize the network
-        # if worker and master run on the same node, reuse bridges
-        #                     don't need to create new bridges
-        if (self.addr == self.master):
+        # delete the existing network
+        [success, bridges] = ovscontrol.list_bridges()
+        if success:
+            for bridge in bridges:
+                if bridge.startswith("docklet-br"):
+                    ovscontrol.del_bridge(bridge)
+        else:
+            logger.error(bridges)
+        '''if (self.addr == self.master):
             logger.info ("master also on this node. reuse master's network")
         else:
             logger.info ("initialize network")
@@ -161,8 +169,8 @@ class Worker(object):
                     sys.exit(1)
             logger.info ("setup GRE tunnel to master %s" % self.master)
             #network.netsetup("gre", self.master)
-            if not netcontrol.gre_exists('docklet-br', self.master):
-                netcontrol.setup_gre('docklet-br', self.master)
+            #if not netcontrol.gre_exists('docklet-br', self.master):
+                #netcontrol.setup_gre('docklet-br', self.master)'''
 
     # start service of worker
     def start(self):
@@ -191,7 +199,7 @@ class Worker(object):
             else:
                 logger.error("get key %s failed, master may be crashed" % self.addr)
                 self.etcd.setkey("machines/runnodes/"+self.addr, "ok", ttl = 60)
-                
+
 
 if __name__ == '__main__':
 

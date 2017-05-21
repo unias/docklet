@@ -5,6 +5,7 @@
 # $2 : net
 # $3 : network flags, up or down
 # $4 : network type, for example, veth
-# $5 : value of lxc.network.veth.pair 
+# $5 : value of lxc.network.veth.pair
 
-ovs-vsctl --may-exist add-port $Bridge $5 tag=$VLANID
+ovs-vsctl --may-exist add-br $Bridge
+ovs-vsctl --may-exist add-port $Bridge $5
