@@ -1,0 +1,2714 @@
+
+<!DOCTYPE HTML>
+<html lang="zh" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>R 软件包 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-language-picker/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="nb.html" />
+    
+    
+    <link rel="prev" href="python.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../intro/">
+            
+                <a href="../intro/">
+            
+                    
+                    Docklet 简介
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../intro/what.html">
+            
+                <a href="../intro/what.html">
+            
+                    
+                    什么是 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../intro/why.html">
+            
+                <a href="../intro/why.html">
+            
+                    
+                    为什么要用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../intro/how.html">
+            
+                <a href="../intro/how.html">
+            
+                    
+                    如何使用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../concepts/">
+            
+                <a href="../concepts/">
+            
+                    
+                    基本概念
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../concepts/workspace.html">
+            
+                <a href="../concepts/workspace.html">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../concepts/vcluster.html">
+            
+                <a href="../concepts/vcluster.html">
+            
+                    
+                    虚拟集群
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../concepts/image.html">
+            
+                <a href="../concepts/image.html">
+            
+                    
+                    镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../concepts/service.html">
+            
+                <a href="../concepts/service.html">
+            
+                    
+                    服务
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../concepts/nfs.html">
+            
+                <a href="../concepts/nfs.html">
+            
+                    
+                    数据区
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../portal/">
+            
+                <a href="../portal/">
+            
+                    
+                    门户系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../portal/dashboard.html">
+            
+                <a href="../portal/dashboard.html">
+            
+                    
+                    面板
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../portal/config.html">
+            
+                <a href="../portal/config.html">
+            
+                    
+                    配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../portal/status.html">
+            
+                <a href="../portal/status.html">
+            
+                    
+                    状态
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../portal/hosts.html">
+            
+                <a href="../portal/hosts.html">
+            
+                    
+                    主机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/users.html">
+            
+                <a href="../portal/users.html">
+            
+                    
+                    用户
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../portal/admin.html">
+            
+                <a href="../portal/admin.html">
+            
+                    
+                    管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../workspace/">
+            
+                <a href="../workspace/">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../workspace/data.html">
+            
+                <a href="../workspace/data.html">
+            
+                    
+                    数据管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../workspace/edit.html">
+            
+                <a href="../workspace/edit.html">
+            
+                    
+                    文件编辑
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../workspace/terminal.html">
+            
+                <a href="../workspace/terminal.html">
+            
+                    
+                    终端操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../workspace/notebook.html">
+            
+                <a href="../workspace/notebook.html">
+            
+                    
+                    交互编程
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../software/">
+            
+                <a href="../software/">
+            
+                    
+                    在终端中开发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../software/list.html">
+            
+                <a href="../software/list.html">
+            
+                    
+                    安装的软件包列表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../software/c.html">
+            
+                <a href="../software/c.html">
+            
+                    
+                    C/C++
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../software/java.html">
+            
+                <a href="../software/java.html">
+            
+                    
+                    Java
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../software/mpi.html">
+            
+                <a href="../software/mpi.html">
+            
+                    
+                    MPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../software/spark.html">
+            
+                <a href="../software/spark.html">
+            
+                    
+                    Spark
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../software/latex.html">
+            
+                <a href="../software/latex.html">
+            
+                    
+                    LaTeX
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    科学计算与数据处理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="python.html">
+            
+                <a href="python.html">
+            
+                    
+                    Python 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.7.2" data-path="r.html">
+            
+                <a href="r.html">
+            
+                    
+                    R 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="nb.html">
+            
+                <a href="nb.html">
+            
+                    
+                    使用Notebook
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="gallery.html">
+            
+                <a href="gallery.html">
+            
+                    
+                    各种样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="beauty.html">
+            
+                <a href="beauty.html">
+            
+                    
+                    python数据分析样例
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="beauty.html">
+            
+                <a href="beauty.html">
+            
+                    
+                    用Python分析《美女与野兽》
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="balancing-reactions.html">
+            
+                <a href="balancing-reactions.html">
+            
+                    
+                    配平化学方程式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="matrix-exponential.html">
+            
+                <a href="matrix-exponential.html">
+            
+                    
+                    矩阵指数
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="time-series-analysis.html">
+            
+                <a href="time-series-analysis.html">
+            
+                    
+                    时间序列分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="docklet-bigdata-r.html">
+            
+                <a href="docklet-bigdata-r.html">
+            
+                    
+                    R数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="docklet-bigdata-spark.md">
+            
+                <span>
+            
+                    
+                    spark大数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../billing/">
+            
+                <a href="../billing/">
+            
+                    
+                    豆与计费系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../billing/beans.html">
+            
+                <a href="../billing/beans.html">
+            
+                    
+                    什么是"豆"
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../billing/billing.html">
+            
+                <a href="../billing/billing.html">
+            
+                    
+                    计费系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../billing/getBeans.html">
+            
+                <a href="../billing/getBeans.html">
+            
+                    
+                    如何获得豆
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >R 软件包</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="r-&#x8F6F;&#x4EF6;&#x5305;">R &#x8F6F;&#x4EF6;&#x5305;</h2>
+<h3 id="&#x63A8;&#x8350;&#x7684;-r-&#x5305;">&#x63A8;&#x8350;&#x7684; R &#x5305;</h3>
+<p>RStudio &#x7F51;&#x7AD9;&#x7684;&#x6587;&#x7AE0; <a href="https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages" target="_blank">Quick list of useful R packages</a>&#x7ED9;&#x51FA;&#x4E86;&#x4E00;&#x4E2A;&#x63A8;&#x8350;&#x7684;R &#x5305;&#x5217;&#x8868;&#x3002;</p>
+<p>Many useful R function come in packages, free libraries of code written by R&apos;s active user community. To install an R package, open an R session and type at the command line</p>
+<pre><code class="r">install.packages(&quot;&lt;the package&apos;s name&gt;&quot;)
+</code></pre>
+<p>R will download the package from CRAN, so you&apos;ll need to be connected to the internet. Once you have a package installed, you can make its contents available to use in your current R session by running</p>
+<pre><code class="r">library(&quot;&lt;the package&apos;s name&gt;&quot;)
+</code></pre>
+<p>There are thousands of helpful R packages for you to use, but navigating them all can be a challenge. To help you out, we&apos;ve compiled this guide to some of the best. We&apos;ve used each of these, and found them to be outstanding &#x2013; we&apos;ve even written some of them. But you don&apos;t have to take our word for it, these packages are also some of the top most downloaded R packages.</p>
+<h4 id="to-load-data">To load data</h4>
+<p><a href="https://cran.rstudio.com/web/packages/RODBC" target="_blank">RODBC</a>, <a href="http://www.rdocumentation.org/packages/RMySQL/functions/RMySQL-package" target="_blank">RMySQL</a>, <a title="Link: http://www.rdocumentation.org/packages/RPostgresSQL" href="http://www.rdocumentation.org/packages/RPostgresSQL" target="_blank">RPostgresSQL</a>, <a title="Link: http://www.rdocumentation.org/packages/RSQLite" href="http://www.rdocumentation.org/packages/RSQLite" target="_blank">RSQLite</a> - If you&apos;d like to read in data from a database, these packages are a good place to start. Choose the package that fits your type of database.</p>
+<p><a href="https://cran.rstudio.com/web/packages/XLConnect" target="_blank">XLConnect</a>, <a href="https://cran.rstudio.com/web/packages/xlsx" target="_blank">xlsx</a> - These packages help you read and write Micorsoft Excel files from R. You can also just export your spreadsheets from Excel as .csv&apos;s.</p>
+<p><a href="http://www.rdocumentation.org/packages/foreign" target="_blank">foreign</a> - Want to read a SAS data set into R? Or an SPSS data set? Foreign provides functions that help you load data files from other programs into R.</p>
+<p>R can handle plain text files &#x2013; no package required. Just use the functions read.csv, read.table, and read.fwf. If you have even more exotic data, consult the CRAN <a href="https://cran.rstudio.com/doc/manuals/R-data.pdf" target="_blank">guide</a> to data import and export.</p>
+
+<h4 id="to-manipulate-data">To manipulate data</h4>
+
+<p><a href="http://blog.rstudio.org/2014/01/17/introducing-dplyr/" target="_blank">dplyr</a> - Essential shortcuts for subsetting, summarizing, rearranging, and joining together data sets. dplyr is our go to package for fast data manipulation.</p>
+<p><a href="http://blog.rstudio.org/2014/07/22/introducing-tidyr/" target="_blank">tidyr</a> - Tools for changing the layout of your data sets. Use the gather and spread functions to convert your data into the <a href="http://www.jstatsoft.org/v59/i10/paper" target="_blank">tidy format</a>, the layout R likes best.</p>
+<p><a href="http://journal.r-project.org/archive/2010-2/RJournal_2010-2_Wickham.pdf" target="_blank">stringr</a> - Easy to learn tools for regular expressions and character strings.</p>
+<p><a href="http://www.r-statistics.com/2012/03/do-more-with-dates-and-times-in-r-with-lubridate-1-1-0/" target="_blank">lubridate</a> - Tools that make working with dates and times easier.</p>
+
+<h4 id="to-visualize-data">To visualize data</h4>
+
+<p><a href="http://docs.ggplot2.org/current/" target="_blank">ggplot2</a> - R&apos;s famous package for making beautiful graphics. ggplot2 lets you use the <a href="http://vita.had.co.nz/papers/layered-grammar.pdf" target="_blank">grammar of graphics</a> to build layered, customizable plots.</p>
+<p><a href="http://ggvis.rstudio.com" target="_blank">ggvis</a> - Interactive, web based graphics built with the grammar of graphics.</p>
+<p><a href="http://rgl.neoscientists.org/about.shtml" target="_blank">rgl</a> - Interactive 3D visualizations with R</p>
+<p><a href="http://www.htmlwidgets.org/" target="_blank">htmlwidgets</a> - A fast way to build interactive (javascript based) visualizations with R. Packages that implement htmlwidgets include:</p>
+<ul>
+<li><a href="http://rstudio.github.io/leaflet/" target="_blank">leaflet</a> (maps)</li>
+<li><a href="http://rstudio.github.io/dygraphs" target="_blank">dygraphs</a> (time series)</li>
+<li><a href="http://rstudio.github.io/DT/" target="_blank">DT</a> (tables)</li>
+<li><a href="http://rich-iannone.github.io/DiagrammeR/" target="_blank">diagrammeR</a> (diagrams)</li>
+<li><a href="http://christophergandrud.github.io/networkD3/" target="_blank">network3D</a> (network graphs)</li>
+<li><a href="https://github.com/bwlewis/rthreejs" target="_blank">threeJS</a> (3D scatterplots and globes).</li>
+</ul>
+<p> </p>
+<p><a href="https://cran.rstudio.com/web/packages/googleVis" target="_blank">googleVis</a> - Let&apos;s you use Google Chart tools to visualize data in R. Google Chart tools used to be called Gapminder, the graphing software Hans Rosling made famous in hie TED talk.</p>
+
+<h4 id="to-model-data">To model data</h4>
+
+<p><a href="http://www.rdocumentation.org/packages/car" target="_blank">car</a> - car&apos;s <a href="http://www.rdocumentation.org/packages/car/functions/Anova" target="_blank">Anova</a> function is popular for making type II and type III Anova tables.</p>
+<p><a href="http://www.rdocumentation.org/packages/mgcv/functions/mgcv-package" target="_blank">mgcv</a> - Generalized Additive Models</p>
+<p><a href="http://www.rdocumentation.org/packages/lme4/functions/lme4-package" target="_blank">lme4</a>/<a href="http://www.rdocumentation.org/packages/nlme/functions/nlme" target="_blank">nlme</a> - Linear and Non-linear mixed effects models</p>
+<p><a href="http://www.rdocumentation.org/packages/randomForest/functions/randomForest" target="_blank">randomForest</a> - Random forest methods from machine learning</p>
+<p><a href="http://www.rdocumentation.org/packages/multcomp" target="_blank">multcomp</a> - Tools for multiple comparison testing</p>
+<p><a href="http://www.rdocumentation.org/packages/vcd" target="_blank">vcd</a> - Visualization tools and tests for categorical data</p>
+<p><a href="http://www.rdocumentation.org/packages/glmnet/functions/glmnet" target="_blank">glmnet</a> - Lasso and elastic-net regression methods with cross validation</p>
+<p><a href="http://www.rdocumentation.org/packages/survival" target="_blank">survival</a> - Tools for survival analysis</p>
+<p><a href="https://cran.rstudio.com/web/packages/caret" target="_blank">caret</a> - Tools for training regression and classification models</p>
+
+<h4 id="to-report-results">To report results</h4>
+
+<p><a href="http://shiny.rstudio.com" target="_blank">shiny</a> - Easily make interactive, web apps with R. A perfect way to explore data and share findings with non-programmers.</p>
+<p><a href="https://rmarkdown.rstudio.com/" target="_blank">R Markdown</a> - The perfect workflow for reproducible reporting. Write R code in your <a href="http://daringfireball.net/projects/markdown/" target="_blank">markdown</a> reports. When you run render, R Markdown will replace the code with its results and then export your report as an HTML, pdf, or MS Word document, or a HTML or pdf slideshow. The result? Automated reporting. R Markdown is integrated straight into RStudio.</p>
+<p><a href="http://www.rdocumentation.org/packages/xtable/functions/xtable" target="_blank">xtable</a> - The <a href="http://www.rdocumentation.org/packages/xtable/functions/xtable" target="_blank">xtable</a> function takes an R object (like a data frame) and returns the latex or HTML code you need to paste a pretty version of the object into your documents. Copy and paste, or pair up with R Markdown.</p>
+
+<h4 id="for-spatial-data">For Spatial data</h4>
+
+<p><a href="https://cran.rstudio.com/web/packages/sp" target="_blank">sp</a>, <a href="http://www.rdocumentation.org/packages/maptools" target="_blank">maptools</a> - Tools for loading and using spatial data including shapefiles.</p>
+<p><a href="http://www.rdocumentation.org/packages/maps" target="_blank">maps</a> - Easy to use map polygons for plots.</p>
+<p><a href="http://journal.r-project.org/archive/2013-1/kahle-wickham.pdf" target="_blank">ggmap</a> - Download street maps straight from Google maps and use them as a background in your ggplots.</p>
+
+<h4 id="for-time-series-and-financial-data">For Time Series and Financial data</h4>
+
+<p><a href="https://cran.rstudio.com/web/packages/zoo" target="_blank">zoo</a> - Provides the most popular format for saving time series objects in R.</p>
+<p><a href="https://cran.rstudio.com/web/packages/xts" target="_blank">xts</a> - Very flexible tools for manipulating time series data sets.</p>
+<p><a href="http://www.quantmod.com/" target="_blank">quantmod</a> - Tools for downloading financial data, plotting common charts, and doing technical analysis.</p>
+
+<h4 id="to-write-high-performance-r-code">To write high performance R code</h4>
+
+<p><a href="http://dirk.eddelbuettel.com/code/rcpp.html" target="_blank">Rcpp</a> - Write R functions that call C++ code for lightning fast speed.</p>
+<p><a href="http://www.rdocumentation.org/packages/data.table" target="_blank">data.table</a> - An alternative way to organize data sets for very, very fast operations. Useful for big data.</p>
+<p><a href="http://www.rdocumentation.org/packages/parallel/functions/parallel-package" target="_blank">parallel</a> - Use parallel processing in R to speed up your code or to crunch large data sets.</p>
+
+<h4 id="to-work-with-the-web">To work with the web</h4>
+
+<p><a href="http://www.omegahat.org/RSXML/shortIntro.pdf" target="_blank">XML</a> - Read and create XML documents with R</p>
+<p><a href="https://cran.rstudio.com/web/packages/jsonlite" target="_blank">jsonlite</a> - Read and create JSON data tables with R</p>
+<p><a href="http://www.rdocumentation.org/packages/httr/functions/httr" target="_blank">httr</a> - A set of useful tools for working with http connections</p>
+
+<h4 id="to-write-your-own-r-packages">To write your own R packages</h4>
+
+<p><a href="https://www.rstudio.com/projects/devtools/" target="_blank">devtools</a> - An essential suite of tools for turning your code into an R package.</p>
+<p><a href="http://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf" target="_blank">testthat</a> - testthat provides an easy way to write unit tests for your code projects.</p>
+<p><a href="http://www.rdocumentation.org/packages/roxygen2" target="_blank">roxygen2</a> - A quick way to document your R packages. roxygen2 turns inline code comments into documentation pages and builds a package namespace.</p>
+<p>You can also read about the entire package development process online in Hadley Wickham&apos;s <a href="http://r-pkgs.had.co.nz/" target="_blank">R Packages</a> book</p>
+
+
+<h3 id="top-100-r-packages-for-2013-jan-may">Top 100 R packages for 2013 (Jan-May)</h3>
+<p>&#x7F51;&#x7AD9; <a href="http://www.r-statistics.com" target="_blank">http://www.r-statistics.com</a> 2013&#x5E74;&#x7684;<a href="http://www.r-statistics.com/2013/06/top-100-r-packages-for-2013-jan-may/" target="_blank">&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;</a> &#x7EDF;&#x8BA1;&#x5206;&#x6790;&#x4E86; R &#x5305;&#x7684;&#x4E0B;&#x8F7D;&#x60C5;&#x51B5; </p>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p1"><span class="s1"><b></b></span><br></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1"><b>Package</b></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1"><b>Title</b></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1"><b>Downloads</b></span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">1</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/plyr/" target="_blank">plyr<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools for splitting, applying and combining data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">84049</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">2</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/digest/" target="_blank">digest<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Create cryptographic hash digests of R objects</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">83192</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">3</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/ggplot2/" target="_blank">ggplot2<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">An implementation of the Grammar of Graphics</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">82768</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">4</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/colorspace/" target="_blank">colorspace<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Color Space Manipulation</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">81901</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">5</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/stringr/" target="_blank">stringr<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Make it easier to work with strings</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">77658</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">6</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RColorBrewer/" target="_blank">RColorBrewer<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">ColorBrewer palettes</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">66783</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">7</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/reshape2/" target="_blank">reshape2<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Flexibly reshape data: a reboot of the reshape package</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">64911</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">8</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/zoo/" target="_blank">zoo<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">S3 Infrastructure for Regular and Irregular Time Series (Z&#x2019;s</span></p>
+        <p class="p3"><span class="s1">ordered observations)</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">60844</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">9</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/proto/" target="_blank">proto<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Prototype object-based programming</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">59043</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">10</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/scales/" target="_blank">scales<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Scale functions for graphics</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">58369</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">11</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/car/" target="_blank">car<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Companion to Applied Regression</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">57453</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">12</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/dichromat/" target="_blank">dichromat<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Color Schemes for Dichromats</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">56624</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">13</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/gtable/" target="_blank">gtable<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Arrange grobs in tables</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">54431</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">14</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/munsell/" target="_blank">munsell<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Munsell colour system</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">53183</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">15</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/labeling/" target="_blank">labeling<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Axis Labeling</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">51877</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">16</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/Hmisc/" target="_blank">Hmisc<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Harrell Miscellaneous</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">47836</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">17</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/rJava/" target="_blank">rJava<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Low-level R to Java interface</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">47731</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">18</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/mvtnorm/" target="_blank">mvtnorm<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Multivariate Normal and t Distributions</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">46884</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">19</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/bitops/" target="_blank">bitops<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Bitwise Operations</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">45689</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">20</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/rgl/" target="_blank">rgl<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">3D visualization device system (OpenGL)</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">41001</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">21</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/foreign/" target="_blank">foreign<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Read Data Stored by Minitab, S, SAS, SPSS, Stata, Systat, dBase,</span></p>
+        <p class="p3"><span class="s1">..</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">37849</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">22</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/XML/" target="_blank">XML<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools for parsing and generating XML within R and S-Plus</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">37153</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">23</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/lattice/" target="_blank">lattice<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Lattice Graphics</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">36597</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">24</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/e1071/" target="_blank">e1071<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Misc Functions of the Department of Statistics (e1071), TU Wien</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">35180</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">25</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/gtools/" target="_blank">gtools<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Various R programming tools</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">35028</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">26</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/sp/" target="_blank">sp<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">classes and methods for spatial data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">34786</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">27</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/gdata/" target="_blank">gdata<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Various R programming tools for data manipulation</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">34262</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">28</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/Rcpp/" target="_blank">Rcpp<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Seamless R and C++ Integration</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">33929</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">29</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/MASS/" target="_blank">MASS<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Support Functions and Datasets for Venables and Ripley&#x2019;s MASS</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">33667</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">30</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/Matrix/" target="_blank">Matrix<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Sparse and Dense Matrix Classes and Methods</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">30740</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">31</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/lmtest/" target="_blank">lmtest<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Testing Linear Regression Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">30319</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">32</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/survival/" target="_blank">survival<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Survival Analysis</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">30186</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">33</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/caTools/" target="_blank">caTools<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools: moving window statistics, GIF, Base64, ROC AUC, etc</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">29945</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">34</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/multcomp/" target="_blank">multcomp<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Simultaneous Inference in General Parametric Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">29871</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">35</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RCurl/" target="_blank">RCurl<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">General network (HTTP/FTP/&#x2026;) client interface for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">28866</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">36</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/knitr/" target="_blank">knitr<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">A general-purpose package for dynamic report generation in R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">28104</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">37</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/xtable/" target="_blank">xtable<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Export tables to LaTeX or HTML</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">28091</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">38</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/xts/" target="_blank">xts<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">eXtensible Time Series</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">28058</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">39</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/rpart/" target="_blank">rpart<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Recursive Partitioning</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">27812</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">40</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/evaluate/" target="_blank">evaluate<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Parsing and evaluation tools that provide more details than the</span></p>
+        <p class="p3"><span class="s1">default</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">27617</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">41</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RODBC/" target="_blank">RODBC<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">ODBC Database Access</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">26131</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">42</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/quadprog/" target="_blank">quadprog<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Functions to solve Quadratic Programming Problems</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">25433</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">43</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/tseries/" target="_blank">tseries<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Time series analysis and computational finance</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">25144</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">44</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/DBI/" target="_blank">DBI<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">R Database Interface</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">24793</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">45</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/nlme/" target="_blank">nlme<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Linear and Nonlinear Mixed Effects Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">24360</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">46</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/lme4/" target="_blank">lme4<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Linear mixed-effects models using S4 classes</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">24199</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">47</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/reshape/" target="_blank">reshape<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Flexibly reshape data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">24118</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">48</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/sandwich/" target="_blank">sandwich<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Robust Covariance Matrix Estimators</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">24016</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">49</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/leaps/" target="_blank">leaps<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">regression subset selection</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">23666</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">50</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/gplots/" target="_blank">gplots<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Various R programming tools for plotting data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">23251</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">51</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/abind/" target="_blank">abind<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Combine multi-dimensional arrays</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">22758</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">52</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/randomForest/" target="_blank">randomForest<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Breiman and Cutler&#x2019;s random forests for classification and</span></p>
+        <p class="p3"><span class="s1">regression</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">22401</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">53</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/Rcmdr/" target="_blank">Rcmdr<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">R Commander</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">22131</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">54</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/coda/" target="_blank">coda<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Output analysis and diagnostics for MCMC</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">21900</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">55</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/maps/" target="_blank">maps<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Draw Geographical Maps</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">21550</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">56</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/igraph/" target="_blank">igraph<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Network analysis and visualization</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">21423</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">57</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/formatR/" target="_blank">formatR<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Format R Code Automatically</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">21049</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">58</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/maptools/" target="_blank">maptools<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools for reading and handling spatial objects</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">20957</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">59</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RSQLite/" target="_blank">RSQLite<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">SQLite interface for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">19671</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">60</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/psych/" target="_blank">psych<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Procedures for Psychological, Psychometric, and Personality</span></p>
+        <p class="p3"><span class="s1">Research</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">19545</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">61</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/KernSmooth/" target="_blank">KernSmooth<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Functions for kernel smoothing for Wand &amp;amp Jones (1995)</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">19166</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">62</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/rgdal/" target="_blank">rgdal<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Bindings for the Geospatial Data Abstraction Library</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">19064</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">63</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RcppArmadillo/" target="_blank">RcppArmadillo<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Rcpp integration for Armadillo templated linear algebra library</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18899</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">64</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/effects/" target="_blank">effects<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Effect Displays for Linear, Generalized Linear,</span></p>
+        <p class="p3"><span class="s1">Multinomial-Logit, Proportional-Odds Logit Models and</span></p>
+        <p class="p3"><span class="s1">Mixed-Effects Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18843</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">65</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/sem/" target="_blank">sem<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Structural Equation Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18711</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">66</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/vcd/" target="_blank">vcd<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Visualizing Categorical Data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18589</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">67</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/XLConnect/" target="_blank">XLConnect<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Excel Connector for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18230</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">68</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/markdown/" target="_blank">markdown<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Markdown rendering for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">18211</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">69</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/timeSeries/" target="_blank">timeSeries<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Rmetrics &#x2013; Financial Time Series Objects</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17932</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">70</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/timeDate/" target="_blank">timeDate<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Rmetrics &#x2013; Chronological and Calendar Objects</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17838</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">71</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/RJSONIO/" target="_blank">RJSONIO<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Serialize R objects to JSON, JavaScript Object Notation</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17801</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">72</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/cluster/" target="_blank">cluster<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Cluster Analysis Extended Rousseeuw et al</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17136</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">73</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/scatterplot3d/" target="_blank">scatterplot3d<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">3D Scatter Plot</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17110</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">74</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/nnet/" target="_blank">nnet<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Feed-forward Neural Networks and Multinomial Log-Linear Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">17074</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">75</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/fBasics/" target="_blank">fBasics<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Rmetrics &#x2013; Markets and Basic Statistics</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">16278</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">76</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/forecast/" target="_blank">forecast<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Forecasting functions for time series and linear models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15638</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">77</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/quantreg/" target="_blank">quantreg<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Quantile Regression</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15509</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">78</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/foreach/" target="_blank">foreach<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Foreach looping construct for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15405</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">79</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/chron/" target="_blank">chron<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Chronological objects which can handle dates and times</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15226</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">80</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/plotrix/" target="_blank">plotrix<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Various plotting functions</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15142</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">81</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/matrixcalc/" target="_blank">matrixcalc<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Collection of functions for matrix calculations</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">15107</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">82</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/aplpack/" target="_blank">aplpack<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Another Plot PACKage: stem.leaf, bagplot, faces, spin3R, and</span></p>
+        <p class="p3"><span class="s1">some slider functions</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">14654</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">83</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/strucchange/" target="_blank">strucchange<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Testing, Monitoring, and Dating Structural Changes</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">14503</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">84</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/iterators/" target="_blank">iterators<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Iterator construct for R</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">14449</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">85</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/mgcv/" target="_blank">mgcv<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Mixed GAM Computation Vehicle with GCV/AIC/REML smoothness</span></p>
+        <p class="p3"><span class="s1">estimation</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">14186</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">86</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/kernlab/" target="_blank">kernlab<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Kernel-based Machine Learning Lab</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">14135</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">87</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/SparseM/" target="_blank">SparseM<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Sparse Linear Algebra</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13921</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">88</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/tree/" target="_blank">tree<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Classification and regression trees</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13871</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">89</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/robustbase/" target="_blank">robustbase<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Basic Robust Statistics</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13778</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">90</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/vegan/" target="_blank">vegan<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Community Ecology Package</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13686</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">91</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/devtools/" target="_blank">devtools<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools to make developing R code easier</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13488</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">92</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/latticeExtra/" target="_blank">latticeExtra<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Extra Graphical Utilities Based on Lattice</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13253</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">93</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/modeltools/" target="_blank">modeltools<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Tools and Classes for Statistical Models</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13233</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">94</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/xlsx/" target="_blank">xlsx<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Read, write, format Excel 2007 and Excel 97/2000/XP/2003 files</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13097</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">95</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/slam/" target="_blank">slam<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Sparse Lightweight Arrays and Matrices</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">13060</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">96</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/TTR/" target="_blank">TTR<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Technical Trading Rules</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">12894</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">97</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/quantmod/" target="_blank">quantmod<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Quantitative Financial Modelling Framework</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">12892</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">98</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/relimp/" target="_blank">relimp<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Relative Contribution of Effects in a Regression Model</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">12692</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">99</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/akima/" target="_blank">akima<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Interpolation of irregularly spaced data</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">12680</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p3"><span class="s1">100</span></p>
+      </td>
+      <td valign="middle" class="td1">
+        <p class="p4"><span class="s1"><a href="http://cran.r-project.org/web/packages/memoise/" target="_blank">memoise<span class="s2"></span></a></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">Memoise functions</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p3"><span class="s1">12600</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="&#x53EF;&#x7528;-r-&#x5305;-&#x5217;&#x8868;">&#x53EF;&#x7528; R &#x5305; &#x5217;&#x8868;</h3>
+<p>Docklet &#x57FA;&#x7840;&#x955C;&#x50CF;&#x63D0;&#x4F9B;&#x4E86;Ubuntu&#x6E90;&#x4E2D;&#x7684; <code>r-base</code>&#xFF0C;<code>r-recommended</code>&#xFF0C;<code>r-cran-*</code>&#x5373;&#x6240;&#x6709;&#x7684;R&#x5305;&#x3002;</p>
+<p>&#x5305;&#x62EC;:</p>
+<ul>
+<li>r-base - GNU R statistical computation and graphics system</li>
+<li>r-base-core - GNU R core of statistical computation and graphics system</li>
+<li>r-base-core-dbg - GNU R debug symbols for statistical comp. language and environment</li>
+<li>r-base-dev - GNU R installation of auxiliary GNU R packages</li>
+<li>r-base-html - GNU R html docs for statistical computing system functions</li>
+<li>r-bioc-qvalue - GNU R package for Q-value estimation for FDR control</li>
+<li>r-cran-abind - GNU R abind multi-dimensional array combination function</li>
+<li>r-cran-acepack - GNU R package for regression transformations</li>
+<li>r-cran-ade4 - GNU R analysis of ecological data</li>
+<li>r-cran-afex - GNU R package for analyzing factorial experiments using ANOVA or mixed models</li>
+<li>r-cran-amelia - GNU R package supporting multiple imputation of missing data</li>
+<li>r-cran-amore - GNU R: A MORE flexible neural network package</li>
+<li>r-cran-ape - GNU R package for Analyses of Phylogenetics and Evolution</li>
+<li>r-cran-base64enc - GNU R package that provides tools for base64 encoding</li>
+<li>r-cran-batchjobs - GNU R batch computing</li>
+<li>r-cran-bayesfactor - GNU R package providing Bayes factors for t-tests, ANOVAs and contingency tables</li>
+<li>r-cran-bayesm - GNU R package for Bayesian inference</li>
+<li>r-cran-bbmisc - GNU R Miscellaneous helper functions for B. Bischl</li>
+<li>r-cran-beeswarm - bee swarm plot, an alternative to stripchart</li>
+<li>r-cran-biasedurn - GNU R Biased Urn model distributions</li>
+<li>r-cran-bio3d - GNU R package for biological structure analysis</li>
+<li>r-cran-bitops - GNU R package implementing bitwise operations</li>
+<li>r-cran-blockmodeling - Generalized and classical blockmodeling of valued networks</li>
+<li>r-cran-bms - GNU R package for Bayesian model averaging for linear models</li>
+<li>r-cran-boolnet - assembling, analyzing and visualizing Boolean networks</li>
+<li>r-cran-boot - GNU R package for bootstrapping functions from Davison and Hinkley</li>
+<li>r-cran-bradleyterry2 - GNU R package for using Bradley-Terry models</li>
+<li>r-cran-brew - GNU R templating framework for report generation</li>
+<li>r-cran-brglm - GNU R package for bias reduction in binomial-response GLMs</li>
+<li>r-cran-cairodevice - GNU R Cairo/Gtk2 device driver package</li>
+<li>r-cran-car - GNU R Companion to Applied Regression by John Fox</li>
+<li>r-cran-caret - GNU R package for classification and regression training</li>
+<li>r-cran-catools - GNU R package providing various utility functions</li>
+<li>r-cran-checkmate - GNU R fast and versatile argument checks</li>
+<li>r-cran-chron - GNU R package for chronologically ordered objects</li>
+<li>r-cran-class - GNU R package for classification</li>
+<li>r-cran-cluster - GNU R package for cluster analysis by Rousseeuw et al</li>
+<li>r-cran-cmprsk - GNU R subdistribution analysis of competing risks</li>
+<li>r-cran-coda - Output analysis and diagnostics for MCMC simulations in R</li>
+<li>r-cran-codetools - GNU R package providing code analysis tools</li>
+<li>r-cran-coin - GNU R package providing conditional inference procedures</li>
+<li>r-cran-colorspace - GNU R Color Space Manipulation</li>
+<li>r-cran-combinat - GNU R package with utilities for combinatorics</li>
+<li>r-cran-contfrac - GNU R package providing various utilities for evaluating continued fractions</li>
+<li>r-cran-conting - GNU R package for Bayesian analysis of contingency tables</li>
+<li>r-cran-crayon - GNU R colored terminal output</li>
+<li>r-cran-cubature - GNU R package for adaptive multivariate integration</li>
+<li>r-cran-date - GNU R package for date handling</li>
+<li>r-cran-dbi - GNU R package providing a generic database interface</li>
+<li>r-cran-deal - Learning Bayesian Networks with Mixed Variables</li>
+<li>r-cran-deldir - GNU R Delaunay Triangulation and Dirichlet (Voronoi) Tessellation</li>
+<li>r-cran-deoptimr - GNU R package for Diffential Evolution in pure R</li>
+<li>r-cran-desolve - GNU R package providing functions that solve initial value problems</li>
+<li>r-cran-diagnosismed - medical diagnostic test accuracy analysis toolkit</li>
+<li>r-cran-dichromat - Color schemes for dichromats</li>
+<li>r-cran-digest - GNU R package for &apos;hash digest&apos; of R data structures</li>
+<li>r-cran-domc - GNU R parallel excution backend for %dopar% using multicore</li>
+<li>r-cran-doparallel - GNU R foreach parallel adaptor for the parallel package</li>
+<li>r-cran-dosefinding - Planning and Analyzing Dose Finding experiments</li>
+<li>r-cran-dosnow - GNU R parallel excution backend for %dopar% using snow</li>
+<li>r-cran-downloader - GNU R package for downloading files over http and https</li>
+<li>r-cran-e1071 - GNU R package with miscellaneous functions of the Dept of Statisics (e1071)</li>
+<li>r-cran-eco - GNU R routines for Bayesian ecological inference</li>
+<li>r-cran-ecodist - GNU R package for dissimilarity-based ecological analysis</li>
+<li>r-cran-effects - GNU R graphical and tabular effects display for glm models</li>
+<li>r-cran-elliptic - GNU R package providing elliptic and related functions</li>
+<li>r-cran-energy - GNU R package for energy statistics for distribution comparison</li>
+<li>r-cran-epi - GNU R epidemiological analysis</li>
+<li>r-cran-epibasix - GNU R Elementary Epidemiological Functions</li>
+<li>r-cran-epicalc - GNU R Epidemiological calculator</li>
+<li>r-cran-epir - GNU R Functions for analysing epidemiological data</li>
+<li>r-cran-epitools - GNU R Epidemiology Tools for Data and Graphics</li>
+<li>r-cran-erm - GNU R package for &apos;extended Rasch modelling&apos;</li>
+<li>r-cran-estimability - GNU R package providing tools for determining estimability of linear functions</li>
+<li>r-cran-etm - GNU R empirical transition matrix</li>
+<li>r-cran-evaluate - GNU R parsing and evaluation tools</li>
+<li>r-cran-evd - GNU R Functions for extreme value distributions</li>
+<li>r-cran-expm - GNU R Computation of the matrix exponential and related quantities</li>
+<li>r-cran-fail - GNU R File Abstraction Interface Layer (FAIL) mimicking a key-value store</li>
+<li>r-cran-fasianoptions - GNU R package for financial engineering -- fAsianOptions</li>
+<li>r-cran-fassets - GNU R package for financial engineering -- fAssets</li>
+<li>r-cran-fastcluster - Fast hierarchical clustering routines for GNU R</li>
+<li>r-cran-fastmatch - GNU R package for fast match replacement for repeated look-ups</li>
+<li>r-cran-fbasics - GNU R package for financial engineering -- fBasics</li>
+<li>r-cran-fbonds - GNU R package for financial engineering -- fBonds</li>
+<li>r-cran-fcopulae - GNU R package for financial engineering -- fCopulae</li>
+<li>r-cran-fexoticoptions - GNU R package for financial engineering -- fExoticOptions</li>
+<li>r-cran-fextremes - GNU R package for financial engineering -- fExtremes</li>
+<li>r-cran-fgarch - GNU R package for financial engineering -- fGarch</li>
+<li>r-cran-fimport - GNU R package for financial engineering -- fImport</li>
+<li>r-cran-fmultivar - GNU R package for financial engineering -- fMultivar</li>
+<li>r-cran-fnonlinear - GNU R package for financial engineering -- fNonlinear</li>
+<li>r-cran-foptions - GNU R package for financial engineering -- fOptions</li>
+<li>r-cran-foreach - GNU R foreach looping support</li>
+<li>r-cran-foreign - GNU R package to read/write data from other stat. systems</li>
+<li>r-cran-formatr - Format R code automatically</li>
+<li>r-cran-formula - GNU R package for extended model formulas</li>
+<li>r-cran-fportfolio - GNU R package for financial engineering -- fPortfolio</li>
+<li>r-cran-fregression - GNU R package for financial engineering -- fRegression</li>
+<li>r-cran-ftrading - GNU R package for financial engineering -- fTrading</li>
+<li>r-cran-funitroots - GNU R package for financial engineering -- fUnitRoots</li>
+<li>r-cran-futile.logger - logging utility for GNU R</li>
+<li>r-cran-futile.options - GNU R futile options management</li>
+<li>r-cran-g.data - GNU R package for delayed-data</li>
+<li>r-cran-gam - Generalized Additive Models for R</li>
+<li>r-cran-gbm - GNU R package &quot;Generalized Boosted Regression Models&quot;</li>
+<li>r-cran-gdata - GNU R package with data manipulation tools by Greg Warnes et al</li>
+<li>r-cran-geepack - Generalized Estimating Equation Package for R</li>
+<li>r-cran-genabel - GNU R package for genome-wide SNP association analysis</li>
+<li>r-cran-genabel.data - data package for genome-wide SNP association analysis</li>
+<li>r-cran-genetics - GNU R package for population genetics</li>
+<li>r-cran-getopt - GNU R package providing command-line parsing functionality</li>
+<li>r-cran-ggplot2 - implementation of the Grammar of Graphics</li>
+<li>r-cran-gmaps - GNU R support for producing geographic maps with grid graphics</li>
+<li>r-cran-gmodels - GNU R package with tools for model fitting by Greg Warnes et al</li>
+<li>r-cran-gnm - GNU R package for generalized nonlinear models</li>
+<li>r-cran-gplots - GNU R package with tools for plotting data by Greg Warnes et al</li>
+<li>r-cran-gregmisc - GNU R package with miscellaneous functions by Greg Warnes et al</li>
+<li>r-cran-gridextra - GNU R package with extensions for the grid package</li>
+<li>r-cran-gsl - GNU R wrapper for the GNU Scientific Library</li>
+<li>r-cran-gss - GNU R package for multivariate estimation using smoothing splines</li>
+<li>r-cran-gtable - Arrange grobs in tables</li>
+<li>r-cran-gtools - GNU R package with R programming tools by Greg Warnes et al</li>
+<li>r-cran-haplo.stats - GNU R package for haplotype analysis</li>
+<li>r-cran-hdf5 - GNU R package interfacing the NCSA HDF5 library</li>
+<li>r-cran-hmisc - GNU R miscellaneous functions by Frank Harrell</li>
+<li>r-cran-hwriter - HTML Writer - Outputs R objects in HTML format</li>
+<li>r-cran-hypergeo - GNU R package providing the Gaussian hypergeometric for complex numbers</li>
+<li>r-cran-igraph - GNU R network analysis and visualization</li>
+<li>r-cran-inline - GNU R package to inline C, C++, Fortran functions from R</li>
+<li>r-cran-int64 - GNU R package for 64 bit integer types</li>
+<li>r-cran-iterators - GNU R iterator support for vectors, lists and other containers</li>
+<li>r-cran-its - GNU R package for handling irregular time series</li>
+<li>r-cran-jsonlite - Robust, High Performance JSON Parser and Generator for R</li>
+<li>r-cran-kernlab - GNU R package for kernel-based machine learning lab</li>
+<li>r-cran-kernsmooth - GNU R package for kernel smoothing and density estimation</li>
+<li>r-cran-labeling - GNU R Axis Labeling optimization</li>
+<li>r-cran-lambda.r - GNU R modeling data with functional programming</li>
+<li>r-cran-lattice - GNU R package for &apos;Trellis&apos; graphics</li>
+<li>r-cran-latticeextra - GNU R package of additional graphical displays based on lattice</li>
+<li>r-cran-learnbayes - GNU R functions for learning bayesian inference</li>
+<li>r-cran-lhs - GNU R package &quot;lhs: Latin Hypercube Samples&quot;</li>
+<li>r-cran-littler - GNU R scripting and command-line front-end</li>
+<li>r-cran-lme4 - GNU R package for linear mixed effects model fitting</li>
+<li>r-cran-lmtest - GNU R package for diagnostic checking in linear models</li>
+<li>r-cran-logspline - GNU R package providing routines for the logspline density estimation</li>
+<li>r-cran-lpsolve - GNU R package providing linear program solvers</li>
+<li>r-cran-lsmeans - GNU R package providing least-squares means for linear, generalized linear, and mixed models</li>
+<li>r-cran-magrittr - GNU R forward-pipe operator</li>
+<li>r-cran-maldiquant - GNU R package for quantitative analysis of mass spectrometry data</li>
+<li>r-cran-maldiquantforeign - GNU R package providing import/export routines for MALDIquant</li>
+<li>r-cran-mapdata - GNU R support for producing geographic maps (supplemental data)</li>
+<li>r-cran-mapproj - GNU R support for cartographic projections of map data</li>
+<li>r-cran-maps - GNU R support for producing geographic maps</li>
+<li>r-cran-mass - GNU R package of Venables and Ripley&apos;s MASS</li>
+<li>r-cran-matchit - GNU R package of nonparametric matching methods</li>
+<li>r-cran-matrix - GNU R package of classes for dense and sparse matrices</li>
+<li>r-cran-matrixmodels - GNU R package for sparse and dense matrix models</li>
+<li>r-cran-matrixstats - GNU R methods that apply to rows and columns of a matrix</li>
+<li>r-cran-maxlik - GNU R maximum likelihood estimation</li>
+<li>r-cran-mcmcpack - R routines for Markov chain Monte Carlo model estimation</li>
+<li>r-cran-medadherence - GNU R Medication Adherence: Commonly Used Definitions</li>
+<li>r-cran-memoise - Memoise functions</li>
+<li>r-cran-mfilter - GNU R package providing miscellaneous time series filters</li>
+<li>r-cran-mgcv - GNU R package for multiple parameter smoothing estimation</li>
+<li>r-cran-mime - R package which maps filenames to MIME Types</li>
+<li>r-cran-minqa - GNU R package for quadratic optimisation without derivatives</li>
+<li>r-cran-misc3d - GNU R collection of 3d plot functions and rgl-based isosurfaces</li>
+<li>r-cran-misctools - GNU R miscellaneous tools and utilities</li>
+<li>r-cran-mixtools - GNU R tools for analyzing finite mixture models</li>
+<li>r-cran-mnormt - GNU R package providing multivariate normal and t distribution</li>
+<li>r-cran-mnp - GNU R package for fitting multinomial probit (MNP) models</li>
+<li>r-cran-modeltools - GNU R package providing a collection of tools to deal with statistical models</li>
+<li>r-cran-msm - GNU R Multi-state Markov and hidden Markov models in continuous time</li>
+<li>r-cran-multcomp - GNU R package for multiple comparison procedures</li>
+<li>r-cran-multicore - GNU R parallel processing on multi-core or multi-cpu machines</li>
+<li>r-cran-munsell - Munsell colour system</li>
+<li>r-cran-mvnormtest - GNU R package for multivariate normality test</li>
+<li>r-cran-mvtnorm - GNU R package to compute multivariate Normal and T distributions</li>
+<li>r-cran-ncdf4 - GNU R interface to Unidata netCDF format data files</li>
+<li>r-cran-nlme - GNU R package for (non-)linear mixed effects models</li>
+<li>r-cran-nloptr - GNU R package for interface to NLopt</li>
+<li>r-cran-nnet - GNU R package for feed-forward neural networks</li>
+<li>r-cran-nnls - GNU R package for non-negative least squares (the Lawson-Hanson algorithm)</li>
+<li>r-cran-numderiv - GNU R package for accurate numerical derivatives</li>
+<li>r-cran-nws - GNU R package for distributed programming via NetWorkSpaces</li>
+<li>r-cran-optparse - GNU/R Command line option parser</li>
+<li>r-cran-pbapply - GNU R package providing progress bars for vectorized R functions</li>
+<li>r-cran-pbivnorm - GNU R package for calculating probabilities from a bivariate normal CDF</li>
+<li>r-cran-pbkrtest - GNU R package for tests in linear mixed-effect models</li>
+<li>r-cran-permute - R functions for generating restricted permutations of data</li>
+<li>r-cran-phangorn - GNU R package for phylogenetic analysis</li>
+<li>r-cran-pkgkitten - GNU R package to create simple packages</li>
+<li>r-cran-plotrix - GNU R package providing various plotting functions</li>
+<li>r-cran-plyr - tools for splitting, applying and combining data</li>
+<li>r-cran-polspline - GNU R package providing polynomial spline fitting</li>
+<li>r-cran-polyclip - GNU R Polygon Clipping</li>
+<li>r-cran-polycub - GNU R Cubature over Polygonal Domains</li>
+<li>r-cran-praise - GNU R praise users</li>
+<li>r-cran-profilemodel - GNU R tools for profiling inference functions</li>
+<li>r-cran-proto - Prototype object-based programming</li>
+<li>r-cran-pscl - GNU R package for discrete data models</li>
+<li>r-cran-psy - GNU R procedures for psychometrics</li>
+<li>r-cran-pvclust - Hierarchical Clustering with P-Values via Multiscale Bootstrap</li>
+<li>r-cran-pwt - GNU R package for the Penn World Tables (version 5.6 to 7.1)</li>
+<li>r-cran-pwt8 - GNU R package for the Penn World Tables (version 8)</li>
+<li>r-cran-qtl - GNU R package for genetic marker linkage analysis</li>
+<li>r-cran-quadprog - GNU R package for solving quadratic programming problems</li>
+<li>r-cran-quantreg - GNU R package for quantile regression</li>
+<li>r-cran-qvcalc - GNU R package for computing quasi variances for factor effects</li>
+<li>r-cran-r.methodss3 - GNU R utility function for defining S3 methods</li>
+<li>r-cran-r.oo - GNU R object-oriented programming with or without references</li>
+<li>r-cran-r.utils - GNU R various programming utilities</li>
+<li>r-cran-randomfields - GNU R simulation and analysis of random fields</li>
+<li>r-cran-randomforest - GNU R package implementing the random forest classificator</li>
+<li>r-cran-raschsampler - GNU R package for sampling binary matrices with fixed margins</li>
+<li>r-cran-rcmdr - GNU R platform-independent basic-statistics GUI</li>
+<li>r-cran-rcmdrmisc - GNU R package for miscellaneous Rcmdr utilities</li>
+<li>r-cran-rcolorbrewer - GNU R package providing suitable color palettes</li>
+<li>r-cran-rcpp - GNU R package for Seamless R and C++ Integration</li>
+<li>r-cran-rcpparmadillo - GNU R package for Armadillo C++ linear algebra library</li>
+<li>r-cran-rcppeigen - GNU R package for Eigen templated linear algebra</li>
+<li>r-cran-rcurl - GNU R General network (HTTP/FTP/...) client interface</li>
+<li>r-cran-readbrukerflexdata - GNU R package to read Bruker Daltonics *flex format files</li>
+<li>r-cran-readmzxmldata - GNU R package to read mass spectrometry data in mzXML format</li>
+<li>r-cran-readxl - GNU R package to read Excel files</li>
+<li>r-cran-relimp - GNU R package for inference on relative importance of regressors</li>
+<li>r-cran-reshape - Flexibly reshape data</li>
+<li>r-cran-reshape2 - Flexibly reshape data: a reboot of the reshape package</li>
+<li>r-cran-rggobi - GNU R package for the GGobi data visualization system</li>
+<li>r-cran-rgl - GNU R package for three-dimensional visualisation using OpenGL</li>
+<li>r-cran-rglpk - GNU R interface to the GNU Linear Programing Kit</li>
+<li>r-cran-rgtk2 - GNU R binding for Gtk2</li>
+<li>r-cran-rinside - GNU R package to embed R in C++ application</li>
+<li>r-cran-rjags - R interface to the JAGS Bayesian statistics package</li>
+<li>r-cran-rjava - GNU R low-level interface to Java</li>
+<li>r-cran-rjson - GNU R package for converting between R and JSON objects</li>
+<li>r-cran-rmpi - GNU R package interfacing MPI libraries for distributed computing</li>
+<li>r-cran-rms - GNU R regression modeling strategies by Frank Harrell</li>
+<li>r-cran-rmysql - GNU R package providing a DBI-compliant interface to MySQL</li>
+<li>r-cran-rneos - GNU R package with XML-RPC interface to NEOS</li>
+<li>r-cran-rnetcdf - GNU R package that provides an R interface to NetCDF datasets</li>
+<li>r-cran-rniftilib - GNU/R interface to NIFTICLIB</li>
+<li>r-cran-robustbase - GNU R package providing basic robust statistics</li>
+<li>r-cran-rocr - GNU R package to prepare and display ROC curves</li>
+<li>r-cran-rodbc - GNU R package for ODBC database access</li>
+<li>r-cran-rpart - GNU R package for recursive partitioning and regression trees</li>
+<li>r-cran-rpostgresql - GNU R package providing database interface and driver for PostgreSQL</li>
+<li>r-cran-rquantlib - GNU R package interfacing the QuantLib finance library</li>
+<li>r-cran-rsclient - GNU R package providing an Rserve client</li>
+<li>r-cran-rsdmx - GNU R package for the Statistical Data and Metadata Exchange (SDMX) framework</li>
+<li>r-cran-rserve - GNU R Rserve tcp/ip server and sample clients</li>
+<li>r-cran-rsolnp - GNU R general non-linear optimization</li>
+<li>r-cran-rsprng - GNU R interface to SPRNG (Scalable Parallel RNGs)</li>
+<li>r-cran-rsqlite - Database Interface R driver for SQLite</li>
+<li>r-cran-rsymphony - GNU R interface to the SYMPHONY MILP solver</li>
+<li>r-cran-runit - GNU R package providing unit testing framework</li>
+<li>r-cran-sandwich - GNU R package for model-robust standard error estimates</li>
+<li>r-cran-scales - Scale functions for graphics</li>
+<li>r-cran-scatterplot3d - GNU R package for Visualizing Multivariate Data</li>
+<li>r-cran-segmented - GNU R segmented relationships in regression models</li>
+<li>r-cran-sendmailr - send email using GNU R</li>
+<li>r-cran-seqinr - GNU R biological sequences retrieval and analysis</li>
+<li>r-cran-seroincidence - GNU R seroincidence calculator tool</li>
+<li>r-cran-slam - GNU R sparse lighweight arrays and matrices package</li>
+<li>r-cran-sm - GNU R package for kernel smoothing methods</li>
+<li>r-cran-sn - GNU R package providing skew-normal and skew-t distributions</li>
+<li>r-cran-snow - GNU R package for &apos;simple network of workstations&apos;</li>
+<li>r-cran-sp - GNU R classes and methods for spatial data</li>
+<li>r-cran-spam - GNU R functions for sparse matrix algebra</li>
+<li>r-cran-sparsem - GNU R package for basic linear algebra for sparse matrices</li>
+<li>r-cran-spatial - GNU R package for spatial statistics</li>
+<li>r-cran-spatstat - GNU R Spatial Point Pattern analysis, model-fitting, simulation, tests</li>
+<li>r-cran-spc - GNU R Statistical Process Control</li>
+<li>r-cran-stabledist - GNU R package for stable distribution functions</li>
+<li>r-cran-statmod - GNU R package providing algorithms and functions for statistical modeling</li>
+<li>r-cran-stringi - GNU R character string processing facilities</li>
+<li>r-cran-stringr - Make it easier to work with strings</li>
+<li>r-cran-strucchange - GNU R package for structural change regression estimation</li>
+<li>r-cran-survival - GNU R package for survival analysis</li>
+<li>r-cran-tcltk2 - GNU R package for Tcl/Tk additions</li>
+<li>r-cran-teachingdemos - GNU R Demonstrations for teaching and learning</li>
+<li>r-cran-tensor - GNU R Tensor product of arrays</li>
+<li>r-cran-testthat - GNU R testsuite</li>
+<li>r-cran-tgp - GNU R package &quot;tgp: Bayesian treed Gaussian process models&quot;</li>
+<li>r-cran-th.data - GNU R package for datasets by Torsten Hothorn</li>
+<li>r-cran-timedate - GNU R package for financial engineering -- timeDate</li>
+<li>r-cran-timeseries - GNU R package for financial engineering -- timeSeries</li>
+<li>r-cran-tkrplot - GNU R embedded Tk plotting device package</li>
+<li>r-cran-truncnorm - GNU R truncated normal distribution</li>
+<li>r-cran-tseries - GNU R package for time-series analysis and comp. finance</li>
+<li>r-cran-urca - GNU R package providing unit root and cointegration tests</li>
+<li>r-cran-vcd - GNU R Visualizing Categorical Data</li>
+<li>r-cran-vcdextra - GNU R package providing extensions and additions to the vcd package</li>
+<li>r-cran-vegan - Community Ecology Package for R</li>
+<li>r-cran-vgam - GNU R package for estimating vector generalized additive models</li>
+<li>r-cran-vioplot - GNU R toolbox for violin plots</li>
+<li>r-cran-wdi - GNU R package for accessing the World Development Indicators</li>
+<li>r-cran-xml - GNU R package for XML parsing and generation</li>
+<li>r-cran-xtable - GNU R coerce data to LaTeX and HTML tables</li>
+<li>r-cran-xts - GNU R package for time series analysis -- xts</li>
+<li>r-cran-yaml - Methods to convert R data to YAML and back</li>
+<li>r-cran-zelig - GNU R package providing a unified front-end for estimating statistical models</li>
+<li>r-cran-zoo - GNU R package for totally ordered indexed observations</li>
+<li>r-doc-html - GNU R html manuals for statistical computing system</li>
+<li>r-doc-info - GNU R info manuals statistical computing system</li>
+<li>r-doc-pdf - GNU R pdf manuals for statistical computing system</li>
+<li>r-mathlib - GNU R standalone mathematics library</li>
+<li>r-recommended - GNU R collection of recommended packages [metapackage]</li>
+<li>r-cran-maptools - GNU R Tools for reading and handling spatial objects</li>
+<li>r-cran-surveillance - GNU R package for the Modeling and Monitoring of Epidemic Phenomena</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="python.html" class="navigation navigation-prev " aria-label="Previous page: Python 软件包">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="nb.html" class="navigation navigation-next " aria-label="Next page: 使用Notebook">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"R 软件包","level":"1.7.2","depth":2,"next":{"title":"使用Notebook","level":"1.7.3","depth":2,"path":"notebook/nb.md","ref":"notebook/nb.md","articles":[]},"previous":{"title":"Python 软件包","level":"1.7.1","depth":2,"path":"notebook/python.md","ref":"notebook/python.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"notebook/r.md","mtime":"2017-06-03T09:04:46.292Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-06-03T09:17:41.937Z"},"basePath":"..","book":{"language":"zh"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-language-picker/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

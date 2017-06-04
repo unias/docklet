@@ -1,0 +1,812 @@
+
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Spark · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-language-picker/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="latex.html" />
+    
+    
+    <link rel="prev" href="mpi.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../intro/">
+            
+                <a href="../intro/">
+            
+                    
+                    Docklet Introduction
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../intro/what.html">
+            
+                <a href="../intro/what.html">
+            
+                    
+                    What is Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../intro/why.html">
+            
+                <a href="../intro/why.html">
+            
+                    
+                    Why to use Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../intro/how.html">
+            
+                <a href="../intro/how.html">
+            
+                    
+                    How to use Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../concepts/">
+            
+                <a href="../concepts/">
+            
+                    
+                    Basic Concepts
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../concepts/workspace.html">
+            
+                <a href="../concepts/workspace.html">
+            
+                    
+                    Workspace
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../concepts/vcluster.html">
+            
+                <a href="../concepts/vcluster.html">
+            
+                    
+                    vCluster
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../concepts/image.html">
+            
+                <a href="../concepts/image.html">
+            
+                    
+                    Image
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../concepts/service.html">
+            
+                <a href="../concepts/service.html">
+            
+                    
+                    Service
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../concepts/nfs.html">
+            
+                <a href="../concepts/nfs.html">
+            
+                    
+                    Dataspace
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../portal/">
+            
+                <a href="../portal/">
+            
+                    
+                    Portal
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../portal/dashboard.html">
+            
+                <a href="../portal/dashboard.html">
+            
+                    
+                    Dashboard
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../portal/config.html">
+            
+                <a href="../portal/config.html">
+            
+                    
+                    Config
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../portal/status.html">
+            
+                <a href="../portal/status.html">
+            
+                    
+                    Status
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../portal/hosts.html">
+            
+                <a href="../portal/hosts.html">
+            
+                    
+                    Hosts
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/users.html">
+            
+                <a href="../portal/users.html">
+            
+                    
+                    Users
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../portal/admin.html">
+            
+                <a href="../portal/admin.html">
+            
+                    
+                    Admin
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../workspace/">
+            
+                <a href="../workspace/">
+            
+                    
+                    Workspace
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../workspace/data.html">
+            
+                <a href="../workspace/data.html">
+            
+                    
+                    Data Management
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../workspace/edit.html">
+            
+                <a href="../workspace/edit.html">
+            
+                    
+                    File Editing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../workspace/terminal.html">
+            
+                <a href="../workspace/terminal.html">
+            
+                    
+                    WEB Terminal
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../workspace/notebook.html">
+            
+                <a href="../workspace/notebook.html">
+            
+                    
+                    Interacive Programming
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Development in WEB Terminal
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="list.html">
+            
+                <a href="list.html">
+            
+                    
+                    Available Tools
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="c.html">
+            
+                <a href="c.html">
+            
+                    
+                    C/C++
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="java.html">
+            
+                <a href="java.html">
+            
+                    
+                    Java
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="mpi.html">
+            
+                <a href="mpi.html">
+            
+                    
+                    MPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.5" data-path="spark.html">
+            
+                <a href="spark.html">
+            
+                    
+                    Spark
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="latex.html">
+            
+                <a href="latex.html">
+            
+                    
+                    LaTeX
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../notebook/">
+            
+                <a href="../notebook/">
+            
+                    
+                    Interactive Computing and Analyzing
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../notebook/python.html">
+            
+                <a href="../notebook/python.html">
+            
+                    
+                    Python Packages
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../notebook/r.html">
+            
+                <a href="../notebook/r.html">
+            
+                    
+                    R Packages
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../notebook/nb.html">
+            
+                <a href="../notebook/nb.html">
+            
+                    
+                    Notebook Usage
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../notebook/gallery.html">
+            
+                <a href="../notebook/gallery.html">
+            
+                    
+                    Scientific Computation
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../billing/">
+            
+                <a href="../billing/">
+            
+                    
+                    Beans and Billing
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../billing/beans.html">
+            
+                <a href="../billing/beans.html">
+            
+                    
+                    What is 'Beans'
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../billing/billing.html">
+            
+                <a href="../billing/billing.html">
+            
+                    
+                    Billing system
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../billing/getBeans.html">
+            
+                <a href="../billing/getBeans.html">
+            
+                    
+                    How to get beans
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Spark</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="spark-example">Spark Example</h2>
+<h3 id="config-and-start-spark-standalone-cluster">Config and Start Spark Standalone Cluster</h3>
+<p>The spark <a href="http://spark.apache.org/docs/latest/spark-standalone.html" target="_blank">official document</a> provides guides about how to start a standalone cluster.</p>
+<p>In Docklet, Apache Spark is installed in <code>/home/spark</code> .</p>
+<p>Assume user <code>robin</code> has a Workspace named <code>note</code>. There are three vnode in the vcluster: host-0, host-1, host-2.</p>
+<p><code>robin</code> opens Web Terminal, entering Spark home directory, starting spark master</p>
+<pre><code>root@host-0:~# cd /home/spark
+root@host-0:/home/spark# ./sbin/start-master.sh
+</code></pre><p>once started, <code>robin</code> could enter <code>logs</code> directory to check logs. Spark master 
+will print its working URL <code>spark://HOST:PORT</code>,  used for connections by
+spark slaves. Here it may be <code>spark://host-0:7077</code>. The master WEB UI is
+also printed, probably <code>http://host-0:8080</code>.</p>
+<p>Then start spark slaves in host-1 and host-2 using ssh</p>
+<pre><code>root@host-0:/home/spark# ssh root@host-1 /home/spark/sbin/start-slave.sh spark://host-0:7077
+root@host-0:/home/spark# ssh root@host-2 /home/spark/sbin/start-slave.sh spark://host-0:7077
+</code></pre><p>Done, the cluster is ready.</p>
+<p><strong> Note </strong></p>
+<p>Docklet provides two scripts in <code>sbin</code> for fast starting and stop spark clusters. The <code>dl_start_spark.sh</code> can automatically start a spark cluster, the master of which is host-0, and all vnodes are slaves. The <code>dl_stop_spark.sh</code> can stop the spark cluster started by <code>dl_start_spark.sh</code>.</p>
+<p>Now running an example </p>
+<pre><code>root@host-0:/home/spark# ./bin/spark-submit --master spark://host-0:7077 examples/src/main/python/pi.py 10
+</code></pre><h3 id="web-ui">WEB UI</h3>
+<p>Docklet vcluster is in private network, which could not be
+accessed from public Internet. Docklet provides a proxy service to help
+visiting Web Server in the vcluster from outside.</p>
+<p>In Docklet portal, click <strong> Config </strong> to configure visiting Spark WEB UI.</p>
+<p>Assume the IP address of host-0 is 172.16.0.99</p>
+<p>Configure <strong> Service </strong> </p>
+<p>ip : 172.16.0.99, port : 8080</p>
+<p>Click <strong> Enable </strong> . Now the Spark WEB UI can be accessed through the  URL of</p>
+<p><code>http://portal/_web/robin/note</code> .</p>
+<p>From WEB UI, <code>robin</code> could check the information about the Spark cluster, including workers, jobs, etc.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="mpi.html" class="navigation navigation-prev " aria-label="Previous page: MPI">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="latex.html" class="navigation navigation-next " aria-label="Next page: LaTeX">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Spark","level":"1.6.5","depth":2,"next":{"title":"LaTeX","level":"1.6.6","depth":2,"path":"software/latex.md","ref":"software/latex.md","articles":[]},"previous":{"title":"MPI","level":"1.6.4","depth":2,"path":"software/mpi.md","ref":"software/mpi.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"software/spark.md","mtime":"2017-06-03T09:04:46.268Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-06-03T09:17:41.937Z"},"basePath":"..","book":{"language":"en"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-language-picker/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Donggang Cao">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Contributing - Docklet</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/base.css" rel="stylesheet">
+        <link href="../css/custom.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-76052641-1', 'docklet.unias.org');
+            ga('send', 'pageview');
+        </script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Docklet</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                
+                <li >
+                    <a href="..">Home</a>
+                </li>
+                
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Document <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+
+<li >
+    <a href="../intro/">Intro</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../quick/">Quickstart</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../userguide/">Userguide</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../changelog/">Changelog</a>
+</li>
+
+
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                
+                <li >
+                    <a href="../example/">Examples</a>
+                </li>
+                
+            
+            
+            
+                
+                <li >
+                    <a href="../download/">Download</a>
+                </li>
+                
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+
+<li >
+    <a href="../contact/">Contact</a>
+</li>
+
+
+                    
+                        
+
+<li class="active">
+    <a href="./">Contributing</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../team/">Team</a>
+</li>
+
+
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/unias/docklet">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        
+        <div class="container">
+            
+            
+            
+            <div class="col-md-9" role="main">
+
+<h1 id="contributing-to-docklet">Contributing To Docklet</h1>
+<hr />
+<p>Docklet is an open source project. All kinds of contributions are
+sincerely welcome!  Contributions can be
+made in a number of ways, including:</p>
+<ul>
+<li>Improving Documents</li>
+<li>Reporting an Issue</li>
+<li>Submitting pull requests</li>
+</ul>
+<h2 id="submitting-pull-requests">Submitting Pull Requests</h2>
+<p>The development workflow of Docklet Project is as follows.</p>
+<p><img alt="Docklet Workflow" src="../img/workflow.png" /></p>
+<h3 id="prepare">Prepare</h3>
+<p>First, we need to prepare our working repository. These actions should be executed just once.</p>
+<h5 id="step-1-fork">Step 1 : fork</h5>
+<p>Open https://github.com/unias/docklet in your browser and click <strong>Fork</strong> button on the top-right corner.</p>
+<h5 id="step-2-clone-config">Step 2 : clone &amp; config</h5>
+<ul>
+<li>clone docklet from your github repository</li>
+</ul>
+<pre><code>git clone https://github.com/YourName/docklet.git
+</code></pre>
+
+<ul>
+<li>config your local repository</li>
+</ul>
+<pre><code># add unias/docklet as your upstream
+git remote add upstream https://github.com/unias/docklet.git
+# set push to upstream not work
+git remote set-url --push upstream no_push
+</code></pre>
+
+<h3 id="work">Work</h3>
+<p>This part is about the steps of making contributions to Docklet by pull request.</p>
+<h4 id="work-begin">Work : Begin</h4>
+<h5 id="step-3-fetch">Step 3 : fetch</h5>
+<p>Fetch the latest code from <strong>upstream(unias/docklet)</strong></p>
+<pre><code>git fetch upstream
+</code></pre>
+
+<h5 id="step-4-branch">Step 4 : branch</h5>
+<p>Create new branch for your work</p>
+<pre><code>git checkout -b BranchName upstream/master
+</code></pre>
+
+<p>This is not the step you must do and you can work on local master branch. But we recommend you follow these steps. Using branch to develop new features fits git.</p>
+<h4 id="work-work">Work : Work</h4>
+<p>Now you can focus on your work by <strong>commit</strong> and <strong>push</strong>.</p>
+<h5 id="step-5-commit-commit">Step 5 : commit &amp; commit</h5>
+<p>Commit is commit. Nothing to say.</p>
+<h5 id="step-6-push-push">Step 6 : push &amp; push</h5>
+<p>Push your work to <strong>your own Github repository</strong> by <strong>BranchName</strong></p>
+<pre><code>git push origin BranchName
+</code></pre>
+
+<h4 id="work-end">Work : End</h4>
+<p>After you complete work of this feature, you maybe want to create a pull request to unias/docklet. Please follow steps below.</p>
+<h5 id="step-7-fetch">Step 7 : fetch</h5>
+<p>Fetch the latest code from <strong>unias/docklet</strong></p>
+<pre><code>git fetch upstream
+</code></pre>
+
+<h5 id="step-8-merge">Step 8 : merge</h5>
+<p>Merge upstream's latest code to your working branch</p>
+<pre><code>git merge upstream/master
+</code></pre>
+
+<p>Please ensure that you are on your working branch.</p>
+<p>If conflict happens, resolve it and commit.</p>
+<h5 id="step-9-push">Step 9 : push</h5>
+<p>Push to your github repository by BranchName.</p>
+<pre><code>git push origin BranchName
+</code></pre>
+
+<h5 id="step-10-pull-request">Step 10 : pull request</h5>
+<p>Open https://github.com/YourName/docklet, click <strong>New pull request</strong> and select your working <strong>BranchName</strong> to create the pull request.</p>
+<h3 id="tips">Tips</h3>
+<h5 id="local-master">local master</h5>
+<p>After you fetch upstream code, you can move forward your local master branch to upstream/master. And push your github repository master branch to update.</p>
+<pre><code>git fetch upstream
+git checkout master
+git merge upstream/master
+git push origin master
+</code></pre>
+
+<h5 id="pretty-git-log-or-git-log-with-gui">pretty git log or git log with GUI</h5>
+<p>You can config your git log command with pretty format.</p>
+<pre><code>git config --global alias.lg &quot;log --graph --color --pretty=format:' %Cred%h %Creset/ %&lt;(10,trunc)%Cblue%an%Creset | %&lt;(60,trunc)%s | %cr %Cred%d' --remotes --branches&quot;
+</code></pre>
+
+<p>Now, type <strong>git lg</strong> to see what happens.</p>
+<p>Of course, you can use GUI with git. <strong>gitg</strong> is a good choice. It shows log of git very friendly.</p>
+<h5 id="understand-git-log">understand git log</h5>
+<p>git log has much information. You should understand the log info of git. This can help you know how to move forward your work. Especially the reference of branches : upstream/master, HEAD, master, origin/master, other branches.</p>
+<h5 id="graphsnetwork-of-github">graphs/network of github</h5>
+<p>The Graphs/Network of Github is very useful. With this, you can know whether you can create a pull request without conflict. Open https://github.com/unias/docklet/network in your browser and see the network graph of docklet.  </p></div>
+        </div>
+        
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>&#169; Unias Team, SEI, PKU</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Donggang Cao">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Quickstart - Docklet</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+        <link href="../css/base.css" rel="stylesheet">
+        <link href="../css/custom.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-76052641-1', 'docklet.unias.org');
+            ga('send', 'pageview');
+        </script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">Docklet</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                
+                <li >
+                    <a href="..">Home</a>
+                </li>
+                
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Document <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+
+<li >
+    <a href="../intro/">Intro</a>
+</li>
+
+
+                    
+                        
+
+<li class="active">
+    <a href="./">Quickstart</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../userguide/">Userguide</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../changelog/">Changelog</a>
+</li>
+
+
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                
+                <li >
+                    <a href="../example/">Examples</a>
+                </li>
+                
+            
+            
+            
+                
+                <li >
+                    <a href="../download/">Download</a>
+                </li>
+                
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        
+
+<li >
+    <a href="../contact/">Contact</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../contrib/">Contributing</a>
+</li>
+
+
+                    
+                        
+
+<li >
+    <a href="../team/">Team</a>
+</li>
+
+
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="https://github.com/unias/docklet">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        
+        <div class="container">
+            
+            
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#quickstart">Quickstart</a></li>
+        
+            <li><a href="#intro">Intro</a></li>
+        
+            <li><a href="#install">Install</a></li>
+        
+            <li><a href="#config">Config</a></li>
+        
+            <li><a href="#start">Start</a></li>
+        
+            <li><a href="#usage">Usage</a></li>
+        
+    
+    </ul>
+</div></div>
+            
+            
+            <div class="col-md-9" role="main">
+
+<h1 id="quickstart">Quickstart</h1>
+<hr />
+<h2 id="intro">Intro</h2>
+<p>Docklet is an operating system for mini-datacener. Its goal is to help
+multi-user share cluster resources effectively. Unlike the "application
+framework oriented" cluster manager such as Mesos and Yarn, Docklet is
+<strong>user oriented</strong>. In Docklet, every user has their own private
+<strong>virtual cluster (vcluster)</strong>, which consists of a number of virtual
+Linux container nodes distributed over the physical cluster. Every
+vcluster is separated from others and can be operated like a real
+physical cluster. Therefore, most applications, especially those
+requiring a cluster environment, can run in vcluster seamlessly.</p>
+<p>Docklet provides a base image for creating virtual nodes. This image has
+pre-installed a lot of mainstream development tools and frameworks,
+including gcc/g++, openjdk, python3, R, MPI, scala, ruby, php, node.js,
+texlive, mpich2, spark,
+scipy/numpy/matplotlib/pandas/sympy/scikit-learn, jupyter notebook, etc.
+Users can get a ready vcluster with just one click within 1 second.</p>
+<p>The users are free to install their specific software in their vcluster.
+Docklet supports operating through <strong>web terminal</strong>. Users can do their
+work as an administrator working on a console. The base image system is
+ubuntu. The recommended way of installing new software is by
+<strong>apt-get</strong>.</p>
+<p>The users manage and use their vcluster all through web. The only client
+tool needed is a modern web browser, like safari, firefox, chrome. The
+integrated <em>jupyter notebook</em> provides a web workspace. By visiting the
+workspace, users can do coding, debugging and testing of their programs
+online. The <strong>python scipy</strong> series of tools can even display graphical
+pictures in the browser. Therefore, it is ideal for data analysis and
+processing.</p>
+<p>Docklet only need <strong>one</strong> public IP address. The vclusters are
+configured to use private IP address range, e.g., 172.16.0.0/16,
+192.168.0.0/16, 10.0.0.0/8. A proxy is setup to help
+users visit their vclusters behind the firewall/gateway.</p>
+<p>The Docklet system runtime consists of four components:</p>
+<ul>
+<li>distributed file system server</li>
+<li>etcd server</li>
+<li>docklet master</li>
+<li>docklet worker</li>
+</ul>
+<h2 id="install">Install</h2>
+<p>Currently the docklet runtime is recommend to run in Unbuntu 15.10+.</p>
+<p>Ensure that python3.5 is the default python3 version.</p>
+<p>Unpack the docklet tarball to a directory ( /root/docklet as an
+example), will get</p>
+<pre><code>readme.md
+prepare.sh
+conf/
+    container.conf
+    docklet.conf.template
+    lxc-script/
+bin/
+    docklet-master
+    docklet-worker
+src/
+    httprest.py
+    worker.py
+    ...
+web/
+    web.py
+dep/
+    etcd-multi-nodes.sh
+    etcd-one-node.sh
+doc/
+tools/
+    update-basefs.sh
+    start_jupyter.sh
+</code></pre>
+
+<p>If it is the first time install, users should run <strong>prepare.sh</strong> to
+install necessary packages automatically. Note it may need to run this
+script several times to successfully install all the needed packages.</p>
+<p>A <em>root</em> users will be created for managing the system. The password is
+recorded in <code>FS_PREFIX/local/generated_password.txt</code> .</p>
+<h2 id="config">Config</h2>
+<p>The main configuration file of docklet is conf/docklet.conf. Most
+default setting works for a single host environment.</p>
+<p>First copy docklet.conf.template to get docklet.conf.</p>
+<p>The following settings should be taken care of:</p>
+<ul>
+<li>NETWORK_DEVICE : the network device to use.</li>
+<li>ETCD : the etcd server address. For distributed muli hosts
+  environment, it should be one of the ETCD public server address.
+  For single host environment, the default value should be OK.</li>
+<li>STORAGE : using disk or file to storage persistent data, for
+  single host, file is convenient.</li>
+<li>FS_PREFIX: the working dir of docklet runtime. default is
+  /opt/docklet.</li>
+<li>CLUSTER_NET: the vcluster network ip address range, default is
+  172.16.0.1/16. This network range should all be allocated to  and
+  managed by docklet.</li>
+<li>PROXY_PORT : the public port of docklet. Users use
+  this port to visit the docklet system.</li>
+<li>PORTAL_URL : the portal of the system. Users access the system
+  by visiting this address. If the system is behind a firewall, then
+  a reverse proxy should be setup.</li>
+</ul>
+<h2 id="start">Start</h2>
+<h3 id="distributed-file-system">Distributed file system</h3>
+<p>For multi hosts distributed environment, a distributed file system is
+needed to store global data. Currently, glusterfs has been tested.
+Lets presume the file system server export filesystem as nfs
+<strong>fileserver:/pub</strong> :</p>
+<p>In each physical host to run docklet, mount <strong>fileserver:/pub</strong> to
+<strong>FS_PEFIX/global</strong> .</p>
+<p>For single host environment, it need not to configure distributed
+file system.</p>
+<h3 id="etcd">Etcd</h3>
+<p>For single host environment, start <strong>dep/etcd-one-node.sh</strong> . Some recent
+Ubuntu releases have included <strong>etcd</strong> in the repository, just <code>apt-get
+install etcd</code>, and it need not to start etcd manually.</p>
+<p>For multi hosts distributed environment, start
+<strong>dep/etcd-multi-nodes.sh</strong> in each etcd server hosts. This scripts
+requires users providing the etcd server address as parameters.</p>
+<h3 id="master">Master</h3>
+<p>First, select a server with 2 network interface card, one having a
+public IP address/url, e.g., docklet.info; the other having a private IP
+address, e.g., 172.16.0.1. This server will be the master.</p>
+<p>If it is the first time you start docklet, run <code>bin/docklet-master init</code>
+to init and start docklet master. Otherwise, run  <code>bin/docklet-master start</code>,
+which will start master in recovery mode in background using
+conf/docklet.conf. It means docklet will recover workspaces existed.</p>
+<p>This script in fact will start three daemons: the docklet master of
+httprest.py, the configurable-http-proxy and the docklet web of web.py.</p>
+<p>You can check the daemon status by running <code>bin/docklet-master status</code></p>
+<p>If the master failed to start, you could try <code>bin/docklet-master init</code>
+to initialize the whole system.</p>
+<p>More usages can be found by typing <code>bin/docklet-master</code></p>
+<p>The master logs are in <strong>FS_PREFIX/local/log/docklet-master.log</strong> and
+<strong>docklet-web.log</strong>.</p>
+<h3 id="worker">Worker</h3>
+<p>Worker needs a basefs image to boot container.</p>
+<p>You can create such an image with <code>lxc-create -n test -t download</code>,
+and then copy the rootfs to <strong>FS_PREFIX/local</strong>, and renamed <code>rootfs</code>
+to <code>basefs</code>.</p>
+<p>Note the <code>jupyerhub</code> package must be installed for this image.  And the
+start script <code>tools/start_jupyter.sh</code> should be placed at
+<code>basefs/home/jupyter</code>.</p>
+<p>You can check and run <code>tools/update-basefs.sh</code> to update basefs.</p>
+<p>Run <code>bin/docklet-worker start</code>, will start worker in background.</p>
+<p>You can check the daemon status by running <code>bin/docklet-worker status</code></p>
+<p>More usages can be found by typing <code>bin/docklet-worker</code>
+The log is in <strong>FS_PREFIX/local/log/docklet-worker.log</strong></p>
+<p>Currently, the worker must run after the master has been started.</p>
+<h2 id="usage">Usage</h2>
+<p>Open a browser, visiting the address specified by PORTAL_URL , 
+e.g., <code>http://docklet.info/</code></p>
+<p>If the system is just deployed in single host for testing purpose,
+then the PORTAL_URL defaults to <code>http://MASTER_IP:PROXY_PORT</code>,
+e.g., <code>http://localhost:8000</code>.</p>
+<p>That is it.</p></div>
+        </div>
+        
+
+        <footer class="col-md-12">
+            <hr>
+            
+                <center>&#169; Unias Team, SEI, PKU</center>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,354 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Virtualized clusters.\n\n            \n\n            \n What users get from Docklet is not a single Container, but a fully functional LXC cluster. Most distributed computing frameworks can run seamlessly without any customization and modification.\n            \n\n        \n\n        \n\n            \n\n                \n\n                    \n\n                \n\n                \nCloud Workspace.\n\n            \n\n            \n\n            Docklet provides users more than a cluster. Users get Cloud Workspaces upon clusters with many programming frameworks pre-installed. Users use just a browser to edit, debug and run their programs.\n            \n\n        \n\n        \n\n            \n\n                \n\n                    \n\n                \n\n                \nWide applicability.\n\n            \n\n            \n\n           Docklet is designed for small data centers with \n           usually \n<\n 100 physical servers, which is common\n           for many enterprises. It is easy to manage, \n           only requires one public IP address to deploy.\n           \n\n        \n\n        \n\n            \n\n                \n\n                    \n\n                \n\n                \nFast and efficient.\n\n            \n\n            \nDocklet runs fast.  It uses LXC technology with advantages like instant booting container in seconds; high utilization of resources, running thousands of containers in one physical host, etc.\n            \n\n        \n\n        \n\n            \n\n                \n\n                    \n\n                \n\n                \nElastic and extensible.\n\n            \n\n            \nDocklet is Elastic and extensible.  Users can scale their vclusters at runtime with just a click in the browser. They can also install software they need as operating in a real virtual machine.\n            \n\n        \n\n        \n\n            \n\n                \n\n                    \n\n                \n\n                \nUser friendly.\n\n            \n\n            \nDocklet is very easy to use.  It could be an ideal environment for application development and testing, online running data analysis jobs,  exercising platform for programming courses, etc.", 
+            "title": "Home"
+        }, 
+        {
+            "location": "/intro/", 
+            "text": "Docklet: What and Why\n\n\n\n\nWhat is Docklet\n\n\nDefinition and Architecture\n\n\nDocklet is an open source project from Software Engineering Institute,\nPeking University. It is released uner the \nNew BSD License\n. Its source code is hosted in GitHub.\n\n\nDocklet is designed to be a lightweight Cloud operating system for small\nscale data centers.  It provides a solution of \nPersonal Development\nWorkspace in the Cloud\n for enterprises. With the help of Docklet,\nenterprises can easily virtualize their small scale data centers,\ncreating virtualized clusters for their staff users, and then providing\nusers a customizable \nWorkspace\n in the cloud.  Users only need a\nmodern \nbrowser\n to visit their own \nWorkspace\n located in the\nenterprise's Intranet from anywhere, at anytime. They can do works like\nonline editing source codes, debugging, testing, managing data files,\nanalyzing data, visualizing results, etc.\n\n\n\n\nThe kernel technology of Docklet is LXC virtual cluster (vcluster) that\nis based on Linux Container (LXC) and software defined networks\ntechnologies. The Docklet \nvcluster\n provides a virtualization\nsolution of physical clusters, supports the installation and running of\nmost existing Linux applications. \n\n\nBased on vcluster, Docklet provides users their \nPersonal Workspace\n. \nUsers visit their Workspace throught the integrated \nJupyper Notebook\n to do most development tasks.\n\n\nDocklet and Docker\n\n\nDocklet has no direct relationship with \nDocker\n. They are two different projects, with totally different design goals.\n\n\nThe goal of Docker is to provide a lightweight operating system\nvirtualization solution. It is in the \nIaaS layer\n of cloud computing architecture.\nDocker encapsulates LXC to make LXC easy, \nso that \nthe users can operate a Docker container as simple as operate\na fast and lightweight virtual machine\n. Although later on Docker has clustering component, \nit in essence still focuses on single node operating system layer.  \n\n\nThe goal of Docklet is to provide \nPersonal Development Workspace in\nthe Cloud\n solution. It covers all the \nSaaS, PaaS and IaaS layer\n of cloud computing architecture.\nThe basic of Docklet is LXC vcluster, but not Docker container. For\nDocklet users, what they face directly is their Workspace. They use\nbrowser to do software development, debuging and testing, etc, using tools\nDocklet provide, working in a high layer.\n\n\nWhy using Docklet\n\n\nAs a \"\nWorkspace Cloud\n\", Docklet has several advantages.\n\n\nFirst, what Docklet provides is a virtual workspace for developers, but\nnot only an Iaas or PaaS solution, therefore more friendly to developers.\n\n\nSecond, the Docklet vcluster provides a high efficient and simple method\nof sharing physical resources, therefore more friendly to\nadministrators.\n\n\nThe detailed advantages and features of Docklet include:\n\n\nWide applicability\n\n\nDocklet is not designed for large data center, but for small or \nmini\ndata center\n. By \nmini data center\n, we mean a cluster with not more than 100\nphysical hosts, all connected by high speed network, each host with\nrelatively high performance. This is the common configuration of most\nmedium or small enterprises and institutes. Therefore, Docklet has a\nwide applicability.\n\n\nEasily Sharing Cluster among Frameworks\n\n\nTraditionally clusters are often monopolized, serving only one kind of\napplication framework, e.g., MPI or Spark.  It is usually difficult to\nshare the physcal cluster among different frameworks.\n\n\nMesos\n and\n\nYarn\n each try to provide a mechanism of sharing clusters. However, they require extra work of customization for each supported framework, which seems not flexible and a bit difficult.\n\n\nDocklet provides a flexible and easy solution. By virtualizing the\nphysical clusters, almost all computing frameworks can run in the\nLXC vcluster seamlessly without any customization and modification.\n\n\nDynamically and Elastically Configure Resources\n\n\nDocklet vcluster supports elastically configuring resources. Users can\nadd a fully functional LXC node to existing vcluster instantly by just a\nclick. This feature is useful for the application frameworks that\nsupport elastic resource management, e.g., Spark.\n\n\nDocklet can monitor the activity of users, smartly finding those not at work, \nthen adjust their resource quota dynamically. This can bring about good\nusage experience for online active users, together with reasonable\nresource utilization. \n\n\nConsuming Very Few Network Resources\n\n\nDocklet utilizes the technology of software defined networks. \nThe inner vclusters will use private Internet address space, e.g.,\n\n172.16/16\n, not consuming public Internet addresses. The administrator\nonly need to configure \none\n public Internet address/URL for Docklet\nportal.  Users use just a modern browser to access their private\nvcluster located behind the enterprise's firewall through the portal's \npublic URL. This feature is very attractive for those enterprises\nwithout so many public Internet addresses.\n\n\nUser Friendly\n\n\nDocklet is mainly targeted for enterprises's staff developers. It is\ndomain oriented, therefore can be setup to meet the enterprise's\nrequirements deliberately. The public base image has most often used\nsoftware. Users can directly start their programming and analyzing job\nwith just a browser, without the heavy burden of installing and\nconfiguring the physical clusters, installation of software frameworks, \nmanagement of images, etc. Therefore, it is very friently to end users,\nwhich is especially important for those non-export users.\n\n\nIdeal Environment for Application Development and Testing\n\n\nThe easy usage of Docklet means it can be an ideal environment for\napplication development and testing. For example, users can program and\ndebug a big data analyzing software with a small data set (possibly\nGigabye scale). If success, then deploy it to production system with\ntrue big data. In fact, for most data analyzing and mining jobs, their\ndata set is usually not so large, which means they can directly run and\noutput the final results in Docklet.\n\n\nDocklet is also a good platform for exercising programming skills and\nstudying programming languages. No need to install kinds of tools, just\na browser is OK.\n\n\nEasy to Customize and Extend\n\n\nThe enterprise's Docklet administrator is free to make specific public base\nimages. The users can also install new software not in the base image.\nWhat is more, the users can save their Workspace as image and then share\nwith others, which is very convenient for users of one group.\n\n\nSupporting Multiple Users\n\n\nDocklet vcluster naturally supports multiple users. Each user has their\nown private vcluster independenlty.  Each vcluster can run different\nframeworks such as MPI and Spark without worry about interference.\nTherefore, it can satisfy the different requirements of different users.\n\n\nAdvantages of LXC\n\n\nDocklet uses LXC technology. Therefore, it has the advantages of LXC and\nLXC-based solutions like Docker, including instant booting container in seconds;\nhigh utilization of resources, running thousands of containers in one\nphysical host; high performance of applications; consuming less\nresources; fast delivery; simple management, etc.", 
+            "title": "Intro"
+        }, 
+        {
+            "location": "/intro/#docklet-what-and-why", 
+            "text": "", 
+            "title": "Docklet: What and Why"
+        }, 
+        {
+            "location": "/intro/#what-is-docklet", 
+            "text": "", 
+            "title": "What is Docklet"
+        }, 
+        {
+            "location": "/intro/#definition-and-architecture", 
+            "text": "Docklet is an open source project from Software Engineering Institute,\nPeking University. It is released uner the  New BSD License . Its source code is hosted in GitHub.  Docklet is designed to be a lightweight Cloud operating system for small\nscale data centers.  It provides a solution of  Personal Development\nWorkspace in the Cloud  for enterprises. With the help of Docklet,\nenterprises can easily virtualize their small scale data centers,\ncreating virtualized clusters for their staff users, and then providing\nusers a customizable  Workspace  in the cloud.  Users only need a\nmodern  browser  to visit their own  Workspace  located in the\nenterprise's Intranet from anywhere, at anytime. They can do works like\nonline editing source codes, debugging, testing, managing data files,\nanalyzing data, visualizing results, etc.   The kernel technology of Docklet is LXC virtual cluster (vcluster) that\nis based on Linux Container (LXC) and software defined networks\ntechnologies. The Docklet  vcluster  provides a virtualization\nsolution of physical clusters, supports the installation and running of\nmost existing Linux applications.   Based on vcluster, Docklet provides users their  Personal Workspace . \nUsers visit their Workspace throught the integrated  Jupyper Notebook  to do most development tasks.", 
+            "title": "Definition and Architecture"
+        }, 
+        {
+            "location": "/intro/#docklet-and-docker", 
+            "text": "Docklet has no direct relationship with  Docker . They are two different projects, with totally different design goals.  The goal of Docker is to provide a lightweight operating system\nvirtualization solution. It is in the  IaaS layer  of cloud computing architecture.\nDocker encapsulates LXC to make LXC easy, \nso that  the users can operate a Docker container as simple as operate\na fast and lightweight virtual machine . Although later on Docker has clustering component, \nit in essence still focuses on single node operating system layer.    The goal of Docklet is to provide  Personal Development Workspace in\nthe Cloud  solution. It covers all the  SaaS, PaaS and IaaS layer  of cloud computing architecture.\nThe basic of Docklet is LXC vcluster, but not Docker container. For\nDocklet users, what they face directly is their Workspace. They use\nbrowser to do software development, debuging and testing, etc, using tools\nDocklet provide, working in a high layer.", 
+            "title": "Docklet and Docker"
+        }, 
+        {
+            "location": "/intro/#why-using-docklet", 
+            "text": "As a \" Workspace Cloud \", Docklet has several advantages.  First, what Docklet provides is a virtual workspace for developers, but\nnot only an Iaas or PaaS solution, therefore more friendly to developers.  Second, the Docklet vcluster provides a high efficient and simple method\nof sharing physical resources, therefore more friendly to\nadministrators.  The detailed advantages and features of Docklet include:", 
+            "title": "Why using Docklet"
+        }, 
+        {
+            "location": "/intro/#wide-applicability", 
+            "text": "Docklet is not designed for large data center, but for small or  mini\ndata center . By  mini data center , we mean a cluster with not more than 100\nphysical hosts, all connected by high speed network, each host with\nrelatively high performance. This is the common configuration of most\nmedium or small enterprises and institutes. Therefore, Docklet has a\nwide applicability.", 
+            "title": "Wide applicability"
+        }, 
+        {
+            "location": "/intro/#easily-sharing-cluster-among-frameworks", 
+            "text": "Traditionally clusters are often monopolized, serving only one kind of\napplication framework, e.g., MPI or Spark.  It is usually difficult to\nshare the physcal cluster among different frameworks.  Mesos  and Yarn  each try to provide a mechanism of sharing clusters. However, they require extra work of customization for each supported framework, which seems not flexible and a bit difficult.  Docklet provides a flexible and easy solution. By virtualizing the\nphysical clusters, almost all computing frameworks can run in the\nLXC vcluster seamlessly without any customization and modification.", 
+            "title": "Easily Sharing Cluster among Frameworks"
+        }, 
+        {
+            "location": "/intro/#dynamically-and-elastically-configure-resources", 
+            "text": "Docklet vcluster supports elastically configuring resources. Users can\nadd a fully functional LXC node to existing vcluster instantly by just a\nclick. This feature is useful for the application frameworks that\nsupport elastic resource management, e.g., Spark.  Docklet can monitor the activity of users, smartly finding those not at work, \nthen adjust their resource quota dynamically. This can bring about good\nusage experience for online active users, together with reasonable\nresource utilization.", 
+            "title": "Dynamically and Elastically Configure Resources"
+        }, 
+        {
+            "location": "/intro/#consuming-very-few-network-resources", 
+            "text": "Docklet utilizes the technology of software defined networks. \nThe inner vclusters will use private Internet address space, e.g., 172.16/16 , not consuming public Internet addresses. The administrator\nonly need to configure  one  public Internet address/URL for Docklet\nportal.  Users use just a modern browser to access their private\nvcluster located behind the enterprise's firewall through the portal's \npublic URL. This feature is very attractive for those enterprises\nwithout so many public Internet addresses.", 
+            "title": "Consuming Very Few Network Resources"
+        }, 
+        {
+            "location": "/intro/#user-friendly", 
+            "text": "Docklet is mainly targeted for enterprises's staff developers. It is\ndomain oriented, therefore can be setup to meet the enterprise's\nrequirements deliberately. The public base image has most often used\nsoftware. Users can directly start their programming and analyzing job\nwith just a browser, without the heavy burden of installing and\nconfiguring the physical clusters, installation of software frameworks, \nmanagement of images, etc. Therefore, it is very friently to end users,\nwhich is especially important for those non-export users.", 
+            "title": "User Friendly"
+        }, 
+        {
+            "location": "/intro/#ideal-environment-for-application-development-and-testing", 
+            "text": "The easy usage of Docklet means it can be an ideal environment for\napplication development and testing. For example, users can program and\ndebug a big data analyzing software with a small data set (possibly\nGigabye scale). If success, then deploy it to production system with\ntrue big data. In fact, for most data analyzing and mining jobs, their\ndata set is usually not so large, which means they can directly run and\noutput the final results in Docklet.  Docklet is also a good platform for exercising programming skills and\nstudying programming languages. No need to install kinds of tools, just\na browser is OK.", 
+            "title": "Ideal Environment for Application Development and Testing"
+        }, 
+        {
+            "location": "/intro/#easy-to-customize-and-extend", 
+            "text": "The enterprise's Docklet administrator is free to make specific public base\nimages. The users can also install new software not in the base image.\nWhat is more, the users can save their Workspace as image and then share\nwith others, which is very convenient for users of one group.", 
+            "title": "Easy to Customize and Extend"
+        }, 
+        {
+            "location": "/intro/#supporting-multiple-users", 
+            "text": "Docklet vcluster naturally supports multiple users. Each user has their\nown private vcluster independenlty.  Each vcluster can run different\nframeworks such as MPI and Spark without worry about interference.\nTherefore, it can satisfy the different requirements of different users.", 
+            "title": "Supporting Multiple Users"
+        }, 
+        {
+            "location": "/intro/#advantages-of-lxc", 
+            "text": "Docklet uses LXC technology. Therefore, it has the advantages of LXC and\nLXC-based solutions like Docker, including instant booting container in seconds;\nhigh utilization of resources, running thousands of containers in one\nphysical host; high performance of applications; consuming less\nresources; fast delivery; simple management, etc.", 
+            "title": "Advantages of LXC"
+        }, 
+        {
+            "location": "/quick/", 
+            "text": "Quickstart\n\n\n\n\nIntro\n\n\nDocklet is an operating system for mini-datacener. Its goal is to help\nmulti-user share cluster resources effectively. Unlike the \"application\nframework oriented\" cluster manager such as Mesos and Yarn, Docklet is\n\nuser oriented\n. In Docklet, every user has their own private\n\nvirtual cluster (vcluster)\n, which consists of a number of virtual\nLinux container nodes distributed over the physical cluster. Every\nvcluster is separated from others and can be operated like a real\nphysical cluster. Therefore, most applications, especially those\nrequiring a cluster environment, can run in vcluster seamlessly.\n\n\nDocklet provides a base image for creating virtual nodes. This image has\npre-installed a lot of mainstream development tools and frameworks,\nincluding gcc/g++, openjdk, python3, R, MPI, scala, ruby, php, node.js,\ntexlive, mpich2, spark,\nscipy/numpy/matplotlib/pandas/sympy/scikit-learn, jupyter notebook, etc.\nUsers can get a ready vcluster with just one click within 1 second.\n\n\nThe users are free to install their specific software in their vcluster.\nDocklet supports operating through \nweb terminal\n. Users can do their\nwork as an administrator working on a console. The base image system is\nubuntu. The recommended way of installing new software is by\n\napt-get\n.\n\n\nThe users manage and use their vcluster all through web. The only client\ntool needed is a modern web browser, like safari, firefox, chrome. The\nintegrated \njupyter notebook\n provides a web workspace. By visiting the\nworkspace, users can do coding, debugging and testing of their programs\nonline. The \npython scipy\n series of tools can even display graphical\npictures in the browser. Therefore, it is ideal for data analysis and\nprocessing.\n\n\nDocklet only need \none\n public IP address. The vclusters are\nconfigured to use private IP address range, e.g., 172.16.0.0/16,\n192.168.0.0/16, 10.0.0.0/8. A proxy is setup to help\nusers visit their vclusters behind the firewall/gateway.\n\n\nThe Docklet system runtime consists of four components:\n\n\n\n\ndistributed file system server\n\n\netcd server\n\n\ndocklet master\n\n\ndocklet worker\n\n\n\n\nInstall\n\n\nCurrently the docklet runtime is recommend to run in Unbuntu 15.10+.\n\n\nEnsure that python3.5 is the default python3 version.\n\n\nUnpack the docklet tarball to a directory ( /root/docklet as an\nexample), will get\n\n\nreadme.md\nprepare.sh\nconf/\n    container.conf\n    docklet.conf.template\n    lxc-script/\nbin/\n    docklet-master\n    docklet-worker\nsrc/\n    httprest.py\n    worker.py\n    ...\nweb/\n    web.py\ndep/\n    etcd-multi-nodes.sh\n    etcd-one-node.sh\ndoc/\ntools/\n    update-basefs.sh\n    start_jupyter.sh\n\n\n\n\nIf it is the first time install, users should run \nprepare.sh\n to\ninstall necessary packages automatically. Note it may need to run this\nscript several times to successfully install all the needed packages.\n\n\nA \nroot\n users will be created for managing the system. The password is\nrecorded in \nFS_PREFIX/local/generated_password.txt\n .\n\n\nConfig\n\n\nThe main configuration file of docklet is conf/docklet.conf. Most\ndefault setting works for a single host environment.\n\n\nFirst copy docklet.conf.template to get docklet.conf.\n\n\nThe following settings should be taken care of:\n\n\n\n\nNETWORK_DEVICE : the network device to use.\n\n\nETCD : the etcd server address. For distributed muli hosts\n  environment, it should be one of the ETCD public server address.\n  For single host environment, the default value should be OK.\n\n\nSTORAGE : using disk or file to storage persistent data, for\n  single host, file is convenient.\n\n\nFS_PREFIX: the working dir of docklet runtime. default is\n  /opt/docklet.\n\n\nCLUSTER_NET: the vcluster network ip address range, default is\n  172.16.0.1/16. This network range should all be allocated to  and\n  managed by docklet.\n\n\nPROXY_PORT : the public port of docklet. Users use\n  this port to visit the docklet system.\n\n\nPORTAL_URL : the portal of the system. Users access the system\n  by visiting this address. If the system is behind a firewall, then\n  a reverse proxy should be setup.\n\n\n\n\nStart\n\n\nDistributed file system\n\n\nFor multi hosts distributed environment, a distributed file system is\nneeded to store global data. Currently, glusterfs has been tested.\nLets presume the file system server export filesystem as nfs\n\nfileserver:/pub\n :\n\n\nIn each physical host to run docklet, mount \nfileserver:/pub\n to\n\nFS_PEFIX/global\n .\n\n\nFor single host environment, it need not to configure distributed\nfile system.\n\n\nEtcd\n\n\nFor single host environment, start \ndep/etcd-one-node.sh\n . Some recent\nUbuntu releases have included \netcd\n in the repository, just \napt-get\ninstall etcd\n, and it need not to start etcd manually.\n\n\nFor multi hosts distributed environment, start\n\ndep/etcd-multi-nodes.sh\n in each etcd server hosts. This scripts\nrequires users providing the etcd server address as parameters.\n\n\nMaster\n\n\nFirst, select a server with 2 network interface card, one having a\npublic IP address/url, e.g., docklet.info; the other having a private IP\naddress, e.g., 172.16.0.1. This server will be the master.\n\n\nIf it is the first time you start docklet, run \nbin/docklet-master init\n\nto init and start docklet master. Otherwise, run  \nbin/docklet-master start\n,\nwhich will start master in recovery mode in background using\nconf/docklet.conf. It means docklet will recover workspaces existed.\n\n\nThis script in fact will start three daemons: the docklet master of\nhttprest.py, the configurable-http-proxy and the docklet web of web.py.\n\n\nYou can check the daemon status by running \nbin/docklet-master status\n\n\nIf the master failed to start, you could try \nbin/docklet-master init\n\nto initialize the whole system.\n\n\nMore usages can be found by typing \nbin/docklet-master\n\n\nThe master logs are in \nFS_PREFIX/local/log/docklet-master.log\n and\n\ndocklet-web.log\n.\n\n\nWorker\n\n\nWorker needs a basefs image to boot container.\n\n\nYou can create such an image with \nlxc-create -n test -t download\n,\nand then copy the rootfs to \nFS_PREFIX/local\n, and renamed \nrootfs\n\nto \nbasefs\n.\n\n\nNote the \njupyerhub\n package must be installed for this image.  And the\nstart script \ntools/start_jupyter.sh\n should be placed at\n\nbasefs/home/jupyter\n.\n\n\nYou can check and run \ntools/update-basefs.sh\n to update basefs.\n\n\nRun \nbin/docklet-worker start\n, will start worker in background.\n\n\nYou can check the daemon status by running \nbin/docklet-worker status\n\n\nMore usages can be found by typing \nbin/docklet-worker\n\nThe log is in \nFS_PREFIX/local/log/docklet-worker.log\n\n\nCurrently, the worker must run after the master has been started.\n\n\nUsage\n\n\nOpen a browser, visiting the address specified by PORTAL_URL , \ne.g., \nhttp://docklet.info/\n\n\nIf the system is just deployed in single host for testing purpose,\nthen the PORTAL_URL defaults to \nhttp://MASTER_IP:PROXY_PORT\n,\ne.g., \nhttp://localhost:8000\n.\n\n\nThat is it.", 
+            "title": "Quickstart"
+        }, 
+        {
+            "location": "/quick/#quickstart", 
+            "text": "", 
+            "title": "Quickstart"
+        }, 
+        {
+            "location": "/quick/#intro", 
+            "text": "Docklet is an operating system for mini-datacener. Its goal is to help\nmulti-user share cluster resources effectively. Unlike the \"application\nframework oriented\" cluster manager such as Mesos and Yarn, Docklet is user oriented . In Docklet, every user has their own private virtual cluster (vcluster) , which consists of a number of virtual\nLinux container nodes distributed over the physical cluster. Every\nvcluster is separated from others and can be operated like a real\nphysical cluster. Therefore, most applications, especially those\nrequiring a cluster environment, can run in vcluster seamlessly.  Docklet provides a base image for creating virtual nodes. This image has\npre-installed a lot of mainstream development tools and frameworks,\nincluding gcc/g++, openjdk, python3, R, MPI, scala, ruby, php, node.js,\ntexlive, mpich2, spark,\nscipy/numpy/matplotlib/pandas/sympy/scikit-learn, jupyter notebook, etc.\nUsers can get a ready vcluster with just one click within 1 second.  The users are free to install their specific software in their vcluster.\nDocklet supports operating through  web terminal . Users can do their\nwork as an administrator working on a console. The base image system is\nubuntu. The recommended way of installing new software is by apt-get .  The users manage and use their vcluster all through web. The only client\ntool needed is a modern web browser, like safari, firefox, chrome. The\nintegrated  jupyter notebook  provides a web workspace. By visiting the\nworkspace, users can do coding, debugging and testing of their programs\nonline. The  python scipy  series of tools can even display graphical\npictures in the browser. Therefore, it is ideal for data analysis and\nprocessing.  Docklet only need  one  public IP address. The vclusters are\nconfigured to use private IP address range, e.g., 172.16.0.0/16,\n192.168.0.0/16, 10.0.0.0/8. A proxy is setup to help\nusers visit their vclusters behind the firewall/gateway.  The Docklet system runtime consists of four components:   distributed file system server  etcd server  docklet master  docklet worker", 
+            "title": "Intro"
+        }, 
+        {
+            "location": "/quick/#install", 
+            "text": "Currently the docklet runtime is recommend to run in Unbuntu 15.10+.  Ensure that python3.5 is the default python3 version.  Unpack the docklet tarball to a directory ( /root/docklet as an\nexample), will get  readme.md\nprepare.sh\nconf/\n    container.conf\n    docklet.conf.template\n    lxc-script/\nbin/\n    docklet-master\n    docklet-worker\nsrc/\n    httprest.py\n    worker.py\n    ...\nweb/\n    web.py\ndep/\n    etcd-multi-nodes.sh\n    etcd-one-node.sh\ndoc/\ntools/\n    update-basefs.sh\n    start_jupyter.sh  If it is the first time install, users should run  prepare.sh  to\ninstall necessary packages automatically. Note it may need to run this\nscript several times to successfully install all the needed packages.  A  root  users will be created for managing the system. The password is\nrecorded in  FS_PREFIX/local/generated_password.txt  .", 
+            "title": "Install"
+        }, 
+        {
+            "location": "/quick/#config", 
+            "text": "The main configuration file of docklet is conf/docklet.conf. Most\ndefault setting works for a single host environment.  First copy docklet.conf.template to get docklet.conf.  The following settings should be taken care of:   NETWORK_DEVICE : the network device to use.  ETCD : the etcd server address. For distributed muli hosts\n  environment, it should be one of the ETCD public server address.\n  For single host environment, the default value should be OK.  STORAGE : using disk or file to storage persistent data, for\n  single host, file is convenient.  FS_PREFIX: the working dir of docklet runtime. default is\n  /opt/docklet.  CLUSTER_NET: the vcluster network ip address range, default is\n  172.16.0.1/16. This network range should all be allocated to  and\n  managed by docklet.  PROXY_PORT : the public port of docklet. Users use\n  this port to visit the docklet system.  PORTAL_URL : the portal of the system. Users access the system\n  by visiting this address. If the system is behind a firewall, then\n  a reverse proxy should be setup.", 
+            "title": "Config"
+        }, 
+        {
+            "location": "/quick/#start", 
+            "text": "", 
+            "title": "Start"
+        }, 
+        {
+            "location": "/quick/#distributed-file-system", 
+            "text": "For multi hosts distributed environment, a distributed file system is\nneeded to store global data. Currently, glusterfs has been tested.\nLets presume the file system server export filesystem as nfs fileserver:/pub  :  In each physical host to run docklet, mount  fileserver:/pub  to FS_PEFIX/global  .  For single host environment, it need not to configure distributed\nfile system.", 
+            "title": "Distributed file system"
+        }, 
+        {
+            "location": "/quick/#etcd", 
+            "text": "For single host environment, start  dep/etcd-one-node.sh  . Some recent\nUbuntu releases have included  etcd  in the repository, just  apt-get\ninstall etcd , and it need not to start etcd manually.  For multi hosts distributed environment, start dep/etcd-multi-nodes.sh  in each etcd server hosts. This scripts\nrequires users providing the etcd server address as parameters.", 
+            "title": "Etcd"
+        }, 
+        {
+            "location": "/quick/#master", 
+            "text": "First, select a server with 2 network interface card, one having a\npublic IP address/url, e.g., docklet.info; the other having a private IP\naddress, e.g., 172.16.0.1. This server will be the master.  If it is the first time you start docklet, run  bin/docklet-master init \nto init and start docklet master. Otherwise, run   bin/docklet-master start ,\nwhich will start master in recovery mode in background using\nconf/docklet.conf. It means docklet will recover workspaces existed.  This script in fact will start three daemons: the docklet master of\nhttprest.py, the configurable-http-proxy and the docklet web of web.py.  You can check the daemon status by running  bin/docklet-master status  If the master failed to start, you could try  bin/docklet-master init \nto initialize the whole system.  More usages can be found by typing  bin/docklet-master  The master logs are in  FS_PREFIX/local/log/docklet-master.log  and docklet-web.log .", 
+            "title": "Master"
+        }, 
+        {
+            "location": "/quick/#worker", 
+            "text": "Worker needs a basefs image to boot container.  You can create such an image with  lxc-create -n test -t download ,\nand then copy the rootfs to  FS_PREFIX/local , and renamed  rootfs \nto  basefs .  Note the  jupyerhub  package must be installed for this image.  And the\nstart script  tools/start_jupyter.sh  should be placed at basefs/home/jupyter .  You can check and run  tools/update-basefs.sh  to update basefs.  Run  bin/docklet-worker start , will start worker in background.  You can check the daemon status by running  bin/docklet-worker status  More usages can be found by typing  bin/docklet-worker \nThe log is in  FS_PREFIX/local/log/docklet-worker.log  Currently, the worker must run after the master has been started.", 
+            "title": "Worker"
+        }, 
+        {
+            "location": "/quick/#usage", 
+            "text": "Open a browser, visiting the address specified by PORTAL_URL , \ne.g.,  http://docklet.info/  If the system is just deployed in single host for testing purpose,\nthen the PORTAL_URL defaults to  http://MASTER_IP:PROXY_PORT ,\ne.g.,  http://localhost:8000 .  That is it.", 
+            "title": "Usage"
+        }, 
+        {
+            "location": "/userguide/", 
+            "text": "Docklet Userguide\n\n\n\n\nLatest\n\n\nv0.2.6, Mar 14 2016\n\n\n[\u4e2d\u6587]\n \n \n[English]\n\n\n\n\nHistory\n\n\nv0.2, Feb 20 2016\n\n\nHTML", 
+            "title": "Userguide"
+        }, 
+        {
+            "location": "/userguide/#docklet-userguide", 
+            "text": "", 
+            "title": "Docklet Userguide"
+        }, 
+        {
+            "location": "/userguide/#latest", 
+            "text": "v0.2.6, Mar 14 2016  [\u4e2d\u6587]     [English]", 
+            "title": "Latest"
+        }, 
+        {
+            "location": "/userguide/#history", 
+            "text": "v0.2, Feb 20 2016  HTML", 
+            "title": "History"
+        }, 
+        {
+            "location": "/changelog/", 
+            "text": "Changes\n\n\n\n\nv0.2.7,  May 17, 2016\n\n\nBug Fix\n\n  * [#9] updating user profile taking effects immediately\n  * [#12] logging user's activity\n  * [#14] Can't stop vcluster by dashboard page\n  * [#18] subprocess call should check return status\n  * [#19] lxc config string in config file is limited in 16 bytes\n  * [#25] bug of external login\n  * [#30] support lxc.custom.conf in appending\n  * [#35] nfs mountpoint bug in imagemgr.py\n  * [#49] Fail to create container\n  * [#57] status page of normal user failed\n  * [#68] Not Found error when just click \"Sign in\" Button\n  * [#76] unable to show and edit user table in smartphone\n\n\nImprovement\n\n  * [#7] enhance quota management\n  * [#8] independent starting of master and workers\n  * [#20] check typing and input on web pages and web server\n  * [#23] add LXCFS for container\n  * [#41] move system data to global/sys\n  * [#42] check IP and network pool when releasing IPs\n  * [#48] token expires after some time\n  * [#54] display container owner\n  * [#61] rewrite httprest.py using flask routing\n\n\nNotes\n\n  * If upgrade from v0.2.6, please run tools/upgrade.py first.\n\n\nv0.2.6,  Mar 31, 2016\n\n\nAn initial release on github.com\n\n\n\n\nUsing the open source AdminLTE theme", 
+            "title": "Changelog"
+        }, 
+        {
+            "location": "/changelog/#changes", 
+            "text": "", 
+            "title": "Changes"
+        }, 
+        {
+            "location": "/changelog/#v027-may-17-2016", 
+            "text": "Bug Fix \n  * [#9] updating user profile taking effects immediately\n  * [#12] logging user's activity\n  * [#14] Can't stop vcluster by dashboard page\n  * [#18] subprocess call should check return status\n  * [#19] lxc config string in config file is limited in 16 bytes\n  * [#25] bug of external login\n  * [#30] support lxc.custom.conf in appending\n  * [#35] nfs mountpoint bug in imagemgr.py\n  * [#49] Fail to create container\n  * [#57] status page of normal user failed\n  * [#68] Not Found error when just click \"Sign in\" Button\n  * [#76] unable to show and edit user table in smartphone  Improvement \n  * [#7] enhance quota management\n  * [#8] independent starting of master and workers\n  * [#20] check typing and input on web pages and web server\n  * [#23] add LXCFS for container\n  * [#41] move system data to global/sys\n  * [#42] check IP and network pool when releasing IPs\n  * [#48] token expires after some time\n  * [#54] display container owner\n  * [#61] rewrite httprest.py using flask routing  Notes \n  * If upgrade from v0.2.6, please run tools/upgrade.py first.", 
+            "title": "v0.2.7,  May 17, 2016"
+        }, 
+        {
+            "location": "/changelog/#v026-mar-31-2016", 
+            "text": "An initial release on github.com   Using the open source AdminLTE theme", 
+            "title": "v0.2.6,  Mar 31, 2016"
+        }, 
+        {
+            "location": "/example/", 
+            "text": "Examples\n\n\n\n\nThe following are some real deployment examples. We will appreciate it if you find Docklet useful and drop us a message.\n\n\n\n\n\n\n \nhttp://docklet.sei.pku.edu.cn\n \n .\nDeployed in the Software Engineering Institute, Peking University, serving about 200 SEI staffs and students. A cluster of 3 physical nodes, each having 24 x 16MB / 2 x Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz / 12 TB, with GlusterFS as distributed file system server.\n\n\n\n\n\n\n \nhttp://iwork.pku.edu.cn\n \n .\nDeployed in the Computing Center, Peking University, serving the university.\nCurrently a cluster of 2 physical nodes, each having 24 x 16MB /\n2 x Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz / 12 TB, with GlusterFS as\ndistributed file system server.", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/example/#examples", 
+            "text": "The following are some real deployment examples. We will appreciate it if you find Docklet useful and drop us a message.      http://docklet.sei.pku.edu.cn    .\nDeployed in the Software Engineering Institute, Peking University, serving about 200 SEI staffs and students. A cluster of 3 physical nodes, each having 24 x 16MB / 2 x Intel(R) Xeon(R) CPU E5-2670 0 @ 2.60GHz / 12 TB, with GlusterFS as distributed file system server.      http://iwork.pku.edu.cn    .\nDeployed in the Computing Center, Peking University, serving the university.\nCurrently a cluster of 2 physical nodes, each having 24 x 16MB /\n2 x Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz / 12 TB, with GlusterFS as\ndistributed file system server.", 
+            "title": "Examples"
+        }, 
+        {
+            "location": "/download/", 
+            "text": "Downloads\n\n\n\n\nContainer Images\n\n\nbasefs-0.3\n\n\n\n\nDate : Apr 28, 2016\n\n\nSize : 4.3 GB, \nDownload\n   \n\n\nDescription : a full image for docklet container. for the release of Ubuntu 16.04.\n\n\nContent : ubuntu 16.04, python 3.5, ipython 4.2, jupyter 1.0, notebook 4.2, nodejs 4.2, gcc 5.3, golang 2.1, nginx 1.9.15, mysql-server 5.6.28, texlive 2015.20160215, openmpi 1.10, openJDK 7, PHP5, R 3.2, Ruby 2.2, Scala 2.11,Ocaml 4.02, matplotlib 1.5.1, numpy 1.11, pandas 0.18, scipy 0.17, sk-learn 0.17.1, sympy 1.0, tornado 4.3, ... ...\n\n\n\n\nbasefs-0.2.1\n\n\n\n\nDate : Apr 3, 2016\n\n\nSize : 4.7 GB, \nDownload\n   \n\n\nDescription : a full image for docklet container\n\n\nContent : ubuntu 16.04, python 3.5, ipython 4.1, jupyter 1.0, notebook 4.1, nodejs 4.2, gcc 5.3, golang 2.1, nginx 1.9.12, apache 2.4, mysql-server 5.6.28, texlive 2015.20160215, openmpi 1.10, openJDK 7, PHP5, R 3.2, Ruby 2.2, Scala 2.11,Ocaml 4.02, matplotlib 1.5, numpy 1.10, pandas 0.15, scipy 0.17, sk-learn 0.17, ... ...\n\n\n\n\nbasefs-0.11\n\n\n\n\nDate : Mar 16, 2016\n\n\nSize : 344 MB, \nDownload\n \n\n\nDescription : a tiny image for docklet container\n\n\nContent : ubuntu 16.04, python 3.5, ipython 2.4, jupyter 1.0, notebook 4.1, nodejs 4.2, gcc 5.3, ... ...", 
+            "title": "Download"
+        }, 
+        {
+            "location": "/download/#downloads", 
+            "text": "", 
+            "title": "Downloads"
+        }, 
+        {
+            "location": "/download/#container-images", 
+            "text": "", 
+            "title": "Container Images"
+        }, 
+        {
+            "location": "/download/#basefs-03", 
+            "text": "Date : Apr 28, 2016  Size : 4.3 GB,  Download      Description : a full image for docklet container. for the release of Ubuntu 16.04.  Content : ubuntu 16.04, python 3.5, ipython 4.2, jupyter 1.0, notebook 4.2, nodejs 4.2, gcc 5.3, golang 2.1, nginx 1.9.15, mysql-server 5.6.28, texlive 2015.20160215, openmpi 1.10, openJDK 7, PHP5, R 3.2, Ruby 2.2, Scala 2.11,Ocaml 4.02, matplotlib 1.5.1, numpy 1.11, pandas 0.18, scipy 0.17, sk-learn 0.17.1, sympy 1.0, tornado 4.3, ... ...", 
+            "title": "basefs-0.3"
+        }, 
+        {
+            "location": "/download/#basefs-021", 
+            "text": "Date : Apr 3, 2016  Size : 4.7 GB,  Download      Description : a full image for docklet container  Content : ubuntu 16.04, python 3.5, ipython 4.1, jupyter 1.0, notebook 4.1, nodejs 4.2, gcc 5.3, golang 2.1, nginx 1.9.12, apache 2.4, mysql-server 5.6.28, texlive 2015.20160215, openmpi 1.10, openJDK 7, PHP5, R 3.2, Ruby 2.2, Scala 2.11,Ocaml 4.02, matplotlib 1.5, numpy 1.10, pandas 0.15, scipy 0.17, sk-learn 0.17, ... ...", 
+            "title": "basefs-0.2.1"
+        }, 
+        {
+            "location": "/download/#basefs-011", 
+            "text": "Date : Mar 16, 2016  Size : 344 MB,  Download    Description : a tiny image for docklet container  Content : ubuntu 16.04, python 3.5, ipython 2.4, jupyter 1.0, notebook 4.1, nodejs 4.2, gcc 5.3, ... ...", 
+            "title": "basefs-0.11"
+        }, 
+        {
+            "location": "/contact/", 
+            "text": "Contact\n\n\n\n\n\n\n\n\nvar disqus_config = function () {\nthis.page.url = 'http://docklet.unias.org/contact'; \nthis.page.identifier = '/contact' ; \n};\n(function() { // DON'T EDIT BELOW THIS LINE\nvar d = document, s = d.createElement('script');\n\ns.src = '//docklet.disqus.com/embed.js';\n\ns.setAttribute('data-timestamp', +new Date());\n(d.head || d.body).appendChild(s);\n})();\n\n\n\n\nPlease enable JavaScript to view the \ncomments powered\nby Disqus.", 
+            "title": "Contact"
+        }, 
+        {
+            "location": "/contact/#contact", 
+            "text": "var disqus_config = function () {\nthis.page.url = 'http://docklet.unias.org/contact'; \nthis.page.identifier = '/contact' ; \n};\n(function() { // DON'T EDIT BELOW THIS LINE\nvar d = document, s = d.createElement('script');\n\ns.src = '//docklet.disqus.com/embed.js';\n\ns.setAttribute('data-timestamp', +new Date());\n(d.head || d.body).appendChild(s);\n})();  Please enable JavaScript to view the  comments powered\nby Disqus.", 
+            "title": "Contact"
+        }, 
+        {
+            "location": "/contrib/", 
+            "text": "Contributing To Docklet\n\n\n\n\nDocklet is an open source project. All kinds of contributions are\nsincerely welcome!  Contributions can be\nmade in a number of ways, including:\n\n\n\n\nImproving Documents\n\n\nReporting an Issue\n\n\nSubmitting pull requests\n\n\n\n\nSubmitting Pull Requests\n\n\nThe development workflow of Docklet Project is as follows.\n\n\n\n\nPrepare\n\n\nFirst, we need to prepare our working repository. These actions should be executed just once.\n\n\nStep 1 : fork\n\n\nOpen https://github.com/unias/docklet in your browser and click \nFork\n button on the top-right corner.\n\n\nStep 2 : clone \n config\n\n\n\n\nclone docklet from your github repository\n\n\n\n\ngit clone https://github.com/YourName/docklet.git\n\n\n\n\n\n\nconfig your local repository\n\n\n\n\n# add unias/docklet as your upstream\ngit remote add upstream https://github.com/unias/docklet.git\n# set push to upstream not work\ngit remote set-url --push upstream no_push\n\n\n\n\nWork\n\n\nThis part is about the steps of making contributions to Docklet by pull request.\n\n\nWork : Begin\n\n\nStep 3 : fetch\n\n\nFetch the latest code from \nupstream(unias/docklet)\n\n\ngit fetch upstream\n\n\n\n\nStep 4 : branch\n\n\nCreate new branch for your work\n\n\ngit checkout -b BranchName upstream/master\n\n\n\n\nThis is not the step you must do and you can work on local master branch. But we recommend you follow these steps. Using branch to develop new features fits git.\n\n\nWork : Work\n\n\nNow you can focus on your work by \ncommit\n and \npush\n.\n\n\nStep 5 : commit \n commit\n\n\nCommit is commit. Nothing to say.\n\n\nStep 6 : push \n push\n\n\nPush your work to \nyour own Github repository\n by \nBranchName\n\n\ngit push origin BranchName\n\n\n\n\nWork : End\n\n\nAfter you complete work of this feature, you maybe want to create a pull request to unias/docklet. Please follow steps below.\n\n\nStep 7 : fetch\n\n\nFetch the latest code from \nunias/docklet\n\n\ngit fetch upstream\n\n\n\n\nStep 8 : merge\n\n\nMerge upstream's latest code to your working branch\n\n\ngit merge upstream/master\n\n\n\n\nPlease ensure that you are on your working branch.\n\n\nIf conflict happens, resolve it and commit.\n\n\nStep 9 : push\n\n\nPush to your github repository by BranchName.\n\n\ngit push origin BranchName\n\n\n\n\nStep 10 : pull request\n\n\nOpen https://github.com/YourName/docklet, click \nNew pull request\n and select your working \nBranchName\n to create the pull request.\n\n\nTips\n\n\nlocal master\n\n\nAfter you fetch upstream code, you can move forward your local master branch to upstream/master. And push your github repository master branch to update.\n\n\ngit fetch upstream\ngit checkout master\ngit merge upstream/master\ngit push origin master\n\n\n\n\npretty git log or git log with GUI\n\n\nYou can config your git log command with pretty format.\n\n\ngit config --global alias.lg \nlog --graph --color --pretty=format:' %Cred%h %Creset/ %\n(10,trunc)%Cblue%an%Creset | %\n(60,trunc)%s | %cr %Cred%d' --remotes --branches\n\n\n\n\n\nNow, type \ngit lg\n to see what happens.\n\n\nOf course, you can use GUI with git. \ngitg\n is a good choice. It shows log of git very friendly.\n\n\nunderstand git log\n\n\ngit log has much information. You should understand the log info of git. This can help you know how to move forward your work. Especially the reference of branches : upstream/master, HEAD, master, origin/master, other branches.\n\n\ngraphs/network of github\n\n\nThe Graphs/Network of Github is very useful. With this, you can know whether you can create a pull request without conflict. Open https://github.com/unias/docklet/network in your browser and see the network graph of docklet.", 
+            "title": "Contributing"
+        }, 
+        {
+            "location": "/contrib/#contributing-to-docklet", 
+            "text": "Docklet is an open source project. All kinds of contributions are\nsincerely welcome!  Contributions can be\nmade in a number of ways, including:   Improving Documents  Reporting an Issue  Submitting pull requests", 
+            "title": "Contributing To Docklet"
+        }, 
+        {
+            "location": "/contrib/#submitting-pull-requests", 
+            "text": "The development workflow of Docklet Project is as follows.", 
+            "title": "Submitting Pull Requests"
+        }, 
+        {
+            "location": "/contrib/#prepare", 
+            "text": "First, we need to prepare our working repository. These actions should be executed just once.", 
+            "title": "Prepare"
+        }, 
+        {
+            "location": "/contrib/#step-1-fork", 
+            "text": "Open https://github.com/unias/docklet in your browser and click  Fork  button on the top-right corner.", 
+            "title": "Step 1 : fork"
+        }, 
+        {
+            "location": "/contrib/#step-2-clone-config", 
+            "text": "clone docklet from your github repository   git clone https://github.com/YourName/docklet.git   config your local repository   # add unias/docklet as your upstream\ngit remote add upstream https://github.com/unias/docklet.git\n# set push to upstream not work\ngit remote set-url --push upstream no_push", 
+            "title": "Step 2 : clone &amp; config"
+        }, 
+        {
+            "location": "/contrib/#work", 
+            "text": "This part is about the steps of making contributions to Docklet by pull request.", 
+            "title": "Work"
+        }, 
+        {
+            "location": "/contrib/#work-begin", 
+            "text": "", 
+            "title": "Work : Begin"
+        }, 
+        {
+            "location": "/contrib/#step-3-fetch", 
+            "text": "Fetch the latest code from  upstream(unias/docklet)  git fetch upstream", 
+            "title": "Step 3 : fetch"
+        }, 
+        {
+            "location": "/contrib/#step-4-branch", 
+            "text": "Create new branch for your work  git checkout -b BranchName upstream/master  This is not the step you must do and you can work on local master branch. But we recommend you follow these steps. Using branch to develop new features fits git.", 
+            "title": "Step 4 : branch"
+        }, 
+        {
+            "location": "/contrib/#work-work", 
+            "text": "Now you can focus on your work by  commit  and  push .", 
+            "title": "Work : Work"
+        }, 
+        {
+            "location": "/contrib/#step-5-commit-commit", 
+            "text": "Commit is commit. Nothing to say.", 
+            "title": "Step 5 : commit &amp; commit"
+        }, 
+        {
+            "location": "/contrib/#step-6-push-push", 
+            "text": "Push your work to  your own Github repository  by  BranchName  git push origin BranchName", 
+            "title": "Step 6 : push &amp; push"
+        }, 
+        {
+            "location": "/contrib/#work-end", 
+            "text": "After you complete work of this feature, you maybe want to create a pull request to unias/docklet. Please follow steps below.", 
+            "title": "Work : End"
+        }, 
+        {
+            "location": "/contrib/#step-7-fetch", 
+            "text": "Fetch the latest code from  unias/docklet  git fetch upstream", 
+            "title": "Step 7 : fetch"
+        }, 
+        {
+            "location": "/contrib/#step-8-merge", 
+            "text": "Merge upstream's latest code to your working branch  git merge upstream/master  Please ensure that you are on your working branch.  If conflict happens, resolve it and commit.", 
+            "title": "Step 8 : merge"
+        }, 
+        {
+            "location": "/contrib/#step-9-push", 
+            "text": "Push to your github repository by BranchName.  git push origin BranchName", 
+            "title": "Step 9 : push"
+        }, 
+        {
+            "location": "/contrib/#step-10-pull-request", 
+            "text": "Open https://github.com/YourName/docklet, click  New pull request  and select your working  BranchName  to create the pull request.", 
+            "title": "Step 10 : pull request"
+        }, 
+        {
+            "location": "/contrib/#tips", 
+            "text": "", 
+            "title": "Tips"
+        }, 
+        {
+            "location": "/contrib/#local-master", 
+            "text": "After you fetch upstream code, you can move forward your local master branch to upstream/master. And push your github repository master branch to update.  git fetch upstream\ngit checkout master\ngit merge upstream/master\ngit push origin master", 
+            "title": "local master"
+        }, 
+        {
+            "location": "/contrib/#pretty-git-log-or-git-log-with-gui", 
+            "text": "You can config your git log command with pretty format.  git config --global alias.lg  log --graph --color --pretty=format:' %Cred%h %Creset/ % (10,trunc)%Cblue%an%Creset | % (60,trunc)%s | %cr %Cred%d' --remotes --branches   Now, type  git lg  to see what happens.  Of course, you can use GUI with git.  gitg  is a good choice. It shows log of git very friendly.", 
+            "title": "pretty git log or git log with GUI"
+        }, 
+        {
+            "location": "/contrib/#understand-git-log", 
+            "text": "git log has much information. You should understand the log info of git. This can help you know how to move forward your work. Especially the reference of branches : upstream/master, HEAD, master, origin/master, other branches.", 
+            "title": "understand git log"
+        }, 
+        {
+            "location": "/contrib/#graphsnetwork-of-github", 
+            "text": "The Graphs/Network of Github is very useful. With this, you can know whether you can create a pull request without conflict. Open https://github.com/unias/docklet/network in your browser and see the network graph of docklet.", 
+            "title": "graphs/network of github"
+        }, 
+        {
+            "location": "/team/", 
+            "text": "Docklet Dev Team\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nDonggang Cao\n\n    \nAssociate Professor\n\n    Peking University\n\n    Mailto: caodg AT pku.edu.cn\n\n    Interests: System Software, Cloud, Big Data Processing \n\n    \nMore about \u00bb\n\n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nWei Cui\n\n    \nPostgraduate\n\n    Peking University\n\n    Mailto: cuiwei AT pku.edu.cn\n\n    Interests: Cloud, Linux, Spark, Algorithms \n\n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nBao Li\n\n    \nPostgraduate\n\n    Peking University\n\n    mailto: libao14 AT pku.edu.cn\n\n    Interests: \n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nHu Wang\n\n    \nPostgraduate\n\n    Peking University\n\n    mailto: wanghu14 AT sei.pku.edu.cn\n\n    Interests: \n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nPeidong Liu\n\n    \nPostgraduate\n\n    Peking University\n\n    mailto: liupd1995 AT 126.com\n\n    Interests: \n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nYehong Zhong\n\n    \nUndergraduate\n\n    Peking University\n\n    mailto: 15289788668 AT 163.com\n\n    Interests: \n    \n\n    \n\n\n\n\n\n\n\n\n    \n\n    \n\n    \n\n    \n\n    \nYujian Zhu\n\n    \nUndergraduate\n\n    Peking University\n\n    mailto: firmlyzhu AT 163.com\n\n    Interests:", 
+            "title": "Team"
+        }, 
+        {
+            "location": "/team/#docklet-dev-team", 
+            "text": "", 
+            "title": "Docklet Dev Team"
+        }
+    ]
+}

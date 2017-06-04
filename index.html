@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Docklet - a mini cloud OS">
+        <meta name="author" content="Donggang Cao">
+
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+	<title>Docklet</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="./css/base.css" rel="stylesheet">
+        <link href="./css/custom.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-76052641-1', 'docklet.unias.org');
+            ga('send', 'pageview');
+        </script>
+
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">Docklet</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+
+
+
+                <li class="active">
+                    <a href=".">Home</a>
+                </li>
+
+
+
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Document <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+
+
+<li >
+    <a href="intro/">Intro</a>
+</li>
+
+
+
+
+
+<li >
+    <a href="quick/">Quickstart</a>
+</li>
+
+
+
+
+
+<li >
+    <a href="userguide/">Userguide</a>
+</li>
+
+
+
+
+
+<li >
+    <a href="changelog/">Changelog</a>
+</li>
+
+
+
+                    </ul>
+                </li>
+
+
+
+
+                <li >
+                    <a href="example/">Examples</a>
+                </li>
+
+
+
+
+
+                <li >
+                    <a href="download/">Download</a>
+                </li>
+
+
+
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+
+
+<li >
+    <a href="contact/">Contact</a>
+</li>
+
+
+
+
+
+<li >
+    <a href="contrib/">Contributing</a>
+</li>
+
+
+
+
+
+<li >
+    <a href="team/">Team</a>
+</li>
+
+
+
+                    </ul>
+                </li>
+
+
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="https://github.com/unias/docklet">
+
+                            <i class="fa fa-github"></i>
+
+                        GitHub
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+            <div class="col-md-12" role="main"><div class="jumbotron">
+    <div class="container">
+        <h1>Docklet: Lightweight Cloud OS</h1>
+        <p>Virtualize physical cluster, get workspaces in cloud,
+        interactively run programs using browser.</p>
+        <p><a class="btn btn-primary btn-lg get-started"
+        href="quick/" role="button">Get started »</a> &nbsp; &nbsp; <a class="btn btn-default btn-lg"
+        href="intro/" role="button">Learn about »</a> </p>
+        <p><small>Docklet is written in Python (3.5). Free open-source
+        under the <a href="http://directory.fsf.org/wiki/License:BSD_3Clause">New BSD license</a>.</small></p>
+        <iframe src="https://ghbtns.com/github-btn.html?user=unias&repo=docklet&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+        <iframe src="https://ghbtns.com/github-btn.html?user=unias&repo=docklet&type=fork&count=true&size=large" frameborder="0" scrolling="0" width="158px" height="30px"></iframe>
+    </div>
+</div></div>
+            <div class="col-md-12" role="main">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p  class="feature-link">
+                <div class="feature-icon feature-icon-static">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-server fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">Virtualized clusters.</h2>
+            </p>
+            <p> What users get from Docklet is not a single Container, but a fully functional LXC cluster. Most distributed computing frameworks can run seamlessly without any customization and modification.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p class="feature-link">
+                <div class="feature-icon feature-icon-components">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle
+                    fa-stack-2x"></i><i class="fa fa-cloud fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">Cloud Workspace.</h2>
+            </p>
+            <p>
+            Docklet provides users more than a cluster. Users get Cloud Workspaces upon clusters with many programming frameworks pre-installed. Users use just a browser to edit, debug and run their programs.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p class="feature-link">
+                <div class="feature-icon feature-icon-formats">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle
+                    fa-stack-2x"></i><i class="fa fa-wrench fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">Wide applicability.</h2>
+            </p>
+            <p>
+           Docklet is designed for small data centers with
+           usually < 100 physical servers, which is common
+           for many enterprises. It is easy to manage,
+           only requires one public IP address to deploy.
+           </p>
+        </div>
+        <div class="col-md-4">
+            <p class="feature-link">
+                <div class="feature-icon feature-icon-fast">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-flash fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">Fast and efficient.</h2>
+            </p>
+            <p>Docklet runs fast.  It uses LXC technology with advantages like instant booting container in seconds; high utilization of resources, running thousands of containers in one physical host, etc.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p class="feature-link">
+                <div class="feature-icon feature-icon-extensible">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-code fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">Elastic and extensible.</h2>
+            </p>
+            <p>Docklet is Elastic and extensible.  Users can scale their vclusters at runtime with just a click in the browser. They can also install software they need as operating in a real virtual machine.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p class="feature-link">
+                <div class="feature-icon feature-icon-unix">
+                    <span class="fa-stack fa-3x"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-terminal fa-stack-1x fa-inverse"></i></span>
+                </div>
+                <h2 class="index-feature">User friendly.</h2>
+            </p>
+            <p>Docklet is very easy to use.  It could be an ideal environment for application development and testing, online running data analysis jobs,  exercising platform for programming courses, etc.
+            </p>
+        </div>
+    </div>
+</div></div>
+
+
+        <footer class="col-md-12">
+            <hr>
+
+                <center>&#169; Unias Team, SEI, PKU</center>
+
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script>var base_url = '.';</script>
+        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
+        <script src="./js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

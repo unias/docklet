@@ -1,0 +1,907 @@
+
+<!DOCTYPE HTML>
+<html lang="zh" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Spark · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-language-picker/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="latex.html" />
+    
+    
+    <link rel="prev" href="mpi.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../intro/">
+            
+                <a href="../intro/">
+            
+                    
+                    Docklet 简介
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../intro/what.html">
+            
+                <a href="../intro/what.html">
+            
+                    
+                    什么是 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../intro/why.html">
+            
+                <a href="../intro/why.html">
+            
+                    
+                    为什么要用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../intro/how.html">
+            
+                <a href="../intro/how.html">
+            
+                    
+                    如何使用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../concepts/">
+            
+                <a href="../concepts/">
+            
+                    
+                    基本概念
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../concepts/workspace.html">
+            
+                <a href="../concepts/workspace.html">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../concepts/vcluster.html">
+            
+                <a href="../concepts/vcluster.html">
+            
+                    
+                    虚拟集群
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../concepts/image.html">
+            
+                <a href="../concepts/image.html">
+            
+                    
+                    镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../concepts/service.html">
+            
+                <a href="../concepts/service.html">
+            
+                    
+                    服务
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../concepts/nfs.html">
+            
+                <a href="../concepts/nfs.html">
+            
+                    
+                    数据区
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../portal/">
+            
+                <a href="../portal/">
+            
+                    
+                    门户系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../portal/dashboard.html">
+            
+                <a href="../portal/dashboard.html">
+            
+                    
+                    面板
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../portal/config.html">
+            
+                <a href="../portal/config.html">
+            
+                    
+                    配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../portal/status.html">
+            
+                <a href="../portal/status.html">
+            
+                    
+                    状态
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../portal/hosts.html">
+            
+                <a href="../portal/hosts.html">
+            
+                    
+                    主机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/users.html">
+            
+                <a href="../portal/users.html">
+            
+                    
+                    用户
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../portal/admin.html">
+            
+                <a href="../portal/admin.html">
+            
+                    
+                    管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../workspace/">
+            
+                <a href="../workspace/">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../workspace/data.html">
+            
+                <a href="../workspace/data.html">
+            
+                    
+                    数据管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../workspace/edit.html">
+            
+                <a href="../workspace/edit.html">
+            
+                    
+                    文件编辑
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../workspace/terminal.html">
+            
+                <a href="../workspace/terminal.html">
+            
+                    
+                    终端操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../workspace/notebook.html">
+            
+                <a href="../workspace/notebook.html">
+            
+                    
+                    交互编程
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    在终端中开发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="list.html">
+            
+                <a href="list.html">
+            
+                    
+                    安装的软件包列表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="c.html">
+            
+                <a href="c.html">
+            
+                    
+                    C/C++
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="java.html">
+            
+                <a href="java.html">
+            
+                    
+                    Java
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="mpi.html">
+            
+                <a href="mpi.html">
+            
+                    
+                    MPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.5" data-path="spark.html">
+            
+                <a href="spark.html">
+            
+                    
+                    Spark
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="latex.html">
+            
+                <a href="latex.html">
+            
+                    
+                    LaTeX
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../notebook/">
+            
+                <a href="../notebook/">
+            
+                    
+                    科学计算与数据处理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../notebook/python.html">
+            
+                <a href="../notebook/python.html">
+            
+                    
+                    Python 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../notebook/r.html">
+            
+                <a href="../notebook/r.html">
+            
+                    
+                    R 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../notebook/nb.html">
+            
+                <a href="../notebook/nb.html">
+            
+                    
+                    使用Notebook
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../notebook/gallery.html">
+            
+                <a href="../notebook/gallery.html">
+            
+                    
+                    各种样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../notebook/beauty.html">
+            
+                <a href="../notebook/beauty.html">
+            
+                    
+                    python数据分析样例
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="../notebook/beauty.html">
+            
+                <a href="../notebook/beauty.html">
+            
+                    
+                    用Python分析《美女与野兽》
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="../notebook/balancing-reactions.html">
+            
+                <a href="../notebook/balancing-reactions.html">
+            
+                    
+                    配平化学方程式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="../notebook/matrix-exponential.html">
+            
+                <a href="../notebook/matrix-exponential.html">
+            
+                    
+                    矩阵指数
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="../notebook/time-series-analysis.html">
+            
+                <a href="../notebook/time-series-analysis.html">
+            
+                    
+                    时间序列分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../notebook/docklet-bigdata-r.html">
+            
+                <a href="../notebook/docklet-bigdata-r.html">
+            
+                    
+                    R数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../notebook/docklet-bigdata-spark.md">
+            
+                <span>
+            
+                    
+                    spark大数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../billing/">
+            
+                <a href="../billing/">
+            
+                    
+                    豆与计费系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../billing/beans.html">
+            
+                <a href="../billing/beans.html">
+            
+                    
+                    什么是"豆"
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../billing/billing.html">
+            
+                <a href="../billing/billing.html">
+            
+                    
+                    计费系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../billing/getBeans.html">
+            
+                <a href="../billing/getBeans.html">
+            
+                    
+                    如何获得豆
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Spark</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="spark-&#x793A;&#x4F8B;">Spark &#x793A;&#x4F8B;</h2>
+<h3 id="&#x914D;&#x7F6E;&#x4E0E;&#x542F;&#x52A8;">&#x914D;&#x7F6E;&#x4E0E;&#x542F;&#x52A8;</h3>
+<p>Apache Spark &#x7F3A;&#x7701;&#x5B89;&#x88C5;&#x4E8E; <code>/home/spark</code> &#x76EE;&#x5F55;.</p>
+<p>&#x5047;&#x5B9A;&#x7528;&#x6237; <code>robin</code> &#x7684; Workspace &#x4E3A; <code>note</code>, &#x6709;3&#x4E2A;vnode: host-0, host-1, host-2, 
+&#x6784;&#x6210;&#x4E00;&#x4E2A;&#x79C1;&#x6709;vcluster&#x96C6;&#x7FA4;.</p>
+<p><code>robin</code> &#x6253;&#x5F00; Web Terminal, &#x8FDB;&#x5165;Spark&#x4E3B;&#x76EE;&#x5F55;, &#x542F;&#x52A8;spark master</p>
+<pre><code>root@host-0:~# cd /home/spark
+root@host-0:/home/spark# ./sbin/start-master.sh
+</code></pre><p>&#x542F;&#x52A8;&#x540E;, &#x53EF;&#x8FDB;&#x5165; <code>logs</code> &#x76EE;&#x5F55;&#x67E5;&#x770B;&#x542F;&#x52A8;&#x65E5;&#x5FD7;, spark master &#x4F1A;&#x6253;&#x5370;&#x5176;&#x5DE5;&#x4F5C;URL, 
+<code>spark://HOST:PORT</code>,  &#x7528;&#x4E8E; spark slave &#x8FDB;&#x884C;&#x8FDE;&#x63A5;&#xFF0C;&#x6B64;&#x5904;&#x5E94;&#x8BE5;&#x662F;
+<code>spark://host-0:7077</code>&#x3002;master &#x7684;WEB UI &#x5730;&#x5740;&#x5219;&#x4E3A; <code>http://host-0:8080</code>&#x3002;</p>
+<p>&#x901A;&#x8FC7; ssh &#x5728; host-1, host-2 &#x4E0A;&#x542F;&#x52A8; spark slave.</p>
+<pre><code>root@host-0:/home/spark# ssh root@host-1 /home/spark/sbin/start-slave.sh spark://host-0:7077
+root@host-0:/home/spark# ssh root@host-2 /home/spark/sbin/start-slave.sh spark://host-0:7077
+</code></pre><p><strong> &#x6CE8;&#x610F; </strong></p>
+<p>sbin &#x76EE;&#x5F55;&#x4E0B;&#x6709;&#x4E24;&#x4E2A;Docklet &#x63D0;&#x4F9B;&#x7684;&#x811A;&#x672C;, &#x5176;&#x4E2D; <code>dl_start_spark.sh</code> &#x53EF;&#x4EE5;&#x81EA;&#x52A8;&#x542F;&#x52A8;
+spark &#x96C6;&#x7FA4;, host-0 &#x4E3A; master, &#x6240;&#x6709;&#x8282;&#x70B9;&#x7686;&#x4E3A; slave. <code>dl_stop_spark.sh</code>
+&#x81EA;&#x52A8;&#x505C;&#x6B62;&#x5F53;&#x524D;&#x7684;spark &#x96C6;&#x7FA4;&#x3002;</p>
+<p>&#x8FD0;&#x884C;&#x4E00;&#x4E2A;&#x793A;&#x4F8B;</p>
+<pre><code>root@host-0:/home/spark# ./bin/spark-submit --master spark://host-0:7077 examples/src/main/python/pi.py 10
+</code></pre><h3 id="web-ui">WEB UI</h3>
+<p>&#x5DE6;&#x8FB9;&#x680F;&#x8FDB;&#x5165;Docklet <strong> Config </strong> &#x754C;&#x9762;, &#x914D;&#x7F6E;&#x4ECE;&#x6D4F;&#x89C8;&#x5668;&#x91CC;&#x8BBF;&#x95EE; Spark WEB UI</p>
+<p>&#x5047;&#x5B9A; host-0 &#x7684;IP&#x5730;&#x5740;&#x4E3A; 172.16.0.99</p>
+<p>&#x5219;&#x914D;&#x7F6E; <strong> Service </strong> </p>
+<p>&#x8BBE;&#x7F6E; ip : 172.16.0.99, port : 8080</p>
+<p>&#x70B9;&#x51FB; <strong> Enable </strong> &#x540E;, &#x5373;&#x53EF;&#x901A;&#x8FC7;&#x4E0A;&#x65B9; URL</p>
+<p><code>http://portal/_web/robin/note</code></p>
+<p>&#x8BBF;&#x95EE; Spark &#x7684; WEB UI</p>
+<p>&#x53EF;&#x770B;&#x5230;&#x8BE5;Spark Cluster&#x7684;Workers, &#x4EE5;&#x53CA;&#x8FD0;&#x884C;&#x7684;&#x4F5C;&#x4E1A;&#x60C5;&#x51B5;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="mpi.html" class="navigation navigation-prev " aria-label="Previous page: MPI">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="latex.html" class="navigation navigation-next " aria-label="Next page: LaTeX">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Spark","level":"1.6.5","depth":2,"next":{"title":"LaTeX","level":"1.6.6","depth":2,"path":"software/latex.md","ref":"software/latex.md","articles":[]},"previous":{"title":"MPI","level":"1.6.4","depth":2,"path":"software/mpi.md","ref":"software/mpi.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"software/spark.md","mtime":"2017-06-03T09:04:46.296Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-06-03T09:17:41.937Z"},"basePath":"..","book":{"language":"zh"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-language-picker/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

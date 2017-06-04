@@ -1,0 +1,924 @@
+
+<!DOCTYPE HTML>
+<html lang="zh" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>终端操作 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-language-picker/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="notebook.html" />
+    
+    
+    <link rel="prev" href="edit.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../intro/">
+            
+                <a href="../intro/">
+            
+                    
+                    Docklet 简介
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../intro/what.html">
+            
+                <a href="../intro/what.html">
+            
+                    
+                    什么是 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../intro/why.html">
+            
+                <a href="../intro/why.html">
+            
+                    
+                    为什么要用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../intro/how.html">
+            
+                <a href="../intro/how.html">
+            
+                    
+                    如何使用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../concepts/">
+            
+                <a href="../concepts/">
+            
+                    
+                    基本概念
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../concepts/workspace.html">
+            
+                <a href="../concepts/workspace.html">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../concepts/vcluster.html">
+            
+                <a href="../concepts/vcluster.html">
+            
+                    
+                    虚拟集群
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../concepts/image.html">
+            
+                <a href="../concepts/image.html">
+            
+                    
+                    镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../concepts/service.html">
+            
+                <a href="../concepts/service.html">
+            
+                    
+                    服务
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../concepts/nfs.html">
+            
+                <a href="../concepts/nfs.html">
+            
+                    
+                    数据区
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../portal/">
+            
+                <a href="../portal/">
+            
+                    
+                    门户系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../portal/dashboard.html">
+            
+                <a href="../portal/dashboard.html">
+            
+                    
+                    面板
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../portal/config.html">
+            
+                <a href="../portal/config.html">
+            
+                    
+                    配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../portal/status.html">
+            
+                <a href="../portal/status.html">
+            
+                    
+                    状态
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../portal/hosts.html">
+            
+                <a href="../portal/hosts.html">
+            
+                    
+                    主机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/users.html">
+            
+                <a href="../portal/users.html">
+            
+                    
+                    用户
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../portal/admin.html">
+            
+                <a href="../portal/admin.html">
+            
+                    
+                    管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="data.html">
+            
+                <a href="data.html">
+            
+                    
+                    数据管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="edit.html">
+            
+                <a href="edit.html">
+            
+                    
+                    文件编辑
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.3" data-path="terminal.html">
+            
+                <a href="terminal.html">
+            
+                    
+                    终端操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="notebook.html">
+            
+                <a href="notebook.html">
+            
+                    
+                    交互编程
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../software/">
+            
+                <a href="../software/">
+            
+                    
+                    在终端中开发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../software/list.html">
+            
+                <a href="../software/list.html">
+            
+                    
+                    安装的软件包列表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../software/c.html">
+            
+                <a href="../software/c.html">
+            
+                    
+                    C/C++
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../software/java.html">
+            
+                <a href="../software/java.html">
+            
+                    
+                    Java
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../software/mpi.html">
+            
+                <a href="../software/mpi.html">
+            
+                    
+                    MPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../software/spark.html">
+            
+                <a href="../software/spark.html">
+            
+                    
+                    Spark
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../software/latex.html">
+            
+                <a href="../software/latex.html">
+            
+                    
+                    LaTeX
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../notebook/">
+            
+                <a href="../notebook/">
+            
+                    
+                    科学计算与数据处理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../notebook/python.html">
+            
+                <a href="../notebook/python.html">
+            
+                    
+                    Python 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="../notebook/r.html">
+            
+                <a href="../notebook/r.html">
+            
+                    
+                    R 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="../notebook/nb.html">
+            
+                <a href="../notebook/nb.html">
+            
+                    
+                    使用Notebook
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="../notebook/gallery.html">
+            
+                <a href="../notebook/gallery.html">
+            
+                    
+                    各种样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="../notebook/beauty.html">
+            
+                <a href="../notebook/beauty.html">
+            
+                    
+                    python数据分析样例
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="../notebook/beauty.html">
+            
+                <a href="../notebook/beauty.html">
+            
+                    
+                    用Python分析《美女与野兽》
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.2" data-path="../notebook/balancing-reactions.html">
+            
+                <a href="../notebook/balancing-reactions.html">
+            
+                    
+                    配平化学方程式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="../notebook/matrix-exponential.html">
+            
+                <a href="../notebook/matrix-exponential.html">
+            
+                    
+                    矩阵指数
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="../notebook/time-series-analysis.html">
+            
+                <a href="../notebook/time-series-analysis.html">
+            
+                    
+                    时间序列分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="../notebook/docklet-bigdata-r.html">
+            
+                <a href="../notebook/docklet-bigdata-r.html">
+            
+                    
+                    R数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="../notebook/docklet-bigdata-spark.md">
+            
+                <span>
+            
+                    
+                    spark大数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../billing/">
+            
+                <a href="../billing/">
+            
+                    
+                    豆与计费系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../billing/beans.html">
+            
+                <a href="../billing/beans.html">
+            
+                    
+                    什么是"豆"
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../billing/billing.html">
+            
+                <a href="../billing/billing.html">
+            
+                    
+                    计费系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../billing/getBeans.html">
+            
+                <a href="../billing/getBeans.html">
+            
+                    
+                    如何获得豆
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >终端操作</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="&#x7EC8;&#x7AEF;&#x64CD;&#x4F5C;">&#x7EC8;&#x7AEF;&#x64CD;&#x4F5C;</h2>
+<p>&#x7EC8;&#x7AEF;(Terminal) &#x64CD;&#x4F5C;&#x5BF9;&#x4E8E;&#x5F88;&#x591A;&#x5F00;&#x53D1;&#x8005;&#x6765;&#x8BF4;&#x662F;&#x5FC5;&#x9700;&#x7684;&#xFF0C;
+&#x5728;&#x7EC8;&#x7AEF;&#x4E0B;&#x51E0;&#x4E4E;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x6240;&#x6709;&#x7684;&#x7CFB;&#x7EDF;&#x7BA1;&#x7406;&#x3001;&#x5F00;&#x53D1;&#x8C03;&#x8BD5;&#x3001;&#x8FD0;&#x884C;&#x5206;&#x6790;&#x4EFB;&#x52A1;&#x3002;</p>
+<p>&#x5728;Jupyter Notebook&#x5DE5;&#x4F5C;&#x9762;&#x677F;&#x4E2D;&#xFF0C;
+&#x70B9;&#x51FB; <strong>New</strong> - <strong>Terminal</strong> &#x53EF;&#x4EE5;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;Terminal&#x5E76;&#x8FDB;&#x5165;&#x5176;&#x4E2D;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#xFF0C;
+&#x5982;&#x8C03;&#x7528; vi &#x7F16;&#x8F91;&#x6587;&#x4EF6;&#xFF0C;&#x8FD0;&#x884C;&#x7A0B;&#x5E8F;&#x7B49;&#x3002;</p>
+<p>Jupyter Notebook&#x7684;WEB Terminal&#x6709;&#x4E2A;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x7279;&#x70B9;&#xFF1A;&#x53EF;&#x4EE5;&#x5728;&#x540E;&#x53F0;&#x8FD0;&#x884C;&#x3002;
+&#x5373;&#x4F7F;&#x7528;&#x6237;&#x5728;&#x6D4F;&#x89C8;&#x5668;&#x4E2D;&#x5173;&#x95ED;&#x4E86; Terminal &#x9875;&#x9762;&#xFF0C;&#x5176;&#x4ECD;&#x7136;&#x5728;&#x540E;&#x53F0;&#x8FD0;&#x884C;&#x3002;
+&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x5728; Jupyter Notebook&#x7684;&#x5DE5;&#x4F5C;&#x9762;&#x677F; - <strong>Running</strong> - <strong>Terminals</strong>
+&#x4E2D;&#x627E;&#x5230;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x7684; Terminal &#xFF0C;&#x70B9;&#x51FB;&#x8FDB;&#x5165;&#x5176;&#x4E2D;&#xFF0C;&#x6062;&#x590D;&#x5DE5;&#x4F5C;&#x573A;&#x666F;&#x3002;
+&#x8FD9;&#x5BF9;&#x4E8E;&#x957F;&#x8FD0;&#x884C;&#x7684;&#x4F5C;&#x4E1A;&#x5F88;&#x6709;&#x610F;&#x4E49;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x957F;&#x65F6;&#x95F4;&#x6CA1;&#x6709;&#x64CD;&#x4F5C; Terminal&#xFF0C;&#x53EF;&#x80FD;&#x4F1A;&#x51FA;&#x73B0;&#x64CD;&#x4F5C;&#x65E0;&#x53CD;&#x5E94;&#x73B0;&#x8C61;&#xFF0C;
+&#x5237;&#x65B0;&#x9875;&#x9762;&#x901A;&#x5E38;&#x5373;&#x53EF;&#x6FC0;&#x6D3B;&#x3002; </p>
+<p>&#x5982;&#x679C;&#x8981;&#x6267;&#x884C;&#x591A;&#x4E2A;&#x4EFB;&#x52A1;&#xFF0C;&#x53EF;&#x4EE5;&#x6253;&#x5F00;&#x591A;&#x4E2A; Terminal&#xFF0C;
+&#x4E5F;&#x53EF;&#x4EE5;&#x5728;&#x4E00;&#x4E2A; Terminal &#x4E2D;&#x4F7F;&#x7528; <a href="https://tmux.github.io" target="_blank">tmux</a> &#x3002;</p>
+<p><strong>&#x8865;&#x5145;</strong>&#xFF1A;
+&#x5BF9;&#x4E8E; Chrome &#x6D4F;&#x89C8;&#x5668;&#x7684;&#x7528;&#x6237;&#xFF0C;&#x7EC8;&#x7AEF;&#x7684;&#x5B57;&#x4F53;&#x53EF;&#x80FD;&#x4E0D;&#x662F;&#x7B49;&#x5BBD;&#x7684;&#xFF0C;&#x5BFC;&#x81F4;&#x7EC8;&#x7AEF;&#x7684;&#x5BBD;&#x5EA6;
+&#x4F1A;&#x5E38;&#x5E38;&#x53D8;&#x5316;&#xFF0C;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8BBE;&#x7F6E; Chrome &#x7684;&#x5B57;&#x4F53;&#x6765;&#x4FEE;&#x590D;&#x8FD9;&#x4E00;&#x95EE;&#x9898;&#x3002;&#x5177;&#x4F53;&#x505A;&#x6CD5;&#x662F;&#xFF1A; Chrome -&gt; 
+&#x8BBE;&#x7F6E; -&gt; &#x663E;&#x793A;&#x9AD8;&#x7EA7;&#x8BBE;&#x7F6E; -&gt; &#x81EA;&#x5B9A;&#x4E49;&#x5B57;&#x4F53; &#x4E2D;&#xFF0C;&#x5C06;<strong>&#x5BBD;&#x5EA6;&#x56FA;&#x5B9A;&#x7684;&#x5B57;&#x4F53;</strong>&#x4FEE;&#x6539;&#x4E3A;&#x67D0;&#x79CD;&#x7B49;&#x5BBD;&#x5B57;&#x4F53;&#xFF0C;
+&#x6BD4;&#x5982; Droid Sans Mono.</p>
+<h3 id="&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305;">&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305;</h3>
+<p>&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x5728;WEB Terminal&#x4E2D;&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305;&#x3002;&#x57FA;&#x7840;&#x7CFB;&#x7EDF;&#x662F;Ubuntu&#xFF0C;&#x7528;&#x6237;&#x4F7F;&#x7528; <code>apt-get</code>
+&#x547D;&#x4EE4;&#x8FDB;&#x884C;&#x5B89;&#x88C5;&#x3002;</p>
+<pre><code>$ apt-get install clang
+</code></pre><p>&#x5982;&#x679C;&#x7528;&#x6237;&#x5E0C;&#x671B;&#x672A;&#x6765;&#x5C06;&#x5DE5;&#x4F5C;&#x533A;&#x4FDD;&#x5B58;&#x4E3A;&#x955C;&#x50CF;&#xFF0C;&#x5EFA;&#x8BAE;&#x6E05;&#x9664; <code>apt-get</code> &#x7684;&#x7F13;&#x5B58;&#x4EE5;&#x51CF;&#x5C11;&#x7A7A;&#x95F4;
+&#x5360;&#x7528;:</p>
+<pre><code>$ apt-get clean
+</code></pre><p>&#x6709;&#x5173;<code>apt-get</code>&#xFF0C;&#x53EF;&#x53C2;&#x9605; 
+<a href="https://help.ubuntu.com/community/AptGet/Howto" target="_blank">&#x5E2E;&#x52A9;&#x6587;&#x6863;</a>&#x3002;</p>
+<h3 id="&#x4F7F;&#x7528;&#x672C;&#x5730;&#x7EC8;&#x7AEF;&#x8BBF;&#x95EE;">&#x4F7F;&#x7528;&#x672C;&#x5730;&#x7EC8;&#x7AEF;&#x8BBF;&#x95EE;</h3>
+<p>&#x7528;&#x6237;&#x6709;&#x65F6;&#x5E0C;&#x671B;&#x7528;&#x672C;&#x5730;&#x8BA1;&#x7B97;&#x673A;&#x4E0A;&#x7684;&#x7EC8;&#x7AEF;&#x901A;&#x8FC7;ssh&#x8BBF;&#x95EE;docklet vnode. &#x7531;&#x4E8E;docklet
+vnode &#x5728;&#x9632;&#x706B;&#x5899;&#x540E;&#x9762;&#xFF0C;&#x56E0;&#x6B64;&#x7528;&#x6237;&#x4E0D;&#x80FD;&#x76F4;&#x63A5;&#x7528;&#x81EA;&#x5DF1;&#x7684;&#x8BA1;&#x7B97;&#x673A;&#x8BBF;&#x95EE;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x501F;&#x52A9;&#x4E8E;&#x4E00;&#x4E2A;
+&#x516C;&#x5171;&#x7684;ssh&#x670D;&#x52A1;&#x5668;&#x5B9E;&#x73B0;.</p>
+<p>&#x5047;&#x5B9A;&#x6709;&#x4E00;&#x4E2A;&#x516C;&#x5171;ssh&#x670D;&#x52A1;&#x5668;, &#x5730;&#x5740;&#x4E3A; <strong>pub.ssh</strong>, &#x7528;&#x6237;&#x5728;&#x8BE5;&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x6709;&#x4E00;&#x4E2A;&#x5E10;&#x53F7;
+<strong>myname</strong> .</p>
+<p>&#x7528;&#x6237;&#x5728;docklet vnode&#x91CC;&#x6267;&#x884C;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;:</p>
+<pre><code>ssh -fNR 2222:localhost:22 myname@pub.ssh
+</code></pre><p>&#x6210;&#x529F;&#x540E;&#xFF0C;&#x6240;&#x6709;&#x8FDE;&#x63A5;&#x5230; <strong>pub.ssh</strong> &#x670D;&#x52A1;&#x5668;&#x4E0A;&#x7684; 2222 &#x7AEF;&#x53E3; &#x7684;ssh &#x8BF7;&#x6C42;&#x90FD;&#x4F1A;&#x8F6C;&#x5230;
+docklet vnode&#x7684; <strong>localhost:22</strong> &#x5730;&#x5740;.</p>
+<p>&#x5728;&#x672C;&#x5730;&#x8BA1;&#x7B97;&#x673A;&#x7684;&#x7EC8;&#x7AEF;&#x4E2D;&#x6267;&#x884C;ssh&#x547D;&#x4EE4; </p>
+<pre><code>ssh myname@pub.ssh
+</code></pre><p>&#x5728;pub.ssh&#x4E0A;&#x9762;&#x518D;&#x6267;&#x884C;ssh&#x547D;&#x4EE4;&#x8FDE;&#x63A5;&#x5230;&#x672C;&#x5730;&#x7684;2222&#x7AEF;&#x53E3;:</p>
+<pre><code>ssh root@localhost -p 2222
+</code></pre><p>&#x6B64;&#x65F6;&#x53EF;&#x80FD;&#x4F1A;&#x8981;&#x6C42;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#x3002;&#x8BE5;&#x5BC6;&#x7801;&#x662F;docklet vnode&#x4E0A;&#x7684;&#x8D26;&#x53F7;&#x5BC6;&#x7801;&#x3002;&#x53EF;&#x4EE5;&#x7528;<strong>passwd</strong>
+&#x547D;&#x4EE4;&#x4E3A;root&#x7528;&#x6237;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;&#xFF0C;&#x5373;&#x53EF;&#x767B;&#x5F55;&#x3002;</p>
+<p>&#x66F4;&#x591A;&#x5173;&#x4E8E; ssh &#x7AEF;&#x53E3;&#x8F6C;&#x53D1;&#x7684;&#x6280;&#x672F;&#xFF0C;&#x53EF;&#x7F51;&#x4E0A;&#x54A8;&#x8BE2;&#x76F8;&#x5173;&#x8D44;&#x6599;&#x3002;</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="edit.html" class="navigation navigation-prev " aria-label="Previous page: 文件编辑">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="notebook.html" class="navigation navigation-next " aria-label="Next page: 交互编程">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"终端操作","level":"1.5.3","depth":2,"next":{"title":"交互编程","level":"1.5.4","depth":2,"path":"workspace/notebook.md","ref":"workspace/notebook.md","articles":[]},"previous":{"title":"文件编辑","level":"1.5.2","depth":2,"path":"workspace/edit.md","ref":"workspace/edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"workspace/terminal.md","mtime":"2017-06-03T09:04:46.296Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-06-03T09:17:41.937Z"},"basePath":"..","book":{"language":"zh"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-language-picker/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

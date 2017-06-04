@@ -1,0 +1,1393 @@
+
+<!DOCTYPE HTML>
+<html lang="zh" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>配平化学方程式 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-language-picker/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="matrix-exponential.html" />
+    
+    
+    <link rel="prev" href="beauty.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="輸入並搜尋" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../intro/">
+            
+                <a href="../intro/">
+            
+                    
+                    Docklet 简介
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../intro/what.html">
+            
+                <a href="../intro/what.html">
+            
+                    
+                    什么是 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.2" data-path="../intro/why.html">
+            
+                <a href="../intro/why.html">
+            
+                    
+                    为什么要用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.3" data-path="../intro/how.html">
+            
+                <a href="../intro/how.html">
+            
+                    
+                    如何使用 Docklet
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../concepts/">
+            
+                <a href="../concepts/">
+            
+                    
+                    基本概念
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../concepts/workspace.html">
+            
+                <a href="../concepts/workspace.html">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../concepts/vcluster.html">
+            
+                <a href="../concepts/vcluster.html">
+            
+                    
+                    虚拟集群
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../concepts/image.html">
+            
+                <a href="../concepts/image.html">
+            
+                    
+                    镜像
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../concepts/service.html">
+            
+                <a href="../concepts/service.html">
+            
+                    
+                    服务
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../concepts/nfs.html">
+            
+                <a href="../concepts/nfs.html">
+            
+                    
+                    数据区
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../portal/">
+            
+                <a href="../portal/">
+            
+                    
+                    门户系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../portal/dashboard.html">
+            
+                <a href="../portal/dashboard.html">
+            
+                    
+                    面板
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../portal/config.html">
+            
+                <a href="../portal/config.html">
+            
+                    
+                    配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../portal/status.html">
+            
+                <a href="../portal/status.html">
+            
+                    
+                    状态
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../portal/hosts.html">
+            
+                <a href="../portal/hosts.html">
+            
+                    
+                    主机
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/users.html">
+            
+                <a href="../portal/users.html">
+            
+                    
+                    用户
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../portal/admin.html">
+            
+                <a href="../portal/admin.html">
+            
+                    
+                    管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../workspace/">
+            
+                <a href="../workspace/">
+            
+                    
+                    工作区
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../workspace/data.html">
+            
+                <a href="../workspace/data.html">
+            
+                    
+                    数据管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../workspace/edit.html">
+            
+                <a href="../workspace/edit.html">
+            
+                    
+                    文件编辑
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../workspace/terminal.html">
+            
+                <a href="../workspace/terminal.html">
+            
+                    
+                    终端操作
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../workspace/notebook.html">
+            
+                <a href="../workspace/notebook.html">
+            
+                    
+                    交互编程
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="../software/">
+            
+                <a href="../software/">
+            
+                    
+                    在终端中开发
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="../software/list.html">
+            
+                <a href="../software/list.html">
+            
+                    
+                    安装的软件包列表
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="../software/c.html">
+            
+                <a href="../software/c.html">
+            
+                    
+                    C/C++
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="../software/java.html">
+            
+                <a href="../software/java.html">
+            
+                    
+                    Java
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="../software/mpi.html">
+            
+                <a href="../software/mpi.html">
+            
+                    
+                    MPI
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="../software/spark.html">
+            
+                <a href="../software/spark.html">
+            
+                    
+                    Spark
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.6" data-path="../software/latex.html">
+            
+                <a href="../software/latex.html">
+            
+                    
+                    LaTeX
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    科学计算与数据处理
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="python.html">
+            
+                <a href="python.html">
+            
+                    
+                    Python 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.2" data-path="r.html">
+            
+                <a href="r.html">
+            
+                    
+                    R 软件包
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.3" data-path="nb.html">
+            
+                <a href="nb.html">
+            
+                    
+                    使用Notebook
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.4" data-path="gallery.html">
+            
+                <a href="gallery.html">
+            
+                    
+                    各种样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5" data-path="beauty.html">
+            
+                <a href="beauty.html">
+            
+                    
+                    python数据分析样例
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.5.1" data-path="beauty.html">
+            
+                <a href="beauty.html">
+            
+                    
+                    用Python分析《美女与野兽》
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.7.5.2" data-path="balancing-reactions.html">
+            
+                <a href="balancing-reactions.html">
+            
+                    
+                    配平化学方程式
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.3" data-path="matrix-exponential.html">
+            
+                <a href="matrix-exponential.html">
+            
+                    
+                    矩阵指数
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.5.4" data-path="time-series-analysis.html">
+            
+                <a href="time-series-analysis.html">
+            
+                    
+                    时间序列分析
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.6" data-path="docklet-bigdata-r.html">
+            
+                <a href="docklet-bigdata-r.html">
+            
+                    
+                    R数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7.7" data-path="docklet-bigdata-spark.md">
+            
+                <span>
+            
+                    
+                    spark大数据分析样例
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../billing/">
+            
+                <a href="../billing/">
+            
+                    
+                    豆与计费系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../billing/beans.html">
+            
+                <a href="../billing/beans.html">
+            
+                    
+                    什么是"豆"
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.2" data-path="../billing/billing.html">
+            
+                <a href="../billing/billing.html">
+            
+                    
+                    计费系统
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8.3" data-path="../billing/getBeans.html">
+            
+                <a href="../billing/getBeans.html">
+            
+                    
+                    如何获得豆
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本書使用 GitBook 釋出
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >配平化学方程式</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <html>
+<head><meta charset="utf-8">
+<title>BalancingReactions</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<style type="text/css">
+    .highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
+    </style>
+
+
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+body {
+  overflow: visible;
+  padding: 8px;
+}
+
+div#notebook {
+  overflow: visible;
+  border-top: none;
+}
+
+@media print {
+  div.cell {
+    display: block;
+    page-break-inside: avoid;
+  } 
+  div.output_wrapper { 
+    display: block;
+    page-break-inside: avoid; 
+  }
+  div.output { 
+    display: block;
+    page-break-inside: avoid; 
+  }
+}
+</style>
+
+<!-- Custom stylesheet, it must be in the same directory as the html file -->
+<link rel="stylesheet" href="custom.css">
+
+</head>
+<body>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#x914D;&#x5E73;&#x5316;&#x5B66;&#x65B9;&#x7A0B;&#x5F0F;">&#x914D;&#x5E73;&#x5316;&#x5B66;&#x65B9;&#x7A0B;&#x5F0F;<a class="anchor-link" href="#&#x914D;&#x5E73;&#x5316;&#x5B66;&#x65B9;&#x7A0B;&#x5F0F;">&#xB6;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h6 id="The-latest-version-of-this-IPython-notebook-is-available-at-http://github.com/jckantor/CBE20255--for-noncommercial-use-under-terms-of-the-Creative-Commons-Attribution-Noncommericial-ShareAlike-License.">The latest version of this IPython notebook is available at <a href="http://github.com/jckantor/CBE20255" target="_blank">http://github.com/jckantor/CBE20255</a>  for noncommercial use under terms of the <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">Creative Commons Attribution Noncommericial ShareAlike License</a>.<a class="anchor-link" href="#The-latest-version-of-this-IPython-notebook-is-available-at-http://github.com/jckantor/CBE20255--for-noncommercial-use-under-terms-of-the-Creative-Commons-Attribution-Noncommericial-ShareAlike-License.">&#xB6;</a></h6><p>J.C. Kantor (Kantor.1@nd.edu)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="&#x4F8B;1--&#x7532;&#x70F7;&#x71C3;&#x70E7;">&#x4F8B;1  &#x7532;&#x70F7;&#x71C3;&#x70E7;<a class="anchor-link" href="#&#x4F8B;1--&#x7532;&#x70F7;&#x71C3;&#x70E7;">&#xB6;</a></h3><p>&#x7532;&#x70F7;(\(CH_4\)) &#x71C3;&#x70E7;&#x7684;&#x53CD;&#x5E94;&#x5982;&#x4E0B;&#xFF1A;</p>
+
+<script type="math/tex; ">CH_4 + O_2 \rightarrow CO_2 + H_2O</script>
+
+<br>
+&#x6211;&#x4EEC;&#x8981;&#x5BFB;&#x627E;&#x4E00;&#x7EC4;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x6765;&#x914D;&#x5E73;&#x8FD9;&#x4E2A;&#x53CD;&#x5E94;&#x5F0F;&#x3002;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;\(\nu_s\)&#x662F;&#x4E00;&#x7EC4;&#x548C;&#x7269;&#x8D28;s&#x5BF9;&#x5E94;&#x7684;&#x7CFB;&#x6570;&#xFF0C;&#x4F7F;&#x5F97;&#x53CD;&#x5E94;&#x5F0F;&#x53EF;&#x4EE5;&#x5199;&#x6210;&#x4E0B;&#x9762;&#x7684;&#x5F62;&#x5F0F;&#xFF1A;
+
+<script type="math/tex; ">\nu_{CH_4}CH_4 + \nu_{O_2}O_2 + \nu_{CO_2}CO_2 + \nu_{H_2O}H_2O</script>
+
+<br>&#x8D1F;&#x5316;&#x5B66;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x5BF9;&#x5E94;&#x4E8E;&#x53CD;&#x5E94;&#x7269;&#xFF0C;&#x6B63;&#x5316;&#x5B66;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x5BF9;&#x5E94;&#x4E8E;&#x8BE5;&#x53CD;&#x5E94;&#x7684;&#x4EA7;&#x7269;&#x3002;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x5E94;&#x4F7F;&#x5F97;&#x53CD;&#x5E94;&#x524D;&#x540E;&#x5404;&#x7269;&#x8D28;&#x4E2D;&#x539F;&#x5B50;&#x5B88;&#x6052;&#x3002;&#x5982;&#x679C;&#x53CD;&#x5E94;&#x4E2D;&#x6709;&#x5E26;&#x7535;&#x7269;&#x8D28;&#xFF0C;&#x8FD8;&#x5E94;&#x4FDD;&#x8BC1;&#x7535;&#x8377;&#x5B88;&#x6052;&#x3002;
+<br>&#x8BA1;&#x7B97;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <a href="http://sympy.org/en/index.html" target="_blank">SymPy</a> &#x5305;
+&#x53EF;&#x4EE5;&#x4E3A;&#x53C2;&#x4E0E;&#x53CD;&#x5E94;&#x7684;&#x6BCF;&#x79CD;&#x7269;&#x8D28;&#x8BBE;&#x4E00;&#x4E2A;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#xFF0C;&#x5E76;&#x7528;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x8868;&#x793A;&#x51FA;&#x539F;&#x5B50;&#x5B88;&#x6052;&#x6761;&#x4EF6;&#x3002;
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="kn">import</span> <span class="nn">sympy</span>
+
+<span class="n">sympy</span><span class="o">.</span><span class="n">var</span><span class="p">([</span><span class="s1">&apos;vCH4&apos;</span><span class="p">,</span> <span class="s1">&apos;vO2&apos;</span><span class="p">,</span> <span class="s1">&apos;vCO2&apos;</span><span class="p">,</span> <span class="s1">&apos;vH2O&apos;</span><span class="p">])</span>
+
+<span class="n">atomBalances</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vCH4</span> <span class="o">+</span> <span class="n">vCO2</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>             <span class="c1"># Carbon &#x78B3;&#x539F;&#x5B50;</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">vCH4</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">vH2O</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>         <span class="c1"># Hydrogen &#x6C22;&#x539F;&#x5B50;</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">vO2</span> <span class="o">+</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">vCO2</span> <span class="o">+</span> <span class="n">vH2O</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Oxygen &#x6C27;&#x539F;&#x5B50;</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">eqn</span> <span class="ow">in</span> <span class="n">atomBalances</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">eqn</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>vCH4 + vCO2 == 0
+4*vCH4 + 2*vH2O == 0
+2*vCO2 + vH2O + 2*vO2 == 0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>&#x8FD8;&#x6709;&#x4E00;&#x79CD;&#x72EC;&#x7279;&#x7684;&#x65B9;&#x6CD5;&#xFF1A;&#x7ED9;&#x53CD;&#x5E94;&#x6307;&#x5B9A;&#x4E00;&#x4E2A;<em>basis</em>. basis&#x662F;&#x4E00;&#x4E2A;&#x989D;&#x5916;&#x7684;&#x65B9;&#x7A0B;&#xFF0C;&#x7528;&#x6765;&#x6307;&#x5B9A;&#x5176;&#x4E2D;&#x4E00;&#x79CD;&#x7269;&#x8D28;&#x7684;&#x5316;&#x5B66;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x3002;&#x6211;&#x4EEC;&#x4E0D;&#x59A8;&#x5C06;&#x7532;&#x70F7;&#x7684;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x8BBE;&#x4E3A;-1</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="n">basis</span> <span class="o">=</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vCH4</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">eqn</span> <span class="ow">in</span> <span class="n">atomBalances</span> <span class="o">+</span> <span class="n">basis</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">eqn</span><span class="p">)</span>
+
+<span class="n">sympy</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">atomBalances</span> <span class="o">+</span> <span class="n">basis</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>vCH4 + vCO2 == 0
+4*vCH4 + 2*vH2O == 0
+2*vCO2 + vH2O + 2*vO2 == 0
+vCH4 == -1
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{vH2O: 2, vCO2: 1, vO2: -2, vCH4: -1}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="&#x4F8B;2--&#x4E00;&#x4E2A;&#x81EA;&#x71C3;&#x53CD;&#x5E94;">&#x4F8B;2  &#x4E00;&#x4E2A;&#x81EA;&#x71C3;&#x53CD;&#x5E94;<a class="anchor-link" href="#&#x4F8B;2--&#x4E00;&#x4E2A;&#x81EA;&#x71C3;&#x53CD;&#x5E94;">&#xB6;</a></h3><p><div style="float: right; margin: 10px; width: 160px; font-size: 80%; line-height: 120%;">
+
+</div>
+&#x81EA;&#x71C3;&#x662F;&#x4E00;&#x7C7B;&#x81EA;&#x53D1;&#x4EA7;&#x751F;&#x7684;&#x71C3;&#x70E7;&#x53CD;&#x5E94;&#x3002;&#x81EA;&#x71C3;&#x63A8;&#x8FDB;&#x5668;&#x662F;&#x8FD9;&#x7C7B;&#x53CD;&#x5E94;&#x7684;&#x4E00;&#x79CD;&#x5E38;&#x89C1;&#x5E94;&#x7528;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#x662F;&#x7531;SpaceX&#x516C;&#x53F8;&#x5F00;&#x53D1;&#x7684;SuperDraco&#x5F15;&#x64CE;&#x4F7F;&#x7528;&#x7684;&#x7532;&#x57FA;&#x80BC;&#xFF08;MMH&#xFF09;&#x548C;&#x6C27;&#x5316;&#x5242;&#x56DB;&#x6C27;&#x5316;&#x4E8C;&#x6C2E;&#x7684;&#x81EA;&#x71C3;&#x53CD;&#x5E94;&#x3002;</p>
+<p><strong>&#x672A;&#x914D;&#x5E73;</strong>&#x7684;&#x53CD;&#x5E94;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;</p>
+<script type="math/tex; ">CH_6N_2 + N_2O_4 \rightarrow CO_2 + NO + H_2O</script>
+
+<p>&#x4E0B;&#x9762;&#x6211;&#x4EEC;&#x8BA1;&#x7B97;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x914D;&#x5E73;&#x53CD;&#x5E94;&#x5F0F;&#x3002;&#x8003;&#x8651;&#x5982;&#x4E0B;&#x95EE;&#x9898;&#xFF1A;&#x4E00;&#x5343;&#x514B;&#x71C3;&#x6599;&#x9700;&#x8981;&#x591A;&#x5C11;&#x6C27;&#x5316;&#x5242;&#xFF1F;</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="c1"># Identify unknown stoichiometric coefficients</span>
+<span class="n">sympy</span><span class="o">.</span><span class="n">var</span><span class="p">([</span><span class="s1">&apos;vCH6N2&apos;</span><span class="p">,</span><span class="s1">&apos;vN2O4&apos;</span><span class="p">,</span><span class="s1">&apos;vCO2&apos;</span><span class="p">,</span><span class="s1">&apos;vNO&apos;</span><span class="p">,</span><span class="s1">&apos;vH2O&apos;</span><span class="p">])</span>
+
+<span class="c1"># Atom balances</span>
+<span class="n">eqns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">vCH6N2</span> <span class="o">+</span> <span class="n">vCO2</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>                <span class="c1"># Carbon</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">vCH6N2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">vH2O</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>              <span class="c1"># Hydrogen</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">vN2O4</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">vCO2</span> <span class="o">+</span> <span class="n">vNO</span> <span class="o">+</span> <span class="n">vH2O</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>  <span class="c1"># Oxygen</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">vN2O4</span> <span class="o">+</span> <span class="n">vNO</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>                   <span class="c1"># Nitrogen</span>
+<span class="p">]</span>
+
+<span class="c1"># Basis</span>
+<span class="n">eqns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vCH6N2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">eqn</span> <span class="ow">in</span> <span class="n">eqns</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">eqn</span><span class="p">)</span>
+
+<span class="n">soln</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">eqns</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stoichiometric Coefficients: &quot;</span><span class="p">,</span> <span class="n">soln</span><span class="p">)</span>
+
+<span class="n">mwN2O4</span> <span class="o">=</span> <span class="mf">92.011</span>
+<span class="n">mwCH6N2</span> <span class="o">=</span> <span class="mf">46.07</span>
+
+<span class="n">nCH6N2</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">mwCH6N2</span>                         <span class="c1"># kg-mol of MMH</span>
+<span class="n">nN2O4</span> <span class="o">=</span>  <span class="p">(</span><span class="n">soln</span><span class="p">[</span><span class="n">vN2O4</span><span class="p">]</span><span class="o">/</span><span class="n">soln</span><span class="p">[</span><span class="n">vCH6N2</span><span class="p">])</span><span class="o">*</span><span class="n">nCH6N2</span>   <span class="c1"># kg-mol of N2O4</span>
+<span class="n">mN2O4</span> <span class="o">=</span> <span class="n">mwN2O4</span><span class="o">*</span><span class="n">nN2O4</span>                         <span class="c1"># kg of N2O4</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">{0:7.3f} kilograms of N2O4 required per kilogram of CH6N2&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mN2O4</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>vCH6N2 + vCO2 == 0
+6*vCH6N2 + 2*vH2O == 0
+2*vCO2 + vH2O + 4*vN2O4 + vNO == 0
+2*vN2O4 + vNO == 0
+vCH6N2 == -1
+
+Stoichiometric Coefficients:  {vN2O4: -5/2, vH2O: 3, vCH6N2: -1, vCO2: 1, vNO: 5}
+
+  4.993 kilograms of N2O4 required per kilogram of CH6N2
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="&#x4F8B;3--&#x4E00;&#x4E2A;&#x6C34;&#x6EB6;&#x6DB2;&#x4E2D;&#x6709;&#x7535;&#x8377;&#x8F6C;&#x79FB;&#x7684;&#x53CD;&#x5E94;">&#x4F8B;3  &#x4E00;&#x4E2A;&#x6C34;&#x6EB6;&#x6DB2;&#x4E2D;&#x6709;&#x7535;&#x8377;&#x8F6C;&#x79FB;&#x7684;&#x53CD;&#x5E94;<a class="anchor-link" href="#&#x4F8B;3--&#x4E00;&#x4E2A;&#x6C34;&#x6EB6;&#x6DB2;&#x4E2D;&#x6709;&#x7535;&#x8377;&#x8F6C;&#x79FB;&#x7684;&#x53CD;&#x5E94;">&#xB6;</a></h3>
+
+<br>&#x91D1;&#x5C5E;&#x9549;\(Cd\)&#x6EB6;&#x89E3;&#x4E8E;&#x6D53;&#x785D;&#x9178;&#xFF0C;&#x751F;&#x6210;\(Cd^{2+}\)&#x79BB;&#x5B50;&#x548C;&#x4E00;&#x6C27;&#x5316;&#x6C2E;\(NO\).
+<br>&#x53CD;&#x5E94;&#x5F0F;&#x5982;&#x4E0B;&#xFF1A;
+<br>
+<script type="math/tex; ">Cd + NO_3^- \longrightarrow Cd^{2+} + NO</script>
+
+<br>
+&#x89C2;&#x5BDF;&#x4E24;&#x4FA7;&#x7684;&#x7535;&#x8377;&#xFF0C;&#x8FD9;&#x4E2A;&#x53CD;&#x5E94;&#x5F0F;&#x663E;&#x7136;&#x65E0;&#x6CD5;&#x76F4;&#x63A5;&#x914D;&#x5E73;&#x3002;
+<br>&#x5BF9;&#x4E8E;&#x8FD9;&#x7C7B;&#x53CD;&#x5E94;&#xFF0C;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x8003;&#x8651;&#x6C34;&#x548C;&#x6EB6;&#x6DB2;&#x4E2D;&#x7684;&#x79BB;&#x5B50;&#x3002;&#x914D;&#x5E73;&#x53CD;&#x5E94;&#x5F0F;&#xFF0C;&#x6211;&#x4EEC;&#x8003;&#x8651;&#x4E0B;&#x9762;&#x7684;8&#x79CD;&#x7269;&#x8D28;&#xFF1A;
+
+<br>
+<script type="math/tex; ">Cd,\ H_2O,\ HNO_3,\ NO,\ Cd^{2+},\ H^+,\ OH^-,\ NO_3^-</script>
+<br>
+&#x8BBE;8&#x4E2A;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x3002;&#x63A5;&#x4E0B;&#x6765;&#x5199;&#x51FA;&#x539F;&#x5B50;&#x5B88;&#x6052;&#x7684;&#x7EA6;&#x675F;&#x6761;&#x4EF6;&#xFF08;4&#x4E2A;&#xFF0C;&#x5BF9;&#x5E94;4&#x79CD;&#x539F;&#x5B50;&#xFF09;&#xFF0C;&#x7535;&#x8377;&#x5B88;&#x6052;&#x7EA6;&#x675F;&#x6761;&#x4EF6;&#xFF08;1&#x4E2A;&#xFF09;&#xFF0C;&#x5E76;&#x5C06;\(Cd\)&#x7684;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x6307;&#x5B9A;&#x4E3A;1&#xFF08;&#x6307;&#x5B9A;basis&#xFF0C;1&#x4E2A;&#xFF09;&#xFF1A;
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="c1"># Identify unknown stoichiometric coefficients</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">var</span><span class="p">([</span><span class="s1">&apos;vCd&apos;</span><span class="p">,</span><span class="s1">&apos;vH2O&apos;</span><span class="p">,</span><span class="s1">&apos;vHNO3&apos;</span><span class="p">,</span><span class="s1">&apos;vNO&apos;</span><span class="p">,</span><span class="s1">&apos;vCdpos2&apos;</span><span class="p">,</span><span class="s1">&apos;vHpos&apos;</span><span class="p">,</span><span class="s1">&apos;vOHneg&apos;</span><span class="p">,</span><span class="s1">&apos;vNO3neg&apos;</span><span class="p">])</span>
+
+<span class="c1"># Atom balances</span>
+<span class="n">eqns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vCd</span> <span class="o">+</span> <span class="n">vCdpos2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>                             <span class="c1"># Cadmium</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">vH2O</span> <span class="o">+</span> <span class="n">vHNO3</span> <span class="o">+</span> <span class="n">vHpos</span> <span class="o">+</span> <span class="n">vOHneg</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>           <span class="c1"># Hydrogen</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vH2O</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">vHNO3</span> <span class="o">+</span> <span class="n">vNO</span> <span class="o">+</span> <span class="n">vOHneg</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">vNO3neg</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="c1"># Oxygen</span>
+    <span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vHNO3</span>  <span class="o">+</span> <span class="n">vNO</span> <span class="o">+</span> <span class="n">vNO3neg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>                     <span class="c1"># Nitrogen</span>
+<span class="p">]</span>
+
+<span class="c1"># Charge balance</span>
+<span class="n">eqns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">vCdpos2</span> <span class="o">+</span> <span class="n">vHpos</span> <span class="o">-</span> <span class="n">vOHneg</span> <span class="o">-</span> <span class="n">vNO3neg</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># Basis</span>
+<span class="n">eqns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vCd</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">eqn</span> <span class="ow">in</span> <span class="n">eqns</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">eqn</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>vCd + vCdpos2 == 0
+2*vH2O + vHNO3 + vHpos + vOHneg == 0
+vH2O + 3*vHNO3 + vNO + 3*vNO3neg + vOHneg == 0
+vHNO3 + vNO + vNO3neg == 0
+2*vCdpos2 + vHpos - vNO3neg - vOHneg == 0
+vCd == -1
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+&#x8FD9;&#x91CC;&#xFF0C;&#x53D8;&#x91CF;&#x6570;&#x591A;&#x4E8E;&#x65B9;&#x7A0B;&#x6570;&#xFF0C;&#x56E0;&#x6B64;&#x6709;&#x4E00;&#x5B9A;&#x7684;<em>&#x81EA;&#x7531;&#x5EA6;&#xFF08;degrees of freedom&#xFF09;</em>&#x3002;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x505A;&#x51FA;&#x989D;&#x5916;&#x7684;&#x5047;&#x8BBE;&#x3002;
+<br>&#x6211;&#x4EEC;&#x5047;&#x8BBE;&#x5728;&#x6D53;&#x785D;&#x9178;&#x4E2D;&#xFF0C;&#x785D;&#x9178;&#x5B8C;&#x5168;&#x7535;&#x79BB;&#xFF0C;&#x5373;&#x6709; \(\nu_{HNO_3}=0\).
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="n">eqns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vHNO3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">sympy</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">eqns</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[5]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{vHpos: vOHneg - 8/3,
+ vCd: -1,
+ vNO: 2/3,
+ vCdpos2: 1,
+ vH2O: -vOHneg + 4/3,
+ vHNO3: 0,
+ vNO3neg: -2/3}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+&#x5176;&#x4E2D;6&#x4E2A;&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x5DF2;&#x7ECF;&#x786E;&#x5B9A;&#xFF0C;&#x4F46;&#x8FD8;&#x5B58;&#x5728;&#x6C34;&#x548C;\(\nu_{OH^-}\)&#x8BA1;&#x91CF;&#x7CFB;&#x6570;&#x7684;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x3002;&#x8003;&#x8651;&#x6C34;&#x7684;&#x7535;&#x79BB;&#xFF1A;<br>
+<script type="math/tex; ">H_2O \longrightarrow H^+ + OH^-</script>
+<br>
+&#x6211;&#x4EEC;&#x4EE4; \(\nu_{H_2O} = 0\)
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#xA0;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span class="n">sympy</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">eqns</span> <span class="o">+</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">Eq</span><span class="p">(</span><span class="n">vH2O</span><span class="p">,</span><span class="mi">0</span><span class="p">)])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{vOHneg: 4/3,
+ vHpos: -4/3,
+ vCd: -1,
+ vNO: 2/3,
+ vCdpos2: 1,
+ vH2O: 0,
+ vNO3neg: -2/3,
+ vHNO3: 0}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>&#x5230;&#x6B64;&#xFF0C;&#x7ED9;&#x51FA;&#x4E86;&#x5E73;&#x8861;&#x7684;&#x53CD;&#x5E94;&#x5F0F;&#xFF1A;</p>
+
+<script type="math/tex; ">Cd + \frac{4}{3}\,H^+ + \frac{2}{3}\,NO_3^- \longrightarrow Cd^{2+} + \frac{4}{3}\,OH^- + \frac{2}{3}\,NO</script>
+
+</div>
+</div>
+</div>
+    </div>
+  </div>
+</body>
+</html>
+
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="beauty.html" class="navigation navigation-prev " aria-label="Previous page: 用Python分析《美女与野兽》">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="matrix-exponential.html" class="navigation navigation-next " aria-label="Next page: 矩阵指数">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"配平化学方程式","level":"1.7.5.2","depth":3,"next":{"title":"矩阵指数","level":"1.7.5.3","depth":3,"path":"notebook/matrix-exponential.md","ref":"notebook/matrix-exponential.md","articles":[]},"previous":{"title":"用Python分析《美女与野兽》","level":"1.7.5.1","depth":3,"path":"notebook/beauty.md","ref":"notebook/beauty.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"notebook/balancing-reactions.md","mtime":"2017-06-03T09:04:46.288Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-06-03T09:17:41.937Z"},"basePath":"..","book":{"language":"zh"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-language-picker/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-mathjax/plugin.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
