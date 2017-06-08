@@ -111,15 +111,15 @@ class VclusterMgr(object):
         elif not self.networkmgr.has_usrgw(username):
             self.networkmgr.usrgws[username] = self.networkmgr.masterip
             self.networkmgr.dump_usrgw(username)
-        [status, result] = self.networkmgr.acquire_userips_cidr(username, clustersize)
+        # [status, result] = self.networkmgr.acquire_userips_cidr(username, clustersize)
         gateway = self.networkmgr.get_usergw(username)
         #vlanid = self.networkmgr.get_uservlanid(username)
         logger.info ("create cluster with gateway : %s" % gateway)
         self.networkmgr.printpools()
-        if not status:
-            logger.info ("create cluster failed: %s" % result)
-            return [False, result]
-        ips = result
+        # if not status:
+        #     logger.info ("create cluster failed: %s" % result)
+        #     return [False, result]
+        # ips = result
         clusterid = self._acquire_id()
         clusterpath = self.fspath+"/global/users/"+username+"/clusters/"+clustername
         hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
@@ -143,14 +143,14 @@ class VclusterMgr(object):
                     return [False, "Fail to get proxy server public IP."]
             lxc_name = username + "-" + str(clusterid) + "-" + str(i)
             hostname = "host-"+str(i)
-            logger.info ("create container with : name-%s, username-%s, clustername-%s, clusterid-%s, hostname-%s, ip-%s, gateway-%s, image-%s" % (lxc_name, username, clustername, str(clusterid), hostname, ips[i], gateway, image_json))
-            [success,message] = oneworker.create_container(lxc_name, proxy_public_ip, username, uid, json.dumps(setting) , clustername, str(clusterid), str(i), hostname, ips[i], gateway, image_json)
+            logger.info ("create container with : name-%s, username-%s, clustername-%s, clusterid-%s, hostname-%s, ip-%s, gateway-%s, image-%s" % (lxc_name, username, clustername, str(clusterid), hostname, gateway, image_json))
+            [success,message] = oneworker.create_container(lxc_name, proxy_public_ip, username, uid, json.dumps(setting) , clustername, str(clusterid), str(i), hostname, gateway, image_json)
             if success is False:
                 logger.info("container create failed, so vcluster create failed")
                 return [False, message]
             logger.info("container create success")
-            hosts = hosts + ips[i].split("/")[0] + "\t" + hostname + "\t" + hostname + "."+clustername + "\n"
-            containers.append({ 'containername':lxc_name, 'hostname':hostname, 'ip':ips[i], 'host':workerip, 'image':image['name'], 'lastsave':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'setting': setting })
+            # hosts = hosts + ips[i].split("/")[0] + "\t" + hostname + "\t" + hostname + "."+clustername + "\n"
+            containers.append({ 'containername':lxc_name, 'hostname':hostname, 'host':workerip, 'image':image['name'], 'lastsave':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'setting': setting })
         hostfile = open(hostpath, 'w')
         hostfile.write(hosts)
         hostfile.close()
@@ -476,6 +476,26 @@ class VclusterMgr(object):
             if worker is None:
                 return [False, "The worker can't be found or has been stopped."]
             worker.start_container(container['containername'])
+
+            logger.info("acquire ip for container %s" % container['containername'])
+            [status, result] = self.networkmgr.acquire_userips_cidr(username)
+            gateway = self.networkmgr.get_usergw(username)
+            if not status:
+                return [False, result]
+            ip = result[0]
+            logger.info("acruire ip for container %s success with ip %" % (container['containername'], ip))
+
+            logger.info("update user %s hosts" % username)
+            self.update_user_hosts(clustername, username, ip)
+            logger.info("update user %s hosts success" % username)
+
+            logger.info("update user %s jupyter.config" % username)
+            worker.update_jupyter_config(container[container['containername'], ip)
+            logger.info("update user %s jupyter.config success" % username)
+
+            logger.info("update user %s network" % username)
+            worker.update_user_network(username, ip)
+
             worker.start_services(container['containername'])
             namesplit = container['containername'].split('-')
             portname = namesplit[1] + '-' + namesplit[2]
@@ -654,3 +674,20 @@ class VclusterMgr(object):
         clusterid = self.etcd.getkey("vcluster/nextid")[1]
         self.etcd.setkey("vcluster/nextid", str(int(clusterid)+1))
         return int(clusterid)
+
+    def update_user_hosts(self, clustername, username, ip):
+        [status, info] = self.get_clusterinfo(clustername, username)
+        if not status:
+            return [False, "cluster not found"]
+        if info['status'] == 'running':
+            return [False, "cluster is already running"]
+        clusterid = info['clusterid']
+        hostname = info['hostname']
+        hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
+        hostfile = open(hostfile, 'r')
+        hosts = hostfile.read()
+        hostfile.close()
+        hosts = hosts + ip.split("/")[0] + "\t" + hostname + "\t" + hostname + "." + clustername + "\n"
+        hostfile = open(hostpath, 'w')
+        hostfile.write(hosts)
+        hostfile.close()

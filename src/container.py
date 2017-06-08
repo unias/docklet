@@ -25,7 +25,7 @@ class Container(object):
         self.imgmgr = imagemgr.ImageMgr()
         self.historymgr = History_Manager()
 
-    def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, ip, gateway, image):
+    def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, gateway, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
         try:
             setting = json.loads(setting)
@@ -54,8 +54,8 @@ class Container(object):
             def config_prepare(content):
                 content = content.replace("%ROOTFS%",rootfs)
                 content = content.replace("%HOSTNAME%",hostname)
-                content = content.replace("%IP%",ip)
-                content = content.replace("%GATEWAY%",gateway)
+                # content = content.replace("%IP%",ip)
+                # content = content.replace("%GATEWAY%",gateway)
                 content = content.replace("%CONTAINER_MEMORY%",str(memory))
                 content = content.replace("%CONTAINER_CPU%",str(cpu))
                 content = content.replace("%FS_PREFIX%",self.fspath)
@@ -122,9 +122,8 @@ COOKIE_NAME=%s
 BASE_URL=%s
 HUB_PREFIX=%s
 HUB_API_URL=%s
-IP=%s
 """ % (username, 10000, cookiename, '/'+ proxy_server_ip +'/go/'+username+'/'+clustername, '/jupyter',
-        authurl, ip.split('/')[0])
+        authurl)
             config.write(jconfigs)
             config.close()
 
@@ -168,7 +167,16 @@ IP=%s
             self.historymgr.log(lxc_name,"Start")
             return [True, "start container success"]
 
-
+    def update_jupyter_config(self, lxc_name, ip):
+        rundir = self.lxcpath+'/'+lxc_name+'/rootfs' + self.rundir
+        jconfigpath = rundir + '/jupyter.config'
+        jconfigfile = open(jconfigpath, 'r')
+        jconfig = jconfigfile.read()
+        jconfigfile.close()
+        jconfig = jconfig + "IP=" + ip + "\n"
+        jconfigfile = open(jconfigpath, 'w')
+        jconfigfile.write(jconfig)
+        jconfigfile.close()
 
     # start container services
     # for the master node, jupyter must be started,
