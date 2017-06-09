@@ -203,7 +203,10 @@ HUB_API_URL=%s
         jconfigfile = open(jconfigpath, 'r')
         jconfig = jconfigfile.read()
         jconfigfile.close()
-        jconfig = jconfig + "IP=" + ip + "\n"
+        jline = jconfig.split('\n')
+        jline[-1] = "IP=" + ip + "\n"
+        ch = '\n'
+        jconfig = ch.join(jline) 
         jconfigfile = open(jconfigpath, 'w')
         jconfigfile.write(jconfig)
         jconfigfile.close()
