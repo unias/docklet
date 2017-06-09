@@ -167,6 +167,24 @@ HUB_API_URL=%s
             self.historymgr.log(lxc_name,"Start")
             return [True, "start container success"]
 
+    def update_container(self, lxc_name, clustername, clusterid, hostname, ip):
+        logger.info("update container:%s with clustername:%s, clusterid:%s, hostname:%s, ip:%s" % (lxc_name, clustername, hostname, clusterid))
+        username = lxc_name.split("-")[0]
+        update_user_hosts(clustername, clusterid, username, hostname, ip)
+        update_jupyter_config(lxc_name, ip)
+        
+
+    def update_user_hosts(self, clustername, clusterid, username, hostname, ip):
+        hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
+        hostfile = open(hostfile, 'r')
+        hosts = hostfile.read()
+        hostfile.close()
+        hosts = hosts + ip.split("/")[0] + "\t" + hostname + "\t" + hostname + "." + clustername + "\n"
+        hostfile = open(hostpath, 'w')
+        hostfile.write(hosts)
+        hostfile.close()
+        logger.info("update user %s hosts success" % username)
+
     def update_jupyter_config(self, lxc_name, ip):
         rundir = self.lxcpath+'/'+lxc_name+'/rootfs' + self.rundir
         jconfigpath = rundir + '/jupyter.config'

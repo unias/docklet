@@ -470,7 +470,7 @@ class VclusterMgr(object):
         self.networkmgr.check_usergw(username, uid, self.nodemgr,self.distributedgw=='True')
         # start containers
         for container in info['containers']:
-            # set up gre from user's gateway host to container's host.
+            # set up gre from user's gateway host to container's host.`
             self.networkmgr.check_usergre(username, uid, container['host'], self.nodemgr, self.distributedgw=='True')
             worker = xmlrpc.client.ServerProxy("http://%s:%s" % (container['host'], env.getenv("WORKER_PORT")))
             if worker is None:
@@ -485,13 +485,15 @@ class VclusterMgr(object):
             ip = result[0]
             logger.info("acruire ip for container %s success with ip %" % (container['containername'], ip))
 
-            logger.info("update user %s hosts" % username)
+            worker.update_container(container['containername'], info['clutsername'], info['clusterid'], container['hostname'], ip)
+
+            '''logger.info("update user %s hosts" % username)
             self.update_user_hosts(clustername, username, ip)
             logger.info("update user %s hosts success" % username)
 
             logger.info("update user %s jupyter.config" % username)
             worker.update_jupyter_config(container[container['containername'], ip)
-            logger.info("update user %s jupyter.config success" % username)
+            logger.info("update user %s jupyter.config success" % username)'''
 
             logger.info("update user %s network" % username)
             worker.update_user_network(username, ip)
@@ -674,20 +676,3 @@ class VclusterMgr(object):
         clusterid = self.etcd.getkey("vcluster/nextid")[1]
         self.etcd.setkey("vcluster/nextid", str(int(clusterid)+1))
         return int(clusterid)
-
-    def update_user_hosts(self, clustername, username, ip):
-        [status, info] = self.get_clusterinfo(clustername, username)
-        if not status:
-            return [False, "cluster not found"]
-        if info['status'] == 'running':
-            return [False, "cluster is already running"]
-        clusterid = info['clusterid']
-        hostname = info['hostname']
-        hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
-        hostfile = open(hostfile, 'r')
-        hosts = hostfile.read()
-        hostfile.close()
-        hosts = hosts + ip.split("/")[0] + "\t" + hostname + "\t" + hostname + "." + clustername + "\n"
-        hostfile = open(hostpath, 'w')
-        hostfile.write(hosts)
-        hostfile.close()
