@@ -167,13 +167,22 @@ HUB_API_URL=%s
             self.historymgr.log(lxc_name,"Start")
             return [True, "start container success"]
 
-    def update_container(self, lxc_name, clustername, clusterid, hostname, ip):
+    def update_container(self, lxc_name, clustername, clusterid, hostname, pid, ip):
         logger.info("update container:%s with clustername:%s, clusterid:%s, hostname:%s, ip:%s" % (lxc_name, clustername, hostname, clusterid))
         username = lxc_name.split("-")[0]
+        update_netns(lxc_name, pid)
         update_user_hosts(clustername, clusterid, username, hostname, ip)
         update_jupyter_config(lxc_name, ip)
-        
 
+    def update_netns(self, lxc_name, pid):
+        logger.info("update container %s netns" % lxc_name)
+        path = "/var/run/netns/"
+        os.makedirs(path, exist_ok = True)
+        src = "/proc/%s/ns/net" % pid
+        dst = "/var/run/netns/%s" % pid
+        os.symlink(src, dst)
+        logger.info("container %s netns with pid % success" % (lxc_name, pid))
+        
     def update_user_hosts(self, clustername, clusterid, username, hostname, ip):
         hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
         hostfile = open(hostfile, 'r')

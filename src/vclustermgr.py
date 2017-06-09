@@ -485,18 +485,15 @@ class VclusterMgr(object):
             ip = result[0]
             logger.info("acruire ip for container %s success with ip %" % (container['containername'], ip))
 
-            worker.update_container(container['containername'], info['clutsername'], info['clusterid'], container['hostname'], ip)
-
-            '''logger.info("update user %s hosts" % username)
-            self.update_user_hosts(clustername, username, ip)
-            logger.info("update user %s hosts success" % username)
-
-            logger.info("update user %s jupyter.config" % username)
-            worker.update_jupyter_config(container[container['containername'], ip)
-            logger.info("update user %s jupyter.config success" % username)'''
+            pid = self.get_pid(container['containername']
+            worker.update_container(container['containername'], info['clutsername'], info['clusterid'], container['hostname'], pid, ip)
 
             logger.info("update user %s network" % username)
-            worker.update_user_network(username, ip)
+            [status, result] = worker.update_user_network(username, pid, ip, gateway)
+            if not status:
+                logger.info("update user % s network failed: %s" % (username, result))
+                return [False, result]
+            logger.info("update user % network with pid %s, ip %s, gateway %s success" % (username, pid, ip,gateway))
 
             worker.start_services(container['containername'])
             namesplit = container['containername'].split('-')
@@ -585,7 +582,8 @@ class VclusterMgr(object):
             worker = xmlrpc.client.ServerProxy("http://%s:%s" % (container['host'], env.getenv("WORKER_PORT")))
             if worker is None:
                 return [False, "The worker can't be found or has been stopped."]
-            worker.stop_container(container['containername'])
+            pid = self.get_pid(container['containername'])
+            worker.stop_container(container['containername'], pid)
         info['status']='stopped'
         info['start_time']="------"
         infofile = open(self.fspath+"/global/users/"+username+"/clusters/"+clustername, 'w')
@@ -676,3 +674,12 @@ class VclusterMgr(object):
         clusterid = self.etcd.getkey("vcluster/nextid")[1]
         self.etcd.setkey("vcluster/nextid", str(int(clusterid)+1))
         return int(clusterid)
+
+    def get_pid(self, lxc_name):
+        output = subprocess.check_output("sudo lxc-info -n %s" % (container_name),shell=True)
+        output = output.decode('utf-8')
+        parts = re.split('\n',output)
+        info = {}
+        pid = info['PID']
+        return pid
+
