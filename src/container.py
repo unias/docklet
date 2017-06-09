@@ -167,12 +167,15 @@ HUB_API_URL=%s
             self.historymgr.log(lxc_name,"Start")
             return [True, "start container success"]
 
-    def update_container(self, lxc_name, clustername, clusterid, hostname, pid, ip):
-        logger.info("update container:%s with clustername:%s, clusterid:%s, hostname:%s, ip:%s" % (lxc_name, clustername, hostname, clusterid))
+    def update_container(self, lxc_name, clustername, clusterid, hostname, ip):
+        logger.info("update container:%s with clustername:%s, clusterid:%s, hostname:%s, ip:%s" % (lxc_name, clustername, hostname, clusterid, ip))
+        c = lxc.Container(lxc_name)
+        pid = c.init_pid
         username = lxc_name.split("-")[0]
-        update_netns(lxc_name, pid)
-        update_user_hosts(clustername, clusterid, username, hostname, ip)
-        update_jupyter_config(lxc_name, ip)
+        self.update_netns(lxc_name, pid)
+        self.update_user_hosts(clustername, clusterid, username, hostname, ip)
+        self.update_jupyter_config(lxc_name, ip)
+        return [True, pid]
 
     def update_netns(self, lxc_name, pid):
         logger.info("update container %s netns" % lxc_name)
@@ -185,7 +188,7 @@ HUB_API_URL=%s
         
     def update_user_hosts(self, clustername, clusterid, username, hostname, ip):
         hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
-        hostfile = open(hostfile, 'r')
+        hostfile = open(hostpath, 'r')
         hosts = hostfile.read()
         hostfile.close()
         hosts = hosts + ip.split("/")[0] + "\t" + hostname + "\t" + hostname + "." + clustername + "\n"
@@ -281,6 +284,10 @@ HUB_API_URL=%s
             return [False, status]
         if status == "running":
             c = lxc.Container(lxc_name)
+            pid = c.init_pid
+            path = "/var/run/netns/%s" % pid
+            if os.path.isfile(path):
+                os.remove(path)
             if not c.stop():
                 logger.error("stop container %s failed" % lxc_name)
                 return [False, "stop container failed"]

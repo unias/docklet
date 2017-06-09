@@ -111,7 +111,7 @@ class ipcontrol(object):
     @staticmethod
     def netns_add_addr(pid, ip, linkname = 'eth0'):
         try:
-            subprocess.run(['ip', 'netns', 'exec', pid, 'ifconfig', str(linkname), ip, 'up'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+            subprocess.run(['ip', 'netns', 'exec', str(pid), 'ifconfig', str(linkname), str(ip), 'up'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
             return [True, "netns %s add address succes : %s" % (pid, ip)]
         except subprocess.CalledProcessError as suberror:
             return [False, "netns %s add address failed : %s" % (pid, suberror.stdout.decode('utf-8'))]
@@ -323,7 +323,7 @@ class netcontrol(object):
     @staticmethod
     def netns_add_route(pid, gateway):
         try:
-            subprocess.run(['ip', 'netns', 'exec', pid, 'route', 'add', 'default', 'gw', gateway], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+            subprocess.run(['ip', 'netns', 'exec', str(pid), 'route', 'add', 'default', 'gw', str(gateway)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
             return [True, "netns %s add route success : %s" % (pid, gateway)]
         except subprocess.CalledProcessError as suberror:
             return [False, "netns %s add route failed : %s" % (pid, suberror.stdout.decode('utf-8'))]
