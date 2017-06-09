@@ -501,7 +501,7 @@ class VclusterMgr(object):
                 return [False, result]
             logger.info("update user %s network with pid %s, ip %s, gateway %s success" % (username, pid, ip,gateway))
 
-            worker.start_services(container['containername'])
+            # worker.start_services(container['containername'])
             namesplit = container['containername'].split('-')
             portname = namesplit[1] + '-' + namesplit[2]
             worker.recover_usernet(portname, uid, info['proxy_server_ip'], container['host']==info['proxy_server_ip'])
