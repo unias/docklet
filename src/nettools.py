@@ -108,6 +108,14 @@ class ipcontrol(object):
         except subprocess.CalledProcessError as suberror:
             return [False, "delete address failed : %s" % suberror.stdout.decode('utf-8')]
 
+    @staticmethod
+    def netns_add_addr(pid, ip, linkname = 'eth0'):
+        try:
+            subprocess.run(['ip', 'netns', 'exec', str(pid), 'ifconfig', str(linkname), str(ip), 'up'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+            return [True, "netns %s add address succes : %s" % (pid, ip)]
+        except subprocess.CalledProcessError as suberror:
+            return [False, "netns %s add address failed : %s" % (pid, suberror.stdout.decode('utf-8'))]
+
 
 # ovs-vsctl list-br
 # ovs-vsctl br-exists <Bridge>
@@ -300,3 +308,22 @@ class netcontrol(object):
                         ovscontrol.del_port("docklet-br-"+str(uid),port)
             ovscontrol.add_port_gre_withkey("docklet-br-"+str(uid), "gre-"+str(uid)+"-"+GatewayHost, GatewayHost, str(uid))
         ovscontrol.add_port("docklet-br-"+str(uid), portname)
+
+    @staticmethod
+    def update_user_network(username, pid, ip, gateway):
+        [status, result] = ipcontrol.netns_add_addr(pid, ip)
+        if not status:
+            return [False, result]
+        [status, route_result] = netcontrol.netns_add_route(pid, gateway)
+        if not status:
+            return [False, route_result]
+        resutl = result + route_result
+        return [True, result]
+
+    @staticmethod
+    def netns_add_route(pid, gateway):
+        try:
+            subprocess.run(['ip', 'netns', 'exec', str(pid), 'route', 'add', 'default', 'gw', str(gateway)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+            return [True, "netns %s add route success : %s" % (pid, gateway)]
+        except subprocess.CalledProcessError as suberror:
+            return [False, "netns %s add route failed : %s" % (pid, suberror.stdout.decode('utf-8'))]

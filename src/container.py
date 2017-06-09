@@ -25,7 +25,7 @@ class Container(object):
         self.imgmgr = imagemgr.ImageMgr()
         self.historymgr = History_Manager()
 
-    def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, ip, gateway, image):
+    def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, gateway, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
         try:
             setting = json.loads(setting)
@@ -54,8 +54,8 @@ class Container(object):
             def config_prepare(content):
                 content = content.replace("%ROOTFS%",rootfs)
                 content = content.replace("%HOSTNAME%",hostname)
-                content = content.replace("%IP%",ip)
-                content = content.replace("%GATEWAY%",gateway)
+                # content = content.replace("%IP%",ip)
+                # content = content.replace("%GATEWAY%",gateway)
                 content = content.replace("%CONTAINER_MEMORY%",str(memory))
                 content = content.replace("%CONTAINER_CPU%",str(cpu))
                 content = content.replace("%FS_PREFIX%",self.fspath)
@@ -122,9 +122,8 @@ COOKIE_NAME=%s
 BASE_URL=%s
 HUB_PREFIX=%s
 HUB_API_URL=%s
-IP=%s
 """ % (username, 10000, cookiename, '/'+ proxy_server_ip +'/go/'+username+'/'+clustername, '/jupyter',
-        authurl, ip.split('/')[0])
+        authurl)
             config.write(jconfigs)
             config.close()
 
@@ -168,7 +167,49 @@ IP=%s
             self.historymgr.log(lxc_name,"Start")
             return [True, "start container success"]
 
+    def update_container(self, lxc_name, clustername, clusterid, hostname, ip):
+        logger.info("update container:%s with clustername:%s, clusterid:%s, hostname:%s, ip:%s" % (lxc_name, clustername, hostname, clusterid, ip))
+        c = lxc.Container(lxc_name)
+        pid = c.init_pid
+        username = lxc_name.split("-")[0]
+        self.update_netns(lxc_name, pid)
+        self.update_user_hosts(clustername, clusterid, username, hostname, ip)
+        self.update_jupyter_config(lxc_name, ip)
+        return [True, pid]
 
+    def update_netns(self, lxc_name, pid):
+        logger.info("update container %s netns" % lxc_name)
+        path = "/var/run/netns/"
+        os.makedirs(path, exist_ok = True)
+        src = "/proc/%s/ns/net" % pid
+        dst = "/var/run/netns/%s" % pid
+        os.symlink(src, dst)
+        logger.info("container %s netns with pid % success" % (lxc_name, pid))
+        
+    def update_user_hosts(self, clustername, clusterid, username, hostname, ip):
+        hostpath = self.fspath+"/global/users/"+username+"/hosts/"+str(clusterid)+".hosts"
+        hostfile = open(hostpath, 'r')
+        hosts = hostfile.read()
+        hostfile.close()
+        hosts = hosts + ip.split("/")[0] + "\t" + hostname + "\t" + hostname + "." + clustername + "\n"
+        hostfile = open(hostpath, 'w')
+        hostfile.write(hosts)
+        hostfile.close()
+        logger.info("update user %s hosts success" % username)
+
+    def update_jupyter_config(self, lxc_name, ip):
+        rundir = self.lxcpath+'/'+lxc_name+'/rootfs' + self.rundir
+        jconfigpath = rundir + '/jupyter.config'
+        jconfigfile = open(jconfigpath, 'r')
+        jconfig = jconfigfile.read()
+        jconfigfile.close()
+        jline = jconfig.split('\n')
+        jline[-1] = "IP=" + ip.split('/')[0] + "\n"
+        ch = '\n'
+        jconfig = ch.join(jline) 
+        jconfigfile = open(jconfigpath, 'w')
+        jconfigfile.write(jconfig)
+        jconfigfile.close()
 
     # start container services
     # for the master node, jupyter must be started,
@@ -246,6 +287,10 @@ IP=%s
             return [False, status]
         if status == "running":
             c = lxc.Container(lxc_name)
+            pid = c.init_pid
+            path = "/var/run/netns/%s" % pid
+            if os.path.isfile(path):
+                os.remove(path)
             if not c.stop():
                 logger.error("stop container %s failed" % lxc_name)
                 return [False, "stop container failed"]
