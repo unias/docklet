@@ -247,7 +247,7 @@ users visit their vclusters behind the firewall/gateway.</p>
 <ul>
 <li>distributed file system server</li>
 <li>etcd server</li>
-<li>docklet master</li>
+<li>docklet supermaster, master</li>
 <li>docklet worker</li>
 </ul>
 <h2 id="install">Install</h2>
@@ -260,9 +260,11 @@ prepare.sh
 conf/
     container.conf
     docklet.conf.template
+    nginx_docklet.conf
     lxc-script/
 bin/
     docklet-master
+    docklet-supermaster
     docklet-worker
 src/
     httprest.py
@@ -270,13 +272,15 @@ src/
     ...
 web/
     web.py
-dep/
+doc/
+user/
+    user.py
+tools/
     etcd-multi-nodes.sh
     etcd-one-node.sh
-doc/
-tools/
     update-basefs.sh
     start_jupyter.sh
+    ...
 </code></pre>
 
 <p>If it is the first time install, users should run <strong>prepare.sh</strong> to
@@ -306,6 +310,19 @@ default setting works for a single host environment.</p>
 <li>PORTAL_URL : the portal of the system. Users access the system
   by visiting this address. If the system is behind a firewall, then
   a reverse proxy should be setup.</li>
+<li>NGINX_PORT : the access port of the public portal. User use this
+    port to visit docklet system.</li>
+<li>DISTRIBUTED_GATEWAY : whether the users' gateways are distributed
+    or not. Both master and worker must be set by same value.</li>
+<li>PUBLIC_IP : public ip of this machine. If DISTRIBUTED_GATEWAY is
+    True, users' gateways can be setup on this machine. Users can
+    visit this machine by the public ip. default: IP of
+    NETWORK_DEVICE.<li>
+<li>USER_IP : the ip of user server. default : localhost<li>
+<li>MASTER_IPS : tell the web server the ips of all the cluster master.</li>
+<li>AUTH_KEY: the key to request users server from master, or to request
+    master from users server. Please set the same value on each machine.
+    Please don't use the default value.</li>
 </ul>
 <h2 id="start">Start</h2>
 <h3 id="distributed-file-system">Distributed file system</h3>
@@ -318,22 +335,34 @@ Lets presume the file system server export filesystem as nfs
 <p>For single host environment, it need not to configure distributed
 file system.</p>
 <h3 id="etcd">Etcd</h3>
-<p>For single host environment, start <strong>dep/etcd-one-node.sh</strong> . Some recent
+<p>For single host environment, start <strong>tools/etcd-one-node.sh</strong> . Some recent
 Ubuntu releases have included <strong>etcd</strong> in the repository, just <code>apt-get
-install etcd</code>, and it need not to start etcd manually.</p>
+install etcd</code>, and it need not to start etcd manually. For others, you should install
+etcd manually.</p>
 <p>For multi hosts distributed environment, start
-<strong>dep/etcd-multi-nodes.sh</strong> in each etcd server hosts. This scripts
+<strong>tools/etcd-multi-nodes.sh</strong> in each etcd server hosts. This scripts
 requires users providing the etcd server address as parameters.</p>
+<h3 id="supermaster">Supermaster</h3>
+<p>Supermaster is a server consist of web server, user server and a master server instance.</p>
+<p>If it is the first time you start docklet, run <code>bin/docklet-supermaster</code> init
+to init and start a docklet master, web server and user server. Otherwise, run
+<code>bin/docklet-supermaster</code> start. When you start a supermaster, you don't
+need to start an extra master in the same cluster.</p>
 <h3 id="master">Master</h3>
+<p>A master manages all the workers in one data center. Docklet can manage several data
+centers, each data center has one master server. But a docklet system will only have one supermaster.</p>
 <p>First, select a server with 2 network interface card, one having a
 public IP address/url, e.g., docklet.info; the other having a private IP
 address, e.g., 172.16.0.1. This server will be the master.</p>
 <p>If it is the first time you start docklet, run <code>bin/docklet-master init</code>
 to init and start docklet master. Otherwise, run  <code>bin/docklet-master start</code>,
 which will start master in recovery mode in background using
-conf/docklet.conf. It means docklet will recover workspaces existed.</p>
+conf/docklet.conf. It means docklet will recover workspaces existed.(Note: if docklet
+will run in the distributed gateway mode and recovery mode, please start the workers first.)</p>
 <p>This script in fact will start three daemons: the docklet master of
 httprest.py, the configurable-http-proxy and the docklet web of web.py.</p>
+<p>Please fill the USER_IP and USER_PORT in conf/docklet.conf, it is the ip and
+port of user server. By default, it is localhost and 9100</p>
 <p>You can check the daemon status by running <code>bin/docklet-master status</code></p>
 <p>If the master failed to start, you could try <code>bin/docklet-master init</code>
 to initialize the whole system.</p>
@@ -351,8 +380,8 @@ start script <code>tools/start_jupyter.sh</code> should be placed at
 <p>You can check and run <code>tools/update-basefs.sh</code> to update basefs.</p>
 <p>Run <code>bin/docklet-worker start</code>, will start worker in background.</p>
 <p>You can check the daemon status by running <code>bin/docklet-worker status</code></p>
-<p>More usages can be found by typing <code>bin/docklet-worker</code>
-The log is in <strong>FS_PREFIX/local/log/docklet-worker.log</strong></p>
+<p>More usages can be found by typing <code>bin/docklet-worker</code><p>
+<p>The log is in <strong>FS_PREFIX/local/log/docklet-worker.log</strong></p>
 <p>Currently, the worker must run after the master has been started.</p>
 <h2 id="usage">Usage</h2>
 <p>Open a browser, visiting the address specified by PORTAL_URL , 
