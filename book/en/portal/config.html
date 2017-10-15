@@ -301,7 +301,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="hosts.html">
+        <li class="chapter " data-level="1.4.4" data-path="admin.html">
+            
+                <a href="admin.html">
+            
+                    
+                    Admin
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="hosts.html">
             
                 <a href="hosts.html">
             
@@ -314,7 +327,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="users.html">
+        <li class="chapter " data-level="1.4.6" data-path="users.html">
             
                 <a href="users.html">
             
@@ -327,12 +340,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.6" data-path="admin.html">
+        <li class="chapter " data-level="1.4.7" data-path="setting.html">
             
-                <a href="admin.html">
+                <a href="setting.html">
             
                     
-                    Admin
+                    Settings
             
                 </a>
             
@@ -704,24 +717,12 @@ can be used later on. Now the image list is shown as:</p>
 <p><img src="../images/config-image.png" width="700" alt="image config"></p>
 <p>Users can also <strong>Share</strong> their saved private images with others, to help
 them avoid tedious installation and configuration stuff.</p>
-<h3 id="custom-web-access">Custom WEB access</h3>
-<p>Docklet provides each vcluster a custom URL that could be used to access
-internal WEB service. Users can define which container this URL is
-proxied to. </p>
-<p><img src="../images/config-proxy.png" alt="proxy service"></p>
-<p>The above is an example showing that the user <em>root</em> has a Workspace
-named <em>note</em>, which has a public URL of </p>
-<p><code>http://iwork.internetware.org/_web/root/note</code></p>
-<p>The user configures this URL to be proxied to one of his container
-<code>172.16.0.45:80</code>.</p>
-<p>If an nginx server is running at <code>172.16.0.45</code>, then the following
-directives could be put in <code>/etc/nginx/sites-enabled/default</code></p>
-<pre><code>location /_web/root/test/  {
-    proxy_pass http://localhost/ ;
-}
-</code></pre><p>Restart nginx, </p>
-<pre><code>$ service nginx restart
-</code></pre><p>then the above URL could be accessed from outside.</p>
+<h3 id="tcp-port-mapping">TCP Port Mapping</h3>
+<p>Each Node can apply for a TCP port. The Node port will be mapped to the host port, and the TCP packets sent by the user to the host port will be transferred to this port. The service on the node needs to listen to the configured port.</p>
+<p>The following picture shows the TCP port mapping webpage of <strong>tee</strong> Workspace:</p>
+<p><img src="../images/config-tcp.png" width="700" alt="image config"></p>
+<p>Click <strong>Apply</strong> to add a TCP port mapping for a node&#xFF1A;</p>
+<p><img src="../images/config-tcpapply.png" width="700" alt="image config"></p>
 
                                 
                                 </section>
@@ -765,7 +766,7 @@ directives could be put in <code>/etc/nginx/sites-enabled/default</code></p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Config","level":"1.4.2","depth":2,"next":{"title":"Status","level":"1.4.3","depth":2,"path":"portal/status.md","ref":"portal/status.md","articles":[]},"previous":{"title":"Dashboard","level":"1.4.1","depth":2,"path":"portal/dashboard.md","ref":"portal/dashboard.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"portal/config.md","mtime":"2017-09-24T06:27:25.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-24T07:35:59.463Z"},"basePath":"..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"Config","level":"1.4.2","depth":2,"next":{"title":"Status","level":"1.4.3","depth":2,"path":"portal/status.md","ref":"portal/status.md","articles":[]},"previous":{"title":"Dashboard","level":"1.4.1","depth":2,"path":"portal/dashboard.md","ref":"portal/dashboard.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"portal/config.md","mtime":"2017-10-15T13:10:06.070Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-15T13:21:36.217Z"},"basePath":"..","book":{"language":"en"}});
         });
     </script>
 </div>

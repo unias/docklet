@@ -301,7 +301,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="hosts.html">
+        <li class="chapter " data-level="1.4.4" data-path="admin.html">
+            
+                <a href="admin.html">
+            
+                    
+                    管理
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="hosts.html">
             
                 <a href="hosts.html">
             
@@ -314,7 +327,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="users.html">
+        <li class="chapter " data-level="1.4.6" data-path="users.html">
             
                 <a href="users.html">
             
@@ -327,12 +340,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.6" data-path="admin.html">
+        <li class="chapter " data-level="1.4.7" data-path="setting.html">
             
-                <a href="admin.html">
+                <a href="setting.html">
             
                     
-                    管理
+                    设置
             
                 </a>
             
@@ -799,21 +812,12 @@ config"></p>
 <p><img src="../images/config-image.png" width="700" alt="image config"></p>
 <p>&#x53EF;&#x4EE5;&#x5BF9;&#x4FDD;&#x5B58;&#x7684;&#x955C;&#x50CF;&#x8FDB;&#x884C;&#x7BA1;&#x7406;&#xFF0C;&#x5C06;&#x5176;<strong>&#x5171;&#x4EAB;(Share)</strong>&#x51FA;&#x53BB;&#xFF0C;&#x9020;&#x798F;&#x4ED6;&#x4EBA;&#xFF0C;
 &#x514D;&#x53BB;&#x4ED6;&#x4EEC;&#x7E41;&#x7410;&#x7684;&#x914D;&#x7F6E;&#x6B65;&#x9AA4;&#x3002;</p>
-<h3 id="&#x81EA;&#x5B9A;&#x4E49;web-&#x8BBF;&#x95EE;">&#x81EA;&#x5B9A;&#x4E49;WEB &#x8BBF;&#x95EE;</h3>
-<p>Docklet&#x4E3A;&#x6BCF;&#x4E2A;vcluster&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;URL, &#x7528;&#x4E8E;&#x4ECE;&#x5916;&#x90E8;&#x8BBF;&#x95EE;vcluster&#x5185;&#x90E8;&#x7684;
-WEB&#x670D;&#x52A1;&#x3002;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x7531;&#x54EA;&#x4E2A;&#x5BB9;&#x5668;&#x63D0;&#x4F9B;&#x8BE5;WEB&#x670D;&#x52A1;&#x3002;</p>
-<p><img src="../images/config-proxy.png" alt="proxy service"></p>
-<p>&#x4E0A;&#x9762;&#x662F;&#x4E00;&#x4E2A;&#x4F8B;&#x5B50;&#xFF0C;&#x7528;&#x6237; <em>root</em> &#x7684; Workspace <em>note</em> &#x6709;&#x4E00;&#x4E2A;&#x516C;&#x5171;URL</p>
-<p><code>http://iwork.internetware.org/_web/root/note</code></p>
-<p>&#x7528;&#x6237;&#x914D;&#x7F6E;&#x8BE5;URL&#x7531;&#x5185;&#x90E8;IP&#x5730;&#x5740;&#x4E3A; <code>172.16.0.45:80</code> &#x7684;&#x5BB9;&#x5668;&#x63D0;&#x4F9B;&#x670D;&#x52A1;&#x3002;</p>
-<p>&#x5982;&#x679C;&#x8BE5;&#x5BB9;&#x5668;&#x8FD0;&#x884C; nginx, &#x90A3;&#x4E48;&#x53EF;&#x4EE5;&#x5728;nginx&#x7684;&#x914D;&#x7F6E;&#x6587;&#x4EF6;
-<code>/etc/nginx/sites-enabled/default</code> &#x4E2D;&#x589E;&#x52A0;&#x4E0B;&#x8FF0;&#x6307;&#x4EE4;:</p>
-<pre><code>location /_web/root/test/  {
-    proxy_pass http://localhost/ ;
-}
-</code></pre><p>&#x91CD;&#x542F;nginx, </p>
-<pre><code>$ service nginx restart
-</code></pre><p>&#x5C31;&#x53EF;&#x4EE5;&#x4ECE;&#x5916;&#x90E8;&#x901A;&#x8FC7;&#x8BE5;URL&#x8BBF;&#x95EE;&#x4F4D;&#x4E8E;&#x5185;&#x90E8;&#x7684;WEB&#x670D;&#x52A1;&#x4E86;&#x3002;</p>
+<h3 id="tcp&#x7AEF;&#x53E3;&#x6620;&#x5C04;">TCP&#x7AEF;&#x53E3;&#x6620;&#x5C04;</h3>
+<p>&#x7528;&#x6237;&#x7684;&#x6BCF;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x80FD;&#x7533;&#x8BF7;&#x4E00;&#x4E2A;TCP&#x7AEF;&#x53E3;&#xFF0C;&#x8BBE;&#x7F6E;&#x7684;&#x8282;&#x70B9;&#x7AEF;&#x53E3;&#x4F1A;&#x6620;&#x5C04;&#x5230;&#x4E3B;&#x673A;&#x7684;&#x4E00;&#x4E2A;&#x7AEF;&#x53E3;&#xFF0C;&#x7528;&#x6237;&#x5411;&#x4E3B;&#x673A;&#x7AEF;&#x53E3;&#x53D1;&#x9001;&#x7684;TCP&#x5305;&#x90FD;&#x4F1A;&#x5230;&#x8F6C;&#x9001;&#x5230;&#x8FD9;&#x4E2A;&#x7AEF;&#x53E3;&#x3002;&#x8282;&#x70B9;&#x4E0A;&#x7684;&#x670D;&#x52A1;&#x9700;&#x8981;&#x76D1;&#x542C;&#x914D;&#x7F6E;&#x7684;&#x7AEF;&#x53E3;&#x3002;</p>
+<p>&#x4E0B;&#x56FE;&#x663E;&#x793A;&#x4E86; <em>tee</em> &#x5DE5;&#x4F5C;&#x533A;&#x7684;TCP&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x9875;&#x9762;:</p>
+<p><img src="../images/config-tcp.png" width="700" alt="image config"></p>
+<p>&#x53EF;&#x4EE5;&#x70B9;&#x51FB; <strong>Apply</strong> &#x7ED9;&#x8282;&#x70B9;&#x6DFB;&#x52A0;TCP&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#xFF1A;</p>
+<p><img src="../images/config-tcpapply.png" width="700" alt="image config"></p>
 
                                 
                                 </section>
@@ -857,7 +861,7 @@ WEB&#x670D;&#x52A1;&#x3002;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x5B9A;&#x4E49;&#x75
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"配置","level":"1.4.2","depth":2,"next":{"title":"状态","level":"1.4.3","depth":2,"path":"portal/status.md","ref":"portal/status.md","articles":[]},"previous":{"title":"面板","level":"1.4.1","depth":2,"path":"portal/dashboard.md","ref":"portal/dashboard.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"portal/config.md","mtime":"2017-09-24T06:25:53.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-24T07:35:59.463Z"},"basePath":"..","book":{"language":"zh"}});
+            gitbook.page.hasChanged({"page":{"title":"配置","level":"1.4.2","depth":2,"next":{"title":"状态","level":"1.4.3","depth":2,"path":"portal/status.md","ref":"portal/status.md","articles":[]},"previous":{"title":"面板","level":"1.4.1","depth":2,"path":"portal/dashboard.md","ref":"portal/dashboard.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"portal/config.md","mtime":"2017-10-15T13:10:06.086Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-15T13:21:36.217Z"},"basePath":"..","book":{"language":"zh"}});
         });
     </script>
 </div>
