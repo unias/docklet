@@ -426,7 +426,7 @@ class delPortMappingView(normalView):
 
     @classmethod
     def post(self):
-        data = {"clustername":self.clustername,"node_name":self.node_name}
+        data = {"clustername":self.clustername,"node_name":self.node_name,"node_port":self.node_port}
         result = dockletRequest.post('/port_mapping/delete/',data, self.masterip)
         success = result.get("success")
         if success == "true":

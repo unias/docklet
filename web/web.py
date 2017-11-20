@@ -234,12 +234,13 @@ def addPortMapping(masterip):
     addPortMappingView.masterip = masterip
     return addPortMappingView.as_view()
 
-@app.route("/port_mapping/delete/<masterip>/<clustername>/<node_name>/", methods=['GET'])
+@app.route("/port_mapping/delete/<masterip>/<clustername>/<node_name>/<node_port>/", methods=['GET'])
 @login_required
-def delPortMapping(masterip,clustername,node_name):
+def delPortMapping(masterip,clustername,node_name,node_port):
     delPortMappingView.masterip = masterip
     delPortMappingView.clustername = clustername
     delPortMappingView.node_name = node_name
+    delPortMappingView.node_port = node_port
     return delPortMappingView.as_view()
 
 @app.route("/getmasterdesc/<mastername>/", methods=['POST'])

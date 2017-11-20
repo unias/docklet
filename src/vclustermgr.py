@@ -262,7 +262,15 @@ class VclusterMgr(object):
         clusterfile.close()
         return [True, clusterinfo]
 
-    def add_port_mapping(self,username,clustername,node_name,node_ip, port):
+    def count_port_mapping(self, username):
+        return sum([len(self.get_clusterinfo(cluster, username)[1]['port_mapping']) for cluster in self.list_clusters(username)[1]])
+
+    def add_port_mapping(self,username,clustername,node_name,node_ip,port,quota):
+        port_mapping_count = self.count_port_mapping(username)
+
+        if port_mapping_count >= int(quota['portmapping']):
+            return [False, 'Port mapping quota exceed.']
+
         [status, clusterinfo] = self.get_clusterinfo(clustername, username)
         host_port = 0
         if self.distributedgw == 'True':
@@ -292,11 +300,41 @@ class VclusterMgr(object):
                 return [False, host_port]
         return [True, clusterinfo]
 
-    def delete_port_mapping(self, username, clustername, node_name):
+    def delete_all_port_mapping(self, username, clustername, node_name):
+        [status, clusterinfo] = self.get_clusterinfo(clustername, username)
+        error_msg = None
+        delete_list = []
+        for item in clusterinfo['port_mapping']:
+            if item['node_name'] == node_name:
+                node_ip = item['node_ip']
+                node_port = item['node_port']
+                if self.distributedgw == 'True':
+                    worker = self.nodemgr.ip_to_rpc(clusterinfo['proxy_server_ip'])
+                    [success,msg] = worker.release_port_mapping(node_name, node_ip, node_port)
+                else:
+                    [success,msg] = portcontrol.release_port_mapping(node_name, node_ip, node_port)
+                if not success:
+                    error_msg = msg
+                else:
+                    delete_list.append(item)
+        if len(delete_list) > 0:
+            for item in delete_list:
+                clusterinfo['port_mapping'].remove(item)
+            clusterfile = open(self.fspath + "/global/users/" + username + "/clusters/" + clustername, 'w')
+            clusterfile.write(json.dumps(clusterinfo))
+            clusterfile.close()
+        else:
+            return [False,"No port mapping."]
+        if error_msg is not None:
+            return [False,error_msg]
+        else:
+            return [True,"Success"]
+
+    def delete_port_mapping(self, username, clustername, node_name, node_port):
         [status, clusterinfo] = self.get_clusterinfo(clustername, username)
         idx = 0
         for item in clusterinfo['port_mapping']:
-            if item['node_name'] == node_name:
+            if item['node_name'] == node_name and item['node_port'] == node_port:
                 break
             idx += 1
         if idx == len(clusterinfo['port_mapping']):
@@ -452,7 +490,7 @@ class VclusterMgr(object):
                 new_hostinfo.append(host)
         hostfile.writelines(new_hostinfo)
         hostfile.close()
-        [success, msg] = self.delete_port_mapping(username, clustername, containername)
+        [success, msg] = self.delete_all_port_mapping(username, clustername, containername)
         if not success:
             return [False, msg]
         [status, info] = self.get_clusterinfo(clustername, username)
@@ -645,7 +683,7 @@ class VclusterMgr(object):
         else:
             proxytool.delete_route("/" + info['proxy_public_ip'] + '/go/'+username+'/'+clustername)
         for container in info['containers']:
-            self.delete_port_mapping(username,clustername,container['containername'])
+            self.delete_all_port_mapping(username,clustername,container['containername'])
             worker = xmlrpc.client.ServerProxy("http://%s:%s" % (container['host'], env.getenv("WORKER_PORT")))
             if worker is None:
                 return [False, "The worker can't be found or has been stopped."]

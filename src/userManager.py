@@ -167,10 +167,10 @@ class userManager:
         if not os.path.exists(fspath+"/global/sys/quota"):
             groupfile = open(fspath+"/global/sys/quota",'w')
             groups = []
-            groups.append({'name':'root', 'quotas':{ 'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
-            groups.append({'name':'admin', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
-            groups.append({'name':'primary', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
-            groups.append({'name':'foundation', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
+            groups.append({'name':'root', 'quotas':{ 'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'portmapping': '8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
+            groups.append({'name':'admin', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'portmapping': '8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
+            groups.append({'name':'primary', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'portmapping': '8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
+            groups.append({'name':'foundation', 'quotas':{'cpu':'4', 'disk':'2000', 'data':'100', 'memory':'2000', 'image':'10', 'idletime':'24', 'vnode':'8', 'portmapping': '8', 'input_rate_limit':'10000', 'output_rate_limit':'10000'}})
             groupfile.write(json.dumps(groups))
             groupfile.close()
         if not os.path.exists(fspath+"/global/sys/quotainfo"):
@@ -185,6 +185,7 @@ class userManager:
             quotas['quotainfo'].append({'name':'image', 'hint':'how many images the user can save, e.g. 10'})
             quotas['quotainfo'].append({'name':'idletime', 'hint':'will stop cluster after idletime, number of hours, e.g. 24'})
             quotas['quotainfo'].append({'name':'vnode', 'hint':'how many containers the user can have, e.g. 8'})
+            quotas['quotainfo'].append({'name':'portmapping', 'hint':'how many ports the user can map, e.g. 8'})
             quotas['quotainfo'].append({'name':'input_rate_limit', 'hint':'the ingress speed of the network, number of kbps'})
             quotas['quotainfo'].append({'name':'output_rate_limit', 'hint':'the egress speed of the network, number of kbps'})
             quotafile.write(json.dumps(quotas))

@@ -293,7 +293,7 @@
                                      <td>{{ record['node_port'] }}</td>
                                      <td>{{ clusterinfo['proxy_public_ip'] }}</td>
                                      <td>{{ record['host_port'] }}</td>
-                                     <td><a class="btn btn-xs btn-danger" href="/port_mapping/delete/{{master.split("@")[0]}}/{{ clustername }}/{{ record['node_name'] }}/">Delete</a></td>
+                                     <td><a class="btn btn-xs btn-danger" href="/port_mapping/delete/{{master.split("@")[0]}}/{{ clustername }}/{{ record['node_name'] }}/{{ record['node_port'] }}/">Delete</a></td>
                                  {% endfor %}
                                  </tbody>
                              </table>

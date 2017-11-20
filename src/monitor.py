@@ -179,8 +179,10 @@ class Container_Collector(threading.Thread):
             disk_quota = workercinfo[vnode_name]['disk_use']['total']
         else:
             disk_quota = 0
-        # billing value = cpu used/a + memory used/b + disk quota/c
-        billingval = math.ceil(cpu_increment/a_cpu + avemem/b_mem + float(disk_quota)/1024.0/1024.0/c_disk)
+        # get ports
+        ports_count = count_port_mapping(vnode_name)
+        # billing value = cpu used/a + memory used/b + disk quota/c + ports
+        billingval = math.ceil(cpu_increment/a_cpu + avemem/b_mem + float(disk_quota)/1024.0/1024.0/c_disk + ports_count)
         if billingval > 100:
             # report outsize billing value
             logger.info("Huge Billingval for "+vnode_name+". cpu_increment:"+str(cpu_increment)+" avemem:"+str(avemem)+" disk:"+str(disk_quota)+"\n")
@@ -521,6 +523,22 @@ def workerFetchInfo(master_ip):
 def get_owner(container_name):
     names = container_name.split('-')
     return names[0]
+
+def count_port_mapping(vnode_name):
+    user = get_owner(vnode_name)
+    fspath = env.getenv("FS_PREFIX")
+    if not os.path.exists(fspath+"/global/users/"+user+"/clusters"):
+        return 0
+    clusters = os.listdir(fspath+"/global/users/"+user+"/clusters")
+    ports_count = 0
+    for cluster in clusters:
+        clusterpath = fspath + "/global/users/" + get_owner(vnode_name) + "/clusters/" + cluster
+        if not os.path.isfile(clusterpath):
+            return 0
+        infofile = open(clusterpath, 'r')
+        info = json.loads(infofile.read())
+        ports_count += len([mapping for mapping in info['port_mapping'] if mapping['node_name'] == vnode_name])
+    return ports_count
 
 # the thread to collect data from each worker and store them in monitor_hosts and monitor_vnodes
 class Master_Collector(threading.Thread):
