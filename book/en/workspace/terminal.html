@@ -731,20 +731,15 @@ installation.</p>
 </code></pre><p>About <code>apt-get</code>, please refer to
 the <a href="https://help.ubuntu.com/community/AptGet/Howto" target="_blank">official help</a>.</p>
 <h3 id="using-your-local-terminal">Using your local terminal</h3>
-<p>Users sometimes want to access docklet using their favorite local terminal in local computer. Since docklet vnode is behind the firewall, users can not connect to their vnodes directly, but can do so by way of a public ssh server.</p>
-<p>Suppose there is an ssh server with public address <strong>pub.ssh</strong>, your account
-name at this server is <strong>myname</strong> .</p>
-<p>Execute the following command in your docklet vnode:</p>
-<pre><code>ssh -fNR 2222:localhost:22 myname@pub.ssh
-</code></pre><p>Enter the passphrase. If success, then all connection to port 2222 of 
-pub.ssh will be forwarded to vnode <strong>localhost:22</strong>. </p>
-<p>Now open your favorite local terminal in your local computer and ssh to
-<strong>pub.ssh</strong>,</p>
-<pre><code>ssh myname@pub.ssh
-</code></pre><p>Then execute ssh to connect to localhost:2222 in pub.ssh:</p>
-<pre><code>ssh root@localhost -p 2222
-</code></pre><p>It may ask for a passphrase for root at the docklet vnode. You can set a passphase in the dockelt vnode using <strong>passwd</strong> command.</p>
-<p>More about ssh port forwarding, users may refer to ssh manual.</p>
+<p>Users sometimes want to access docklet using their favorite local terminal in local computer. Since docklet vnode is behind the firewall, users can not connect to their vnodes directly, but can do so by way of port mapping.</p>
+<p>Each Node can apply for multiple ports, but there is a quota limit. The Node port will be mapped to the host port, and the TCP packets sent by the user to the host port will be transferred to this port. The service on the node needs to listen to the configured port.</p>
+<p>Users apply for port mapping in config page, and there shows the corresponding port mapping table item:</p>
+<p><img src="../images/config-tcp.png" width="700" alt="image config">
+port 10000 is directly mapped to port 22 of the container. Connecting to the port 10000 of Host Public IP is equivalent to the connection to the container.</p>
+<p>Suppose the user has an account in the container named <strong>myname</strong>, execute the following command in your local terminal:</p>
+<pre><code>ssh -p 10000 myname@masterip
+</code></pre><p>masterip corresponds to 222.29.159.164 in the figure above. It may ask for a passphrase for root at the docklet vnode. You can set a passphase in the dockelt vnode using passwd command.</p>
+<p>More about <strong>port mapping</strong>, users may refer to relevant information online.</p>
 
                                 
                                 </section>
@@ -788,7 +783,7 @@ pub.ssh will be forwarded to vnode <strong>localhost:22</strong>. </p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"WEB Terminal","level":"1.5.3","depth":2,"next":{"title":"Interacive Programming","level":"1.5.4","depth":2,"path":"workspace/notebook.md","ref":"workspace/notebook.md","articles":[]},"previous":{"title":"File Editing","level":"1.5.2","depth":2,"path":"workspace/edit.md","ref":"workspace/edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"workspace/terminal.md","mtime":"2017-09-24T06:31:29.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-15T13:21:36.217Z"},"basePath":"..","book":{"language":"en"}});
+            gitbook.page.hasChanged({"page":{"title":"WEB Terminal","level":"1.5.3","depth":2,"next":{"title":"Interacive Programming","level":"1.5.4","depth":2,"path":"workspace/notebook.md","ref":"workspace/notebook.md","articles":[]},"previous":{"title":"File Editing","level":"1.5.2","depth":2,"path":"workspace/edit.md","ref":"workspace/edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"workspace/terminal.md","mtime":"2017-11-26T13:59:38.314Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-11-26T14:00:18.602Z"},"basePath":"..","book":{"language":"en"}});
         });
     </script>
 </div>
