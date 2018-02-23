@@ -130,6 +130,7 @@ class Worker(object):
         self.rpcserver.register_instance(Containers)
         self.rpcserver.register_function(monitor.workerFetchInfo)
         self.rpcserver.register_function(netcontrol.setup_gw)
+        self.rpcserver.register_function(netcontrol.update_user_network)
         self.rpcserver.register_function(netcontrol.del_gw)
         self.rpcserver.register_function(netcontrol.del_bridge)
         self.rpcserver.register_function(ovscontrol.add_port_gre_withkey)
