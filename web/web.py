@@ -39,6 +39,7 @@ from webViews.cloud import *
 from webViews.authenticate.auth import login_required, administration_required,activated_required
 from webViews.authenticate.register import registerView
 from webViews.authenticate.login import loginView, logoutView
+from webViews.batch import *
 import webViews.dockletrequest
 from webViews import cookie_tool
 import traceback
@@ -119,6 +120,28 @@ def redirect_dochome():
 def config():
     return configView.as_view()
 
+@app.route("/batch_jobs/", methods=['GET'])
+@login_required
+def batch_job():
+    return batchJobListView().as_view()
+
+@app.route("/batch_job/create/", methods=['GET'])
+@login_required
+def create_batch_job():
+    return createBatchJobView().as_view()
+
+@app.route("/batch_job/add/", methods=['POST'])
+@login_required
+def add_batch_job():
+    #TODO get form parameters of a job description
+    job_data = {}
+    job_data["job_name"] = request.form["job_name"]
+    return addBatchJobView().as_view()
+
+@app.route("/batch_job/state/", methods=['GET'])
+@login_required
+def state_batch_job():
+    return stateBatchJobView().as_view()
 
 @app.route("/workspace/create/", methods=['GET'])
 @activated_required

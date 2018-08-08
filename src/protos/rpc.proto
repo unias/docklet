@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+service Master {
+	rpc report (ReportMsg) returns (Reply) {};
+}
+
+service Worker {
+	rpc process_task (TaskInfo) returns (Reply) {}
+}
+
+message Reply {
+	ReplyStatus status = 1;	// 返回值
+	string message = 2;
+
+	enum ReplyStatus {
+		ACCEPTED = 0;
+		REFUSED = 1;
+	}
+}
+
+message ReportMsg {
+	repeated TaskMsg taskmsgs = 1;
+}
+
+message TaskMsg {
+	string taskid = 1;
+	int32 instanceid = 2;
+	Status instanceStatus = 3; // 任务状态
+	string token = 4;
+	string errmsg = 5;
+}
+
+enum Status {
+	WAITING = 0;
+	RUNNING = 1;
+	COMPLETED = 2;
+	FAILED = 3;
+	TIMEOUT = 4;
+	OUTPUTERROR = 5;
+}
+
+message TaskInfo {
+	string id = 1;
+	string username = 2;
+	int32 instanceid = 3;
+	int32 instanceCount = 4;	// 实例个数
+	int32 maxRetryCount = 5;	// 最大重试次数
+	Parameters parameters = 6;	// 参数
+	Cluster cluster = 7;		// 集群配置
+	int32 timeout = 8;			// 超时阈值
+	string token = 9;
+}
+
+message Parameters {
+	Command command = 1;			// 命令配置
+	string stderrRedirectPath = 2;	// 错误输出重定向
+	string stdoutRedirectPath = 3;	// 标准输出重定向
+}
+
+message Command {
+	string commandLine = 1;				// 命令
+	string packagePath = 2;				// 工作路径
+	map<string, string> envVars = 3;	// 自定义环境变量
+}
+
+message Cluster {
+	Image image = 1;			// 镜像配置
+	Instance instance = 2;		// 实例配置
+	repeated Mount mount = 3;	// 挂载配置
+}
+
+message Image {
+	string name = 1;	// 镜像名
+	ImageType type = 2;	// 镜像类型（public/private)
+	string owner = 3;	// 所有者
+
+	enum ImageType {
+	BASE = 0;
+	PUBLIC = 1;
+	PRIVATE = 2;
+	}
+}
+
+message Mount {
+	string localPath = 1;	// 本地路径
+	string remotePath = 2;	// 远程路径
+}
+
+message Instance {
+	int32 cpu = 1;		// CPU，单位 个？
+	int32 memory = 2;	// 内存，单位 mb
+	int32 disk = 3;		// 磁盘，单位 mb
+	int32 gpu = 4;		// 显卡，单位 个
+}

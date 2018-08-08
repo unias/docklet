@@ -182,3 +182,32 @@
 # ALLOW_SCALE_OUT: allow docklet to rent server on the cloud to scale out
 # Only when you deploy docklet on the cloud can you set it to True
 # ALLOW_SCALE_OUT=False
+
+# ==================================================
+#
+# Batch Config
+#
+# ==================================================
+
+# BATCH_ON: whether to start batch job processing system when start
+# the docklet. Default: True
+# BATCH_ON=True
+
+# BATCH_MASTER_PORT: the rpc server port on master.
+# default: 50050
+# BATCH_MASTER_PORT=50050
+
+# BATCH_WORKER_PORT: the rpc server port on worker.
+# default: 50051
+# BATCH_WORKER_PORT=50051
+
+# BATCH_GATEWAY: the ip address of gateway for the containers processing
+# batch jobs. default: 10.0.3.1
+# BATCH_GATEWAY=10.0.3.1
+
+# BATCH_NET: ip addresses range of containers for batch job, default is 10.0.3.0/24
+# BATCH_NET=10.0.3.0/24
+
+# BATCH_MAX_THREAD_WORKER: the maximun number of threads of the rpc server on
+# the batch job worker. default:5
+# BATCH_MAX_THREAD_WORKER=5  

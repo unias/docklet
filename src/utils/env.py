@@ -79,5 +79,17 @@ def getenv(key):
         return os.environ.get("ALLOCATED_PORTS","10000-65535")
     elif key =="ALLOW_SCALE_OUT":
         return os.environ.get("ALLOW_SCALE_OUT", "False")
+    elif key == "BATCH_ON":
+        return os.environ.get("BATCH_ON","True")
+    elif key == "BATCH_MASTER_PORT":
+        return os.environ.get("BATCH_MASTER_PORT","50050")
+    elif key == "BATCH_WORKER_PORT":
+        return os.environ.get("BATCH_WORKER_PORT","50051")
+    elif key == "BATCH_GATEWAY":
+        return os.environ.get("BATCH_GATEWAY","10.0.3.1")
+    elif key == "BATCH_NET":
+        return os.environ.get("BATCH_NET","10.0.3.0/24")
+    elif key == "BATCH_MAX_THREAD_WORKER":
+        return os.environ.get("BATCH_MAX_THREAD_WORKER","5")
     else:
         return os.environ.get(key,"")
