@@ -315,6 +315,7 @@ def masterdesc(mastername):
     descriptionMasterView.desc=env.getenv(mastername+"_desc")[1:-1]
     return descriptionMasterView.as_view()
 
+
 @app.route("/image/<masterip>/list/", methods=['POST'])
 @login_required
 def image_list(masterip):
@@ -375,6 +376,14 @@ def updatebaseImage(image,masterip):
 @administration_required
 def hosts():
     return hostsView.as_view()
+
+@app.route("/hosts/<masterip>/migrate/<hostip>/", methods=['POST'])
+@administration_required
+def hostMigrate(hostip, masterip):
+    hostMigrateView.hostip = hostip
+    hostMigrateView.masterip = masterip
+    hostMigrateView.target = request.form.getlist('target')
+    return hostMigrateView.as_view()
 
 @app.route("/hosts/<masterip>/<com_ip>/", methods=['GET'])
 @administration_required

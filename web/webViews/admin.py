@@ -113,3 +113,13 @@ class updatebaseImageView(normalView):
         }
         dockletRequest.post('/image/updatebase/', data)
         return redirect("/settings/")
+
+class hostMigrateView(normalView):
+    @classmethod
+    def post(self):
+        data = {
+                "src_host": self.hostip,
+                "dst_host_list": self.target
+        }
+        dockletRequest.post("/host/migrate/", data, self.masterip)
+        return redirect("/hosts/")

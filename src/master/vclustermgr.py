@@ -789,14 +789,14 @@ class VclusterMgr(object):
         self.imgmgr.removeImage(username,imagename)
         return [True,""]
 
-    def migrate_cluster(self, clustername, username, new_host_list, user_info):
+    def migrate_cluster(self, clustername, username, src_host, new_host_list, user_info):
         [status, info] = self.get_clusterinfo(clustername, username)
         if not status:
             return [False, "cluster not found"]
         prestatus = info['status']
         self.stop_cluster(clustername, username)
         for container in info['containers']:
-            if container['host'] in new_host_list:
+            if not container['host'] == src_host:
                 continue
             random.shuffle(new_host_list)
             for new_host in new_host_list:
@@ -814,6 +814,29 @@ class VclusterMgr(object):
             status, msg = self.start_cluster(clustername, username, user_info)
             if not status:
                 return [False, msg]
+        return [True, ""]
+
+    def migrate_host(self, src_host, new_host_list):
+        [status, vcluster_list] = self.get_all_clusterinfo()
+        if not status:
+            return [False, vcluster_list]
+        auth_key = env.getenv('AUTH_KEY')
+        res = post_to_user("/master/user/groupinfo/", {'auth_key':auth_key})
+        groups = json.loads(res['groups'])
+        quotas = {}
+        for group in groups:
+            quotas[group['name']] = group['quotas']
+
+        for vcluster in vcluster_list:
+            try:
+                clustername = vcluster['clustername']
+                username = vcluster['ownername']
+                rc_info = post_to_user("/master/user/recoverinfo/", {'username':username,'auth_key':auth_key})
+                groupname = rc_info['groupname']
+                user_info = {"data":{"id":rc_info['uid'],"groupinfo":quotas[groupname]}}
+                self.migrate_cluster(clustername, username, src_host, new_host_list, user_info)
+            except Exception as ex:
+                return [False, str(ex)]
         return [True, ""]
 
     def is_cluster(self, clustername, username):
@@ -861,6 +884,14 @@ class VclusterMgr(object):
             return [False, None]
         else:
             return [True, vcluster]
+
+    def get_all_clusterinfo(self):
+        vcluster_list = VCluster.query.all()
+        logger.info(str(vcluster_list))
+        if vcluster_list is None:
+            return [False, None]
+        else:
+            return [True, json.loads(str(vcluster_list))]
 
     # acquire cluster id from etcd
     def _acquire_id(self):
