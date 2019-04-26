@@ -19,6 +19,15 @@ def post_to_user(url = '/', data={}):
 #
 ##################################################
 
+def db_commit():
+    try:
+        db.session.commit()
+    except Exception as err:
+        db.session.rollback()
+        logger.error(traceback.format_exc())
+        return False
+    return True
+
 class VclusterMgr(object):
     def __init__(self, nodemgr, networkmgr, etcdclient, addr, mode, distributedgw='False'):
         self.mode = mode
@@ -615,7 +624,8 @@ class VclusterMgr(object):
         [status,vcluster] = self.get_vcluster(clustername,username)
         vcluster.status ='running'
         vcluster.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        db.session.commit()
+        if not db_commit():
+            return [False, "Commit Errror"]
         return [True, "start cluster"]
 
     def mount_cluster(self, clustername, username):
@@ -697,7 +707,8 @@ class VclusterMgr(object):
         [status, vcluster] = self.get_vcluster(clustername, username)
         vcluster.status = 'stopped'
         vcluster.start_time ="------"
-        db.session.commit()
+        if not db_commit():
+            return [False, "Commit Errror"]
         return [True, "stop cluster"]
 
     def detach_cluster(self, clustername, username):
@@ -784,7 +795,14 @@ class VclusterMgr(object):
             self.imgmgr.removeImage(username,imagename)
             return [False, msg]
         con_db.host = new_host
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as err:
+            logger.error(traceback.format_exc())
+            db.session.rollback()
+            worker.delete_container(containername)
+            self.imgmgr.removeImage(username,imagename)
+            return [False, "Database commit error!"]
         oldworker.delete_container(containername)
         self.imgmgr.removeImage(username,imagename)
         return [True,""]
@@ -816,7 +834,7 @@ class VclusterMgr(object):
                 return [False, msg]
         return [True, ""]
 
-    def migrate_host(self, src_host, new_host_list):
+    def migrate_host(self, src_host, new_host_list, ulockmgr):
         [status, vcluster_list] = self.get_all_clusterinfo()
         if not status:
             return [False, vcluster_list]
@@ -828,15 +846,21 @@ class VclusterMgr(object):
             quotas[group['name']] = group['quotas']
 
         for vcluster in vcluster_list:
+            if 'ownername' not in vcluster.keys():
+                return [Flase, 'Ownername not in vcluster(%s).keys' % str(vcluster) ]
             try:
-                clustername = vcluster['clustername']
                 username = vcluster['ownername']
+                ulockmgr.acquire(username)
+                clustername = vcluster['clustername']
                 rc_info = post_to_user("/master/user/recoverinfo/", {'username':username,'auth_key':auth_key})
                 groupname = rc_info['groupname']
                 user_info = {"data":{"id":rc_info['uid'],"groupinfo":quotas[groupname]}}
                 self.migrate_cluster(clustername, username, src_host, new_host_list, user_info)
             except Exception as ex:
+                ulockmgr.release(username)
+                logger.error(traceback.format_exc())
                 return [False, str(ex)]
+            ulockmgr.release(username)
         return [True, ""]
 
     def is_cluster(self, clustername, username):
@@ -868,7 +892,8 @@ class VclusterMgr(object):
         vcluster.proxy_public_ip = proxy_public_ip
         #proxy_url = env.getenv("PORTAL_URL") +"/"+ proxy_public_ip +"/_web/" + username + "/" + clustername
         #info['proxy_url'] = proxy_url
-        db.session.commit()
+        if not db_commit():
+            return [False, "Commit Errror"]
         return proxy_public_ip
 
     def get_clusterinfo(self, clustername, username):
@@ -887,7 +912,7 @@ class VclusterMgr(object):
 
     def get_all_clusterinfo(self):
         vcluster_list = VCluster.query.all()
-        logger.info(str(vcluster_list))
+        #logger.info(str(vcluster_list))
         if vcluster_list is None:
             return [False, None]
         else:
