@@ -442,14 +442,14 @@ def migrate_host(user, beans, form):
 
     if src_host is None or dst_host_list is None:
         return json.dumps({'success':'false', 'message': 'src host or dst host list is null'})
-    [status, msg] = G_vclustermgr.migrate_host(src_host, dst_host_list)
+    [status, msg] = G_vclustermgr.migrate_host(src_host, dst_host_list, G_ulockmgr)
     if status:
         return json.dumps({'success': 'true', 'action': 'migrate_host'})
     else:
         return json.dumps({'success': 'false', 'message': msg})
 
-    
-    
+
+
 @app.route("/image/list/", methods=['POST'])
 @login_required
 def list_image(user, beans, form):
