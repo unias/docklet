@@ -80,9 +80,9 @@ def getenv(key):
     elif key =="ALLOW_SCALE_OUT":
         return os.environ.get("ALLOW_SCALE_OUT", "False")
     elif key == "WARNING_DAYS":
-        return os.environ.get("WARNING_DAYS"."7")
+        return os.environ.get("WARNING_DAYS", "7")
     elif key == "RELEASE_DAYS":
-        return os.environ.get("RELEASE_DAYS"."14")
+        return os.environ.get("RELEASE_DAYS", "14")
     elif key == "BATCH_ON":
         return os.environ.get("BATCH_ON","True")
     elif key == "BATCH_MASTER_PORT":
