@@ -707,6 +707,7 @@ class VclusterMgr(object):
         [status, vcluster] = self.get_vcluster(clustername, username)
         vcluster.status = 'stopped'
         vcluster.start_time ="------"
+        vcluster.stop_time = datetime.datetime.now()
         if not db_commit():
             return [False, "Commit Errror"]
         return [True, "stop cluster"]

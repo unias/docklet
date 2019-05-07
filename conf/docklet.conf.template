@@ -183,6 +183,16 @@
 # Only when you deploy docklet on the cloud can you set it to True
 # ALLOW_SCALE_OUT=False
 
+# WARNING_DAYS: user will receive a warning email for releasing
+# when his/her vcluster has been stopped for more then the days.
+# Default: 7
+# WARNING_DAYS=7
+
+# RELEASE_DAYS: the vcluster will be released when it has been
+# stopped for more then the days. Needs to be larger then WARNING_DAYS.
+# Default: 14
+# RELEASE_DAYS=14
+
 # ==================================================
 #
 # Batch Config

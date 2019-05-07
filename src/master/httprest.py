@@ -29,7 +29,7 @@ from socketserver import ThreadingMixIn
 from utils import etcdlib, imagemgr
 from master import nodemgr, vclustermgr, notificationmgr, lockmgr, cloudmgr, jobmgr, taskmgr
 from utils.logs import logs
-from master import userManager, beansapplicationmgr, monitor, sysmgr, network
+from master import userManager, beansapplicationmgr, monitor, sysmgr, network, releasemgr
 from worker.monitor import History_Manager
 import threading
 import requests
@@ -1161,6 +1161,10 @@ if __name__ == '__main__':
     logger.info("vclustermgr started")
     G_imagemgr = imagemgr.ImageMgr()
     logger.info("imagemgr started")
+
+    G_releasemgr = releasemgr.ReleaseMgr(G_vclustermgr,G_ulockmgr,10)
+    G_releasemgr.start()
+    logger.info("releasemgr started")
 
     logger.info("startting to listen on: ")
     masterip = env.getenv('MASTER_IP')

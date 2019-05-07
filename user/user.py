@@ -314,7 +314,7 @@ def get_master_recoverinfo():
         return json.dumps({'success':'false', 'message':'username field is required.'})
     else:
         user = User.query.filter_by(username=username).first()
-        return json.dumps({'success':'true', 'uid':user.id, 'groupname':user.user_group})
+        return json.dumps({'success':'true', 'uid':user.id, 'email':user.e_mail, 'groupname':user.user_group})
 
 @app.route("/master/user/groupinfo/", methods=['POST'])
 @auth_key_required
