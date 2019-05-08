@@ -1,5 +1,8 @@
+import sys
+if sys.path[0].endswith("utils"):
+    sys.path[0] = sys.path[0][:-5]
 from flask_migrate import Migrate,MigrateCommand
-from model import *
+from utils.model import *
 from flask_script import Manager
 from flask import Flask
 

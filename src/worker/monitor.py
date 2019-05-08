@@ -372,7 +372,7 @@ class Container_Collector(threading.Thread):
 
         # deal with network used data
         containerids = re.split("-",container_name)
-        if not is_batch and len(containerids) >= 3:
+        if not is_batch and len(containerids) >= 3 and (containerids[1] + "-" + containerids[2]) in self.net_stats.keys():
             workercinfo[container_name]['net_stats'] = self.net_stats[containerids[1] + '-' + containerids[2]]
             #logger.info(workercinfo[container_name]['net_stats'])
 
@@ -658,7 +658,11 @@ class History_Manager:
             laststopruntime[vnode_name] = runtime
             vnode.laststopruntime = runtime
         db.session.add(history)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as err:
+            db.session.rollback()
+            logger.warning(traceback.format_exc())
 
     def getHistory(self,vnode_name):
         vnode = VNode.query.filter_by(name=vnode_name).first()

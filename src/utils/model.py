@@ -160,7 +160,7 @@ class UserUsage(db.Model):
         self.disk = '0'
 
     def __repr__(self):
-        return '<UserUsage %r>' % self.name
+        return '<UserUsage %s>cpu:%s memory:%s disk:%s' % (self.username,self.cpu,self.memory,self.disk)
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -378,6 +378,8 @@ class VCluster(db.Model):
     nextcid = db.Column(db.Integer)
     create_time = db.Column(db.DateTime)
     start_time = db.Column(db.String(20))
+    stop_time = db.Column(db.DateTime)
+    is_warned = db.Column(db.Boolean)
     proxy_server_ip = db.Column(db.String(20))
     proxy_public_ip = db.Column(db.String(20))
     port_mapping = db.relationship('PortMapping', backref='v_cluster', lazy='dynamic')
@@ -397,6 +399,8 @@ class VCluster(db.Model):
         self.billing_history = []
         self.create_time = datetime.now()
         self.start_time = "------"
+        self.stop_time = datetime.now()
+        self.is_warned = False
 
     def __repr__(self):
         info = {}
@@ -410,6 +414,11 @@ class VCluster(db.Model):
         info["nextcid"] = self.nextcid
         info["create_time"] = self.create_time.strftime("%Y-%m-%d %H:%M:%S")
         info["start_time"] = self.start_time
+        if self.stop_time is None:
+            info['stop_time'] = "------"
+        else:
+            info['stop_time'] = self.stop_time.strftime("%Y-%m-%d %H:%M:%S")
+        info["is_warned"] = self.is_warned
         info["containers"] = [dict(eval(str(con))) for con in self.containers]
         info["port_mapping"] = [dict(eval(str(pm))) for pm in self.port_mapping]
         info["billing_history"] = [dict(eval(str(bh))) for bh in self.billing_history]
@@ -517,7 +526,7 @@ class Batchtask(db.Model):
         self.running_time = 0
         self.billing = 0
         self.tried_times = 0
-        
+
     def __repr__(self):
         info = {}
         info['id'] = self.id

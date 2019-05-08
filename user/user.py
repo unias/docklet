@@ -314,7 +314,7 @@ def get_master_recoverinfo():
         return json.dumps({'success':'false', 'message':'username field is required.'})
     else:
         user = User.query.filter_by(username=username).first()
-        return json.dumps({'success':'true', 'uid':user.id, 'groupname':user.user_group})
+        return json.dumps({'success':'true', 'uid':user.id, 'email':user.e_mail, 'groupname':user.user_group})
 
 @app.route("/master/user/groupinfo/", methods=['POST'])
 @auth_key_required
@@ -324,6 +324,21 @@ def get_master_groupinfo():
     groups = json.loads(groupfile.read())
     groupfile.close()
     return json.dumps({'success':'true', 'groups':json.dumps(groups)})
+
+@app.route("/master/user/usageRelease/", methods=['POST'])
+@auth_key_required
+def usageRelease_master():
+    global G_usermgr
+    logger.info("handle request: /master/user/usageRelease/")
+    form = request.form
+    user = form.get("username",None)
+    cur_user = User.query.filter_by(username=user).first()
+    if user is None or cur_user is None:
+        return json.dumps({'success':'false', 'message':'Null username field or user does not exist.'})
+    G_lockmgr.acquire('__usage_'+str(user))
+    result = G_usermgr.usageRelease(cur_user = cur_user, cpu = form.get('cpu'), memory = form.get('memory'), disk = form.get('disk'))
+    G_lockmgr.release('__usage_'+str(user))
+    return json.dumps(result)
 
 @app.route("/user/selfModify/", methods=['POST'])
 @login_required

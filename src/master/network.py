@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import json, sys, netifaces, threading
+import json, sys, netifaces, threading, traceback
 from utils.nettools import netcontrol,ovscontrol
 
 from utils.log import logger
@@ -507,6 +507,7 @@ class NetworkMgr(object):
             self.user_locks.release()
 
     def del_usrgwbr(self, username, uid, nodemgr):
+        self.load_usrgw(username)
         if username not in self.usrgws.keys():
             return [False, "user does't have gateway or user doesn't exist."]
         ip = self.usrgws[username]
@@ -539,7 +540,7 @@ class NetworkMgr(object):
             del self.users[username]
             return [True, 'delete user success']
         except Exception as ex:
-            logger.error(str(ex))
+            logger.error(traceback.format_exc())
             return [False, str(ex)]
         finally:
             self.user_locks.release()
