@@ -325,6 +325,21 @@ def get_master_groupinfo():
     groupfile.close()
     return json.dumps({'success':'true', 'groups':json.dumps(groups)})
 
+@app.route("/master/user/usageRelease/", methods=['POST'])
+@auth_key_required
+def usageRelease_master():
+    global G_usermgr
+    logger.info("handle request: /master/user/usageRelease/")
+    form = request.form
+    user = form.get("username",None)
+    cur_user = User.query.filter_by(username=user).first()
+    if user is None or cur_user is None:
+        return json.dumps({'success':'false', 'message':'Null username field or user does not exist.'})
+    G_lockmgr.acquire('__usage_'+str(user))
+    result = G_usermgr.usageRelease(cur_user = cur_user, cpu = form.get('cpu'), memory = form.get('memory'), disk = form.get('disk'))
+    G_lockmgr.release('__usage_'+str(user))
+    return json.dumps(result)
+
 @app.route("/user/selfModify/", methods=['POST'])
 @login_required
 def selfModify_user(cur_user, user, form):

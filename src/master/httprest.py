@@ -1162,7 +1162,7 @@ if __name__ == '__main__':
     G_imagemgr = imagemgr.ImageMgr()
     logger.info("imagemgr started")
 
-    G_releasemgr = releasemgr.ReleaseMgr(G_vclustermgr,G_ulockmgr,10)
+    G_releasemgr = releasemgr.ReleaseMgr(G_vclustermgr,G_ulockmgr)
     G_releasemgr.start()
     logger.info("releasemgr started")
 

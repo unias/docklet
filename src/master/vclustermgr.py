@@ -624,6 +624,7 @@ class VclusterMgr(object):
         [status,vcluster] = self.get_vcluster(clustername,username)
         vcluster.status ='running'
         vcluster.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        vcluster.is_warned = False
         if not db_commit():
             return [False, "Commit Errror"]
         return [True, "start cluster"]

@@ -179,7 +179,7 @@ class TaskMgr(threading.Thread):
         self.free_nets = []
         for i in range(0, (1 << (32-self.batch_cidr)) - 1, (1 << self.task_cidr)):
             self.free_nets.append(i)
-        self.logger.info("Free nets addresses pool %s" % str(self.free_nets))
+        #self.logger.info("Free nets addresses pool %s" % str(self.free_nets))
         self.logger.info("Each Batch Net CIDR:%s"%(str(self.task_cidr)))
 
     def data_lock(lockname):

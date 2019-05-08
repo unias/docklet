@@ -1,4 +1,4 @@
-import threading, time, requests, json
+import threading, time, requests, json, traceback
 from utils import env
 from utils.log import logger
 from utils.model import db, VCluster, Container
@@ -26,15 +26,17 @@ class ReleaseMgr(threading.Thread):
         self.release_days = int(env.getenv("RELEASE_DAYS"))
         if self.release_days <= self.warning_days:
             self.release_days = self.warning_days+1
+        logger.info("[ReleaseMgr] start withe warning_days=%d release_days=%d"%(self.warning_days, self.release_days))
 
-    def _send_email(to_address, username, vcluster, days, is_released=True):
+    def _send_email(self, to_address, username, vcluster, days, is_released=True):
         email_from_address = settings.get('EMAIL_FROM_ADDRESS')
         if (email_from_address in ['\'\'', '\"\"', '']):
             return
         text = '<html><h4>Dear '+ username + ':</h4>'
+        st_str = vcluster.stop_time.strftime("%Y-%m-%d %H:%M:%S")
         text += '''<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your workspace/vcluster(name:%s id:%d) in <a href='%s'>%s</a>
-                   has been stopped more than %d days now. </p>
-                ''' % (vc.clustername, vc.clusterid, env.getenv("PORTAL_URL"), env.getenv("PORTAL_URL"), days)
+                   has been stopped more than %d days now(stopped at:%s). </p>
+                ''' % (vcluster.clustername, vcluster.clusterid, env.getenv("PORTAL_URL"), env.getenv("PORTAL_URL"), days, st_str)
         if is_released:
             text += '''<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Therefore, the workspace/vcluster has been released now.</p>
                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>And the data in it couldn't be recoverd</b> unless you save it.</p>
@@ -43,7 +45,7 @@ class ReleaseMgr(threading.Thread):
         else:
             #day_d = self.release_days - (datetime.datetime.now() - vcluster.stop_time).days
             release_date = vcluster.stop_time + datetime.timedelta(days=self.release_days)
-            day_d = (release_date - vcluster.stop_time).days
+            day_d = (release_date - datetime.datetime.now()).days
             rd_str = release_date.strftime("%Y-%m-%d %H:%M:%S")
             text += '''<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It will be released after <b>%s(in about %d days)</b>.</p>
                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>And the data in it couldn't be recoverd after releasing.</b></p>
@@ -81,6 +83,7 @@ class ReleaseMgr(threading.Thread):
                 quotas[group['name']] = group['quotas']
 
             vcs = VCluster.query.filter_by(status='stopped').all()
+            #logger.info(str(vcs))
             for vc in vcs:
                 if vc.stop_time is None:
                     continue
@@ -89,28 +92,44 @@ class ReleaseMgr(threading.Thread):
                 if days >= self.release_days:
                     logger.info("[ReleaseMgr] VCluster(id:%d,user:%s) has been stopped(%s) for more than %d days, it will be released."
                                 % (vc.clusterid, vc.ownername, vc.stop_time.strftime("%Y-%m-%d %H:%M:%S"), self.release_days))
-                    rc_info = post_to_user("/master/user/recoverinfo/", {'username':username,'auth_key':auth_key})
+                    rc_info = post_to_user("/master/user/recoverinfo/", {'username':vc.ownername,'auth_key':auth_key})
                     logger.info("[ReleaseMgr] %s"%str(rc_info))
                     groupname = rc_info['groupname']
-                    user_info = {"data":{"id":rc_info['uid'],"groupinfo":quotas[groupname]}}
+                    user_info = {"data":{"id":rc_info['uid'],"group":groupname,"groupinfo":quotas[groupname]}}
                     self.ulockmgr.acquire(vc.ownername)
                     try:
-                        success, msg = self.vclustermgr.delete_cluster(vc.clustername, vc.ownername, user_info)
+                        [status, usage_info] = self.vclustermgr.get_clustersetting(vc.clustername, vc.ownername, "all", True)
+                        success, msg = self.vclustermgr.delete_cluster(vc.clustername, vc.ownername, json.dumps(user_info))
                         if not success:
                             logger.error("[ReleaseMgr] Can't release VCluster(id:%d,user:%s) for %s"%(vc.clusterid, vc.ownername, msg))
                         else:
-                            self._send_email(rc_info['email'], vc.ownername, vc, days)
+                            if status:
+                                logger.info("[ReleaseMgr] Release Quota.")
+                                post_to_user("/master/user/usageRelease/", {'auth_key':auth_key,'username':vc.ownername,
+                                             'cpu':usage_info['cpu'], 'memory':usage_info['memory'],'disk':usage_info['disk']})
+                            self._send_email(rc_info['email'], vc.ownername, vc, self.release_days)
+                            logger.info("[ReleaseMgr] Succeed to releasing VCluster(id:%d,user:%s) for %s. Send mail to info."%(vc.clusterid, vc.ownername, msg))
                     except Exception as err:
-                        logger.error(err)
+                        logger.error(traceback.format_exc())
                     finally:
                         self.ulockmgr.release(vc.ownername)
 
                 elif days >= self.warning_days:
                     logger.info("[ReleaseMgr] VCluster(id:%d,user:%s) has been stopped(%s) for more than %d days. A warning email will be sent to the user."
                                 % (vc.clusterid, vc.ownername, vc.stop_time.strftime("%Y-%m-%d %H:%M:%S"), self.warning_days))
-                    rc_info = post_to_user("/master/user/recoverinfo/", {'username':username,'auth_key':auth_key})
+                    if vc.is_warned:
+                        logger.info("[ReleaseMgr] VCluster(id:%d,user:%s) has been warned before. Skip it."% (vc.clusterid, vc.ownername))
+                        continue
+                    rc_info = post_to_user("/master/user/recoverinfo/", {'username':vc.ownername,'auth_key':auth_key})
                     logger.info("[ReleaseMgr] %s"%str(rc_info))
-                    self._send_email(rc_info['email'], vc.ownername, vc, days, False)
+                    self._send_email(rc_info['email'], vc.ownername, vc, self.warning_days, False)
+                    vc.is_warned = True
+
+            try:
+                db.session.commit()
+            except Exception as err:
+                db.session.rollback()
+                logger.warning(traceback.format_exc())
             time.sleep(self.check_interval)
 
     def stop(self):
