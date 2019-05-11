@@ -224,6 +224,7 @@
       var masterip=$("select#masterselector").children('option:selected').val();
       //mapping_number = 0;
       var task_html = '';
+      var images = images_info
       task_html +=
             '<div class="panel panel-default" id="task_pannel_' + task_number + '">'
            +'<div class="panel-heading">'
@@ -233,6 +234,77 @@
            +'</a><div class="box-tools pull-right"><button type="button" id="' + task_number + '" onclick="removeTask(this)" class="btn btn-box-tool"><i class="fa fa-times"></i></button></div>'
            +'</h4></div>'
            +'<div id="collapse' + task_number + '" class="panel-collapse collapse in">'
+           +'<div class="panel-body">'
+           +'<div class="form-group">'
+           +'<label class="col-sm-2 control-label">Running Path</label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="srcAddr_' + task_number + '" id="srcAddr_' + task_number + '" value="/root" required/>'
+           +'</div>'
+           +'<label class="col-sm-2 control-label">Command</label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="command_' + task_number + '" id="command_' + task_number + '"  required/>'
+           +'</div></div>'
+
+     task_html +=
+            '<div class="form-group"><label class="col-sm-2 control-label">Image Choose</label>'
+           +'<div class="col-sm-10">'
+           +'<table id="imagetable' + task_number +'" class="table table-striped table-bordered table-hover table-image" >'
+           +"<thead>"
+           +"<tr>"
+           +"<th>ImageName</th>"
+           +"<th>Type</th>"
+           +"<th>Owner</th>"
+           +"<th>Size</th>"
+           +"<th>Description</th>"
+           +"<th>Choose</th>"
+           +"</tr>"
+           +"</thead>"
+           +"<tbody>"
+           +"<tr>"
+           +"<td>base</td>"
+           +"<td>public</td>"
+           +"<td>docklet</td>"
+           +"<td>--</td>"
+           +"<td>A base image for you</td>"
+           +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="base_base_base" checked="checked"></label></div></td>'
+           +"</tr>";
+           for(var index in images[masterip].private) {
+             var image = images[masterip].private[index];
+              task_html +=
+                "<tr>"
+               +"<td>"+image.name+"</td>"
+               +"<td>private</td>"
+               +"<td>{{user}}</td>"
+               +"<td>"+image.size_format+"</td>"
+               +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
+               +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
+               +"</tr>";
+           }
+           for(var p_user in images[masterip].public) {
+             for(var index in images[masterip].public[p_user]) {
+               image=images[masterip].public[p_user][index];
+               task_html +=
+                 "<tr>"
+                 +"<td>"+image.name+"</td>"
+                 +"<td>public</td>"
+                 +"<td>" + p_user + "</td>"
+                 +"<td>"+image.size_format+"</td>"
+                 +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
+                 +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
+                 +"</tr>";
+              }
+           }
+    task_html +=
+            '</tbody></table>'
+           +'</div>'
+           +'</div>'
+    task_html +=
+            '<div class="panel panel-default" id="task_subpannel_' + task_number + '">'
+           +'<div class="panel-heading">'
+           +'<h4 class="panel-title">'
+           +'<a data-toggle="collapse" data-panel="#acc" href="#subcollapse' + task_number + '">'
+           +'Show detailed options'
+           +'</a>'
+           +'</h4></div>'
+           +'<div id="subcollapse' + task_number + '" class="panel-collapse collapse">'
            +'<div class="panel-body">'
            +'<div class="form-group">'
            +'<label class="col-sm-2 control-label">CPU</label>'
@@ -256,11 +328,11 @@
            +'<div class="col-sm-3"><input type="number" class="form-control" name="retryCount_' + task_number + '" id="retryCount_' + task_number + '" value= 1  min="0" max="5" required/>'
            +'</div></div>'
            +'<div class="form-group">'
-           +'<label class="col-sm-2 control-label">Running Path</label>'
-           +'<div class="col-sm-3"><input type="text" class="form-control" name="srcAddr_' + task_number + '" id="srcAddr_' + task_number + '" value="/root" required/>'
+           +'<label class="col-sm-2 control-label">Dependency&nbsp<i class="fa fa-question-circle" title="The tasks ids that this task depends on, seperate them with commas, eg: 1, 2"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="dependency_' + task_number + '" id="dependency_' + task_number + '"  />'
            +'</div>'
            +'<label class="col-sm-2 control-label">Expire Time</label>'
-           +'<div class="col-sm-3"><input type="number" class="form-control" name="expTime_' + task_number + '" id="expTime_' + task_number + '" value= 60  min="10" max="86400" required/>'
+           +'<div class="col-sm-3"><input type="number" class="form-control" name="expTime_' + task_number + '" id="expTime_' + task_number + '" value= 3600  min="10" max="86400" required/>'
            +'</div>Seconds</div>'
            +'<div class="form-group">'
            +'<label class="col-sm-2 control-label">Stderr Redirect Path</label>'
@@ -270,74 +342,15 @@
            +'<div class="col-sm-3"><input type="text" class="form-control" placeholder="/path/to/file or /path/" name="stdOutRedPth_' + task_number + '" id="stdOutRedPth_' + task_number + '" value="/root/nfs/batch_{jobid}/" required/>'
            +'</div></div>'
            +'<div class="form-group">'
-           +'<label class="col-sm-2 control-label">Dependency&nbsp<i class="fa fa-question-circle" title="The tasks ids that this task depends on, seperate them with commas, eg: 1, 2"></i></label>'
-           +'<div class="col-sm-3"><input type="text" class="form-control" name="dependency_' + task_number + '" id="dependency_' + task_number + '"  />'
-           +'</div>'
-           +'<label class="col-sm-2 control-label">Command</label>'
-           +'<div class="col-sm-3"><input type="text" class="form-control" name="command_' + task_number + '" id="command_' + task_number + '"  required/>'
-           +'</div></div>'
-           +'<div class="form-group">'
            +'<label class="col-sm-2 control-label">Run on: </label>'
            +'<div class="col-sm-3"><input type="radio" name="runon_' + task_number + '" value="all"  checked="checked"/>All vnodes &nbsp'
            +' <input type="radio" name="runon_' + task_number + '" value="master"  />One vnode(master)</div>'
            +'<label class="col-sm-2 control-label">Start at the Same Time</label>'
            +'<div class="col-sm-3"><input type="checkbox" name="atSameTime_' + task_number + '" checked="checked"/>'
            +'</div></div>'
-      var images = images_info
+
       task_html +=
-            '<div class="form-group"><label class="col-sm-2 control-label">Image Choose</label>'
-            +'<div class="col-sm-10">'
-            +'<table id="imagetable' + task_number +'" class="table table-striped table-bordered table-hover table-image" >'
-            +"<thead>"
-            +"<tr>"
-            +"<th>ImageName</th>"
-            +"<th>Type</th>"
-            +"<th>Owner</th>"
-            +"<th>Size</th>"
-            +"<th>Description</th>"
-            +"<th>Choose</th>"
-            +"</tr>"
-            +"</thead>"
-            +"<tbody>"
-            +"<tr>"
-            +"<td>base</td>"
-            +"<td>public</td>"
-            +"<td>docklet</td>"
-            +"<td>--</td>"
-            +"<td>A base image for you</td>"
-            +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="base_base_base" checked="checked"></label></div></td>'
-            +"</tr>";
-            for(var index in images[masterip].private) {
-              var image = images[masterip].private[index];
-              task_html +=
-                "<tr>"
-                +"<td>"+image.name+"</td>"
-                +"<td>private</td>"
-                +"<td>{{user}}</td>"
-                +"<td>"+image.size_format+"</td>"
-                +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
-                +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
-                +"</tr>";
-            }
-            for(var p_user in images[masterip].public) {
-              for(var index in images[masterip].public[p_user]) {
-                image=images[masterip].public[p_user][index];
-                task_html +=
-                  "<tr>"
-                  +"<td>"+image.name+"</td>"
-                  +"<td>public</td>"
-                  +"<td>" + p_user + "</td>"
-                  +"<td>"+image.size_format+"</td>"
-                  +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
-                  +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
-                  +"</tr>";
-              }
-            }
-      task_html +=
-           '</tbody></table>'
-           +'</div>'
-           +'</div>'
-           +'<div class="form-group">'
+           '<div class="form-group">'
            +'<label class="col-sm-2 control-label">Object Storage Mapping<br/>'
            +'<button type="button" id="' + task_number + '" class="btn btn-primary btn-xs" title="add an external storage mapping" onclick="addMapping(this,'+task_number+')">'
            +'Add<i class="fa fa-plus"></i></button></label>'
@@ -349,8 +362,9 @@
            +'</tbody>'
            +'</table></div>'
            +'</div>'
-           +'<div class="box-tools pull-right"><button type="button" id="' + task_number + '" onclick="unfoldTask(this)" class="btn btn-primary">Confirm</button></div>'
            +'</div></div></div>'
+           +'<div class="box-tools pull-right"><button type="button" id="' + task_number + '" onclick="unfoldTask(this)" class="btn btn-primary">Confirm</button></div>'
+           +'</div></div>'
       $(task_html).appendTo("#accordion");
     }
     addTask();
