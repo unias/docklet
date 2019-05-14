@@ -687,9 +687,9 @@ class TaskMgr(threading.Thread):
                     username = username,
                     vnode = VNode(
                         image = Image(
-                            name = json_task['image'].split('_')[0], #json_task['cluster']['image']['name'],
-                            type = image_dict[json_task['image'].split('_')[2]], #json_task['cluster']['image']['type'],
-                            owner = username if not json_task['image'].split('_')[1] else json_task['image'].split('_')[1]), #json_task['cluster']['image']['owner']),
+                            name = '_'.join(json_task['image'].split('_')[:-2]), #json_task['cluster']['image']['name'],
+                            type = image_dict[json_task['image'].split('_')[-1]], #json_task['cluster']['image']['type'],
+                            owner = username if not json_task['image'].split('_')[-2] else json_task['image'].split('_')[-2]), #json_task['cluster']['image']['owner']),
                         instance = Instance(
                             cpu = int(json_task['cpuSetting']),
                             memory = int(json_task['memorySetting']),
