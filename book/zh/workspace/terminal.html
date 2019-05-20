@@ -301,7 +301,20 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.4" data-path="../portal/admin.html">
+        <li class="chapter " data-level="1.4.4" data-path="../portal/batch.html">
+            
+                <a href="../portal/batch.html">
+            
+                    
+                    批量计算
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../portal/admin.html">
             
                 <a href="../portal/admin.html">
             
@@ -314,7 +327,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.5" data-path="../portal/hosts.html">
+        <li class="chapter " data-level="1.4.6" data-path="../portal/hosts.html">
             
                 <a href="../portal/hosts.html">
             
@@ -327,7 +340,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.6" data-path="../portal/users.html">
+        <li class="chapter " data-level="1.4.7" data-path="../portal/users.html">
             
                 <a href="../portal/users.html">
             
@@ -340,7 +353,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.7" data-path="../portal/setting.html">
+        <li class="chapter " data-level="1.4.8" data-path="../portal/setting.html">
             
                 <a href="../portal/setting.html">
             
@@ -752,6 +765,77 @@
             
         </li>
     
+        <li class="chapter " data-level="1.9" data-path="../batch/">
+            
+                <a href="../batch/">
+            
+                    
+                    批量计算系统
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../batch/concepts.html">
+            
+                <a href="../batch/concepts.html">
+            
+                    
+                    概念介绍
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../batch/create.html">
+            
+                <a href="../batch/create.html">
+            
+                    
+                    作业创建及作业配置
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.3" data-path="../batch/status_schedule.html">
+            
+                <a href="../batch/status_schedule.html">
+            
+                    
+                    作业状态及调度
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.4" data-path="../batch/billing.html">
+            
+                <a href="../batch/billing.html">
+            
+                    
+                    如何计费
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
 
     
 
@@ -832,10 +916,10 @@ vnode &#x5728;&#x9632;&#x706B;&#x5899;&#x540E;&#x9762;&#xFF0C;&#x56E0;&#x6B64;&#
 <p>&#x7528;&#x6237;&#x7684;&#x6BCF;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x90FD;&#x80FD;&#x7533;&#x8BF7;&#x591A;&#x4E2A;&#x7AEF;&#x53E3;&#xFF0C;&#x4F46;&#x603B;&#x6570;&#x6709;&#x914D;&#x989D;&#x9650;&#x5236;&#x3002;&#x8BBE;&#x7F6E;&#x7684;&#x8282;&#x70B9;&#x7AEF;&#x53E3;&#x4F1A;&#x6620;&#x5C04;&#x5230;&#x4E3B;&#x673A;&#x7684;&#x4E00;&#x4E2A;&#x7AEF;&#x53E3;&#xFF0C;&#x7528;&#x6237;&#x5411;&#x4E3B;&#x673A;&#x7AEF;&#x53E3;&#x53D1;&#x9001;&#x7684;TCP&#x5305;&#x90FD;&#x4F1A;&#x5230;&#x8F6C;&#x9001;&#x5230;&#x8FD9;&#x4E2A;&#x7AEF;&#x53E3;&#x3002;&#x8282;&#x70B9;&#x4E0A;&#x7684;&#x670D;&#x52A1;&#x9700;&#x8981;&#x76D1;&#x542C;&#x914D;&#x7F6E;&#x7684;&#x7AEF;&#x53E3;&#x3002;</p>
 <p>&#x7528;&#x6237;&#x5728;&#x914D;&#x7F6E;&#x9875;&#x9762;&#x6DFB;&#x52A0;&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#xFF0C;&#x6DFB;&#x52A0;&#x540E;&#x5F97;&#x5230;&#x76F8;&#x5E94;&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x8868;&#x9879;&#xFF1A;</p>
 <p><img src="../images/config-tcp.png" width="700" alt="image config">
-&#x7AEF;&#x53E3;10000&#x76F4;&#x63A5;&#x6620;&#x5C04;&#x5230;&#x4E86;&#x5BB9;&#x5668;&#x7684;22&#x7AEF;&#x53E3;&#xFF0C;&#x4E0E;Host Public IP&#x7684;10000&#x7AEF;&#x53E3;&#x8FDE;&#x63A5;&#x7B49;&#x4EF7;&#x4E8E;&#x4E0E;&#x5BB9;&#x5668;&#x76F8;&#x8FDE;&#x63A5;&#x3002;</p>
-<p>&#x5047;&#x5B9A;&#x7528;&#x6237;&#x5728;&#x5BB9;&#x5668;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x8D26;&#x53F7; <strong>myname</strong>&#xFF0C;&#x5728;&#x7EC8;&#x7AEF;&#x4E2D;&#x6267;&#x884C;ssh&#x547D;&#x4EE4;</p>
+&#x7AEF;&#x53E3;10000&#x76F4;&#x63A5;&#x6620;&#x5C04;&#x5230;&#x4E86;&#x5BB9;&#x5668;&#x7684;22&#x7AEF;&#x53E3;&#xFF0C;&#x4E0E;Host Public IP&#x7684;10000&#x7AEF;&#x53E3;&#x8FDE;&#x63A5;&#x7B49;&#x4EF7;&#x4E8E;&#x4E0E;&#x5BB9;&#x5668;&#x76F8;&#x8FDE;&#x63A5;&#x3002;   </p>
+<p>&#x5047;&#x5B9A;&#x7528;&#x6237;&#x5728;&#x5BB9;&#x5668;&#x4E2D;&#x6709;&#x4E00;&#x4E2A;&#x8D26;&#x53F7; <strong>myname</strong>&#xFF0C;&#x5728;&#x7EC8;&#x7AEF;&#x4E2D;&#x6267;&#x884C;ssh&#x547D;&#x4EE4;&#xFF1A;</p>
 <pre><code>ssh -p 10000 myname@masterip
-</code></pre><p>masterip&#x5728;&#x4E0A;&#x56FE;&#x4E2D;&#x5BF9;&#x5E94;222.29.159.164&#x3002;&#x6B64;&#x65F6;&#x53EF;&#x80FD;&#x4F1A;&#x8981;&#x6C42;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF0C;&#x6539;&#x5BC6;&#x7801;&#x662F;&#x5BB9;&#x5668;&#x4E2D;&#x7684;&#x8D26;&#x53F7;&#x5BC6;&#x7801;&#x3002;&#x53EF;&#x4EE5;&#x7528;<strong>passwd</strong>&#x547D;&#x4EE4;&#x4E3A;root&#x7528;&#x6237;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;&#xFF0C;&#x5373;&#x53EF;&#x767B;&#x5F55;&#x3002;</p>
+</code></pre><p>masterip&#x5728;&#x4E0A;&#x56FE;&#x4E2D;&#x5BF9;&#x5E94;222.29.159.164&#x3002;&#x6B64;&#x65F6;&#x53EF;&#x80FD;&#x4F1A;&#x8981;&#x6C42;&#x8F93;&#x5165;&#x5BC6;&#x7801;&#xFF0C;&#x8BE5;&#x5BC6;&#x7801;&#x662F;&#x5BB9;&#x5668;&#x4E2D;&#x7684;&#x8D26;&#x53F7;&#x5BC6;&#x7801;&#x3002;&#x53EF;&#x4EE5;&#x7528;<strong>passwd</strong>&#x547D;&#x4EE4;&#x4E3A;root&#x7528;&#x6237;&#x8BBE;&#x7F6E;&#x4E00;&#x4E2A;&#xFF0C;&#x5373;&#x53EF;&#x767B;&#x5F55;&#x3002;</p>
 <p>&#x66F4;&#x591A;&#x5173;&#x4E8E; <strong>&#x7AEF;&#x53E3;&#x6620;&#x5C04;</strong> &#x7684;&#x6280;&#x672F;&#xFF0C;&#x53EF;&#x7F51;&#x4E0A;&#x54A8;&#x8BE2;&#x76F8;&#x5173;&#x8D44;&#x6599;&#x3002;</p>
 
                                 
@@ -880,7 +964,7 @@ vnode &#x5728;&#x9632;&#x706B;&#x5899;&#x540E;&#x9762;&#xFF0C;&#x56E0;&#x6B64;&#
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"终端操作","level":"1.5.3","depth":2,"next":{"title":"交互编程","level":"1.5.4","depth":2,"path":"workspace/notebook.md","ref":"workspace/notebook.md","articles":[]},"previous":{"title":"文件编辑","level":"1.5.2","depth":2,"path":"workspace/edit.md","ref":"workspace/edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"workspace/terminal.md","mtime":"2017-11-26T13:49:06.744Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-11-26T14:00:18.602Z"},"basePath":"..","book":{"language":"zh"}});
+            gitbook.page.hasChanged({"page":{"title":"终端操作","level":"1.5.3","depth":2,"next":{"title":"交互编程","level":"1.5.4","depth":2,"path":"workspace/notebook.md","ref":"workspace/notebook.md","articles":[]},"previous":{"title":"文件编辑","level":"1.5.2","depth":2,"path":"workspace/edit.md","ref":"workspace/edit.md","articles":[]},"dir":"ltr"},"config":{"plugins":["language-picker","mathjax"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"language-picker":{"grid-columns":3},"mathjax":{"forceSVG":false,"version":"2.6-latest"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"zh","gitbook":"*"},"file":{"path":"workspace/terminal.md","mtime":"2019-05-20T01:42:21.936Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-05-20T01:53:43.028Z"},"basePath":"..","book":{"language":"zh"}});
         });
     </script>
 </div>
