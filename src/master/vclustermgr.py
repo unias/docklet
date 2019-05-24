@@ -380,14 +380,13 @@ class VclusterMgr(object):
                     [success,msg] = worker.release_port_mapping(node_name, node_ip, str(node_port))
                 else:
                     [success,msg] = portcontrol.release_port_mapping(node_name, node_ip, str(node_port))
-                if not success:
-                    return [False,msg]
                 db.session.delete(item)
-                break
-        else:
-            return [False,"No port mapping."]
-        db.session.commit()
-        return [True, json.loads(str(vcluster))]
+                db.session.commit()
+                if success:
+                    return [True, json.loads(str(vcluster))]
+                else:
+                    return [False, msg]
+        return [False, "No port mapping."]
 
     def flush_cluster(self,username,clustername,containername):
         begintime = datetime.datetime.now()
