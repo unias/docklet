@@ -7,5 +7,7 @@
 # $4 : network type, for example, veth
 # $5 : value of lxc.network.veth.pair
 
+. $LXC_ROOTFS_PATH/../env.conf
+
 ovs-vsctl --may-exist add-br $Bridge
 ovs-vsctl --may-exist add-port $Bridge $5

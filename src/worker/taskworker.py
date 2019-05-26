@@ -324,6 +324,16 @@ class TaskWorker(rpc_pb2_grpc.WorkerServicer):
 
         return rpc_pb2.Reply(status=rpc_pb2.Reply.ACCEPTED,message="")
 
+    def prepare_hook_conf(self, conf_path, env_dict):
+        try:
+            confile = open(conf_path, "w")
+            for k,v in env_dict.items():
+                confile.write("%s=%s\n"%(k,v))
+            confile.close()
+        except Exception as e:
+            logger.error(traceback.format_exc())
+            return [False, e]
+        return [True, ""]
 
     #accquire ip and create a container
     def create_container(self,taskid,vnodeid,username,image,lxcname,quota,ipaddr,gateway,brname,hostname):
@@ -353,7 +363,6 @@ class TaskWorker(rpc_pb2_grpc.WorkerServicer):
             content = content.replace("%LXCNAME%",lxcname)
             content = content.replace("%VETHPAIR%",str(taskid)+"-"+str(vnodeid))
             content = content.replace("%IP%",ipaddr)
-            content = content.replace("%BRNAME%",brname)
             content = content.replace("%GATEWAY%",gateway)
             return content
 
@@ -367,7 +376,11 @@ class TaskWorker(rpc_pb2_grpc.WorkerServicer):
         conffile = open("/var/lib/lxc/%s/config" % lxcname, 'w')
         conffile.write(conftext)
         conffile.close()
-        return [True, ""]
+
+        hook_env = {}
+        hook_env['Bridge'] = brname
+        hook_env['HNAME'] = hostname
+        return self.prepare_hook_conf(rootfs+"/../env.conf",hook_env)
 
     def write_output(self,lxcname,tmplogpath,filepath):
         cmd = "lxc-attach -n " + lxcname + " -- mv %s %s"

@@ -6,6 +6,8 @@
 # $4 : network type, for example, veth
 # $5 : value of lxc.network.veth.pair
 
+. $LXC_ROOTFS_PATH/../env.conf
+
 ovs-vsctl --if-exists del-port $Bridge $5
 cnt=$(ovs-vsctl list-ports ${Bridge} | wc -l)
 if [ "$cnt" = "1" ]; then

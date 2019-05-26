@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import subprocess, os, json
+import subprocess, os, json, traceback
 from utils.log import logger
 from utils import env, imagemgr
 from utils.lvmtool import sys_run, check_volume
@@ -23,6 +23,17 @@ class Container(object):
         self.lxcpath = "/var/lib/lxc"
         self.imgmgr = imagemgr.ImageMgr()
         self.historymgr = History_Manager()
+
+    def prepare_hook_conf(self, conf_path, env_dict):
+        try:
+            confile = open(conf_path, "w")
+            for k,v in env_dict.items():
+                confile.write("%s=%s\n"%(k,v))
+            confile.close()
+        except Exception as e:
+            logger.error(traceback.format_exc())
+            return [False, e]
+        return [True, ""]
 
     def create_container(self, lxc_name, proxy_server_ip, username, uid, setting, clustername, clusterid, containerid, hostname, ip, gateway, image):
         logger.info("create container %s of %s for %s" %(lxc_name, clustername, username))
@@ -84,6 +95,11 @@ class Container(object):
                 conffile = open("/var/lib/lxc/%s/config" % lxc_name, 'a')
                 conffile.write(conftext)
                 conffile.close()
+
+            hook_env = {}
+            hook_env['Bridge'] = "docklet-br-%d" % uid
+            hook_env['HNAME'] = hostname
+            self.prepare_hook_conf(rootfs+"/../env.conf",hook_env)
 
             #logger.debug(Ret.stdout.decode('utf-8'))
             logger.info("create container %s success" % lxc_name)
