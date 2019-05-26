@@ -1,3 +1,26 @@
+v0.4.0,  May 26, 2019
+--------------------
+
+**Bug Fix**
+  * Fix a bug of update base image.
+  * Fix a bug of port control & a bug of update_v0.3.2.py.
+  * Add locks to solve synchronization problems.
+  * Fix a type error in web/web.py.
+  * Fix a bug that net stats can't be shown.
+
+**Improvement**
+  * [#298 #299 #300 ] Support batch computing.
+  * Add information of login to user log and database.
+  * Prevent users that is not activated from applying for beans.
+  * Aggregate api of monitor at the backend and aggregate http request on status realtime pages for monitor information.
+  * Support user to report a bug in dashboard.
+  * Display image size when creating vcluster.
+  * Security enhancement: forbid double slashes url, add header into nginx to defend clickjacking, add CsrfProtect, forbid methods except for GET and POST in nginx and support https...
+  * Add LoginFailMsg into model & Ban user if he input wrong password for many times.
+  * Add UDP4 mapping for iptables.
+  * Support migrating containers.
+  * Support releasing vcluster when it is stopped for too long automatically.
+
 v0.3.2,  Dec 11, 2017
 --------------------
 
