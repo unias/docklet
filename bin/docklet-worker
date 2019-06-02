@@ -65,6 +65,20 @@ DOCKMETER_PIDFILE=$RUN_DIR/$DOCKMETER_NAME.pid
 
 ###########
 
+update_container_conf () {
+    LXC_VERSION=$(lxc-start --version | awk -F "." '{print $1}')
+    #echo $LXC_VERSION
+
+    if [ "$LXC_VERSION"x != "2"x ]&&[ "$LXC_VERSION"x != "3"x ];then
+      LXC_VERSION=2
+    fi
+    #echo $LXC_VERSION
+
+    cp $DOCKLET_CONF/container/lxc$LXC_VERSION.container.conf $DOCKLET_CONF/container.conf
+    cp $DOCKLET_CONF/container/lxc$LXC_VERSION.container.batch.conf $DOCKLET_CONF/container.batch.conf
+    #echo "cp $DOCKLET_CONF/container/lxc$LXC_VERSION.container.conf $DOCKLET_CONF/container.conf"
+}
+
 pre_start () {
     [ ! -d $FS_PREFIX/global ] && mkdir -p $FS_PREFIX/global
     [ ! -d $FS_PREFIX/local ] && mkdir -p $FS_PREFIX/local
@@ -101,6 +115,8 @@ pre_start () {
 	if [ ! -d $FS_PREFIX/local/packagefs ]; then
 		mkdir -p $FS_PREFIX/local/packagefs
 	fi
+
+  update_container_conf
 }
 
 do_start() {

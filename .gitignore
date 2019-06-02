@@ -7,3 +7,5 @@ __temp
 docklet.conf
 home.html
 src/utils/migrations/
+container.conf
+container.batch.conf
