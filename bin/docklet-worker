@@ -66,7 +66,7 @@ DOCKMETER_PIDFILE=$RUN_DIR/$DOCKMETER_NAME.pid
 ###########
 
 update_container_conf () {
-    LXC_VERSION=$(lxc-start --version | awk -F "." "{print $1}")
+    LXC_VERSION=$(lxc-start --version | awk -F "." '{print $1}')
     #echo $LXC_VERSION
 
     if [ "$LXC_VERSION"x != "2"x ]&&[ "$LXC_VERSION"x != "3"x ];then
