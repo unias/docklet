@@ -4,21 +4,23 @@ https://unias.github.io/docklet
 
 ## Intro
 
-Docklet is a cloud operating system for mini-datacener. Its goal is to
-help multi-user share cluster resources effectively.  In Docklet, every
-user has their own private **virtual cluster (vcluster)**, which
-consists of a number of virtual Linux container nodes distributed over
-the physical cluster. Each vcluster is separated from others and can be
-operated like a real physical cluster. Therefore, most applications,
-especially those requiring a cluster environment, can run in vcluster
-seamlessly.
+Docklet is an operating system for virtual private cloud. Its goal is
+to help a user group effectively share cluster resources in physical 
+datacenter or in the cloud. In Docklet, the shared resources are organized
+and managed as a virtual private cloud among the user group. Every user 
+has their own private **virtual cluster (vcluster)**, which consists of 
+a number of virtual Linux container nodes distributed over the physical 
+cluster. Each vcluster is separated from others and can be operated like 
+a real physical cluster. Therefore, most applications, especially those 
+requiring a cluster of resources can run in vcluster seamlessly. 
 
-Users manage and use their vcluster all through web. The only client
+Users manage and use their vcluster resources all through web. The supported
+resources include CPUs, GPUs, shared storage, etc. The only client
 tool needed is a modern web browser supporting HTML5, like Safari,
 Firefox, or Chrome.  The integrated *jupyter notebook* provides a web
-**Workspace**. In the Workspace, users can code, debug, test,
-and run their programs, even visualize the outputs online.
-Therefore, it is ideal for data analysis and processing.
+**Workspace**. Users can code, debug, test, and run their programs, 
+even visualize the outputs online. Serverless computing and batch 
+processing is supported.
 
 Docklet creates virtual nodes from a base image. Admins can
 pre-install development tools and frameworks according to their
@@ -30,14 +32,15 @@ configured to use private IP address range, e.g., 172.16.0.0/16,
 192.168.0.0/16, 10.0.0.0/8. A proxy is setup to help
 users visit their vclusters behind the firewall/gateway.
 
-The Docklet system runtime consists of four components:
+## Architecture
+
+The Docklet system runtime consists of four main components:
 
 - distributed file system server
 - etcd server
 - docklet supermaster, master
 - docklet worker
 
-## Architecture
 ![](./docklet-arch.png)
 
 For detailed information about configurations, please see [Config](#config).
