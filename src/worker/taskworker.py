@@ -434,19 +434,19 @@ class TaskWorker(rpc_pb2_grpc.WorkerServicer):
                 cmd = cmd + " -v %s=%s" % (envkey,envval)
             cmd = cmd + " -- /bin/bash \"" + "/root/" + scriptname + "\""
             logger.info('run task with command - %s' % cmd)
-            p = subprocess.Popen(cmd,stdout=stdoutfile,stderr=stderrfile, shell=True)
+            #p = subprocess.Popen(cmd,stdout=stdoutfile,stderr=stderrfile, shell=True)
             #logger.info(p)
             if timeout == 0:
-                to = MAX_RUNNING_TIME
-            else:
-                to = timeout
-            while p.poll() is None and to > 0:
-                time.sleep(min(2,to))
-                to -= 2
-            if p.poll() is None:
-                p.kill()
+                timeout = MAX_RUNNING_TIME
+            try:
+                ret = subprocess.run(cmd, stdout=stdoutfile, stderr=stderrfile, shell=True, timeout = timeout)
+            except subprocess.TimeoutExpired as e:
                 logger.info("Running time(%d) is out. Task(%s-%s-%s) will be killed." % (timeout,str(taskid),str(vnodeid),token))
-                self.add_msg(taskid,username,vnodeid,rpc_pb2.TIMEOUT,token,"Running time is out.")
+                self.add_msg(taskid,username,vnodeid,rpc_pb2.TIMEOUT,token,"Running time(%ds) is out." % timeout)
+            except Exception as e:
+                logger.error(traceback.format_exc())
+                logger.info("Someting is wrong:%s. Task(%s-%s-%s) will be killed." % (str(e),str(taskid),str(vnodeid),token))
+                self.add_msg(taskid,username,vnodeid,rpc_pb2.FAILED,token,"Runtime Error. More information in stderr log.")
             else:
                 [success1,msg1] = self.write_output(lxcname,jobdir+"/"+stdoutname,outpath[0])
                 [success2,msg2] = self.write_output(lxcname,jobdir+"/"+stderrname,outpath[1])
@@ -458,7 +458,7 @@ class TaskWorker(rpc_pb2_grpc.WorkerServicer):
                     logger.info("Output error on Task(%s-%s-%s)." % (str(taskid),str(vnodeid),token))
                     self.add_msg(taskid,username,vnodeid,rpc_pb2.OUTPUTERROR,token,msg)
                 else:
-                    if p.poll() == 0:
+                    if ret.returncode == 0:
                         logger.info("Task(%s-%s-%s) completed." % (str(taskid),str(vnodeid),token))
                         self.add_msg(taskid,username,vnodeid,rpc_pb2.COMPLETED,token,"")
                     else:
