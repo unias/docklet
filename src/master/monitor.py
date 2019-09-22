@@ -210,6 +210,15 @@ class Fetcher:
             res = {}
         return res
 
+    def get_gpuinfo(self):
+        try:
+            res = self.info['gpuinfo']
+        except Exception as err:
+            logger.warning(traceback.format_exc())
+            logger.warning(err)
+            res = {}
+        return res
+
     def get_cpuinfo(self):
         try:
             res = self.info['cpuinfo']

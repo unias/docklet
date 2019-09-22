@@ -665,6 +665,8 @@ def hosts_monitor(user, beans, form, com_id, issue):
     fetcher = monitor.Fetcher(com_id)
     if issue == 'meminfo':
         res['meminfo'] = fetcher.get_meminfo()
+    elif issue == 'gpuinfo':
+        res['gpuinfo'] = fetcher.get_gpuinfo()
     elif issue == 'cpuinfo':
         res['cpuinfo'] = fetcher.get_cpuinfo()
     elif issue == 'cpuconfig':

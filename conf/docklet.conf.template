@@ -220,3 +220,8 @@
 # BATCH_MAX_THREAD_WORKER: the maximun number of threads of the rpc server on
 # the batch job worker. default:5
 # BATCH_MAX_THREAD_WORKER=5
+
+# BATCH_GPU_BILLING: beans cost per hour by different GPUs
+# The GPU's name can be found by 'nvidia-smi -L' and all spaces need be replaced by '-'
+# default: 100
+# BATCH_GPU_BILLING=default:100,GeForce-GTX-1080-Ti:100,GeForce-GTX-2080-Ti:150,Tesla-V100-PCIE-16GB:200

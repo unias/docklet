@@ -438,6 +438,8 @@ class Collector(threading.Thread):
         self.thread_stop = False
         self.interval = 1
         self.test=test
+        self.gpu_info_count = 0
+        self.gpu_info_cache = None
         workerinfo['concpupercent'] = {}
         return
 
@@ -483,7 +485,29 @@ class Collector(threading.Thread):
 
     # collect gpu used information
     def collect_gpuinfo(self):
-        return gputools.get_gpu_status()
+        # load gpu price
+        batch_gpu_billing = env.getenv("BATCH_GPU_BILLING")
+        gpu_price = {}
+        default_gpu_price = 100 # /cores*h
+        if batch_gpu_billing:
+            # examples: default:100,GeForce-GTX-1080-Ti:100,GeForce-GTX-2080-Ti:150,Tesla-V100-PCIE-16GB:200
+            billing_configs = batch_gpu_billing.split(',')
+            for config in billing_configs:
+                config_sp = config.split(':')
+                if config_sp[0] == 'default':
+                    default_gpu_price = int(config_sp[1])
+                else:
+                    gpu_price[config_sp[0]] = int(config_sp[1])
+        # reload gpu info
+        if self.gpu_info_count == 0 or self.gpu_info_cache is None:
+            self.gpu_info_cache = gputools.get_gpu_status()
+            gpu_names = gputools.get_gpu_names()
+            for index in range(len(self.gpu_info_cache)):
+                if index < len(gpu_names):
+                    self.gpu_info_cache[index]['name'] = gpu_names[index]
+                    self.gpu_info_cache[index]['price'] = gpu_price.get(gpu_names[index], default_gpu_price)
+        self.gpu_info_count = (self.gpu_info_count + 1) % 5
+        return self.gpu_info_cache
 
     # collect disk used information
     def collect_diskinfo(self):
