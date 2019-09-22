@@ -39,9 +39,11 @@ def remove_device(container_name, device_path):
 # |    1    111893    C   python3                                        151MiB |
 # +-----------------------------------------------------------------------------+
 #
-def nvidia_smi():
+def nvidia_smi(args=[]):
     try:
-        ret = subprocess.run(['nvidia-smi'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
+        cmd = ['nvidia-smi']
+        cmd.extend(args)
+        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
         return ret.stdout.decode('utf-8').split('\n')
     except subprocess.CalledProcessError:
         return None
@@ -55,6 +57,22 @@ def get_gpu_driver_version():
         return None
     else:
         return output[2].split()[-2]
+
+
+# GPU 0: GeForce GTX 1080 Ti (UUID: GPU-a1c9b91b-5fb2-6059-9784-29ae78cdba8f)
+# GPU 1: GeForce GTX 1080 Ti (UUID: GPU-36a9e2ff-b71d-8601-d0c5-72e0ec72564b)
+def get_gpu_names():
+    output = nvidia_smi(['-L'])
+    if not output:
+        return []
+    gpu_names = []
+    for line in output:
+        start = line.find(':') + 1
+        end = line.find('(')
+        name = line[start:end].strip().replace(' ', '-')
+        if name:
+            gpu_names.append(name)
+    return gpu_names
 
 
 def get_gpu_status():

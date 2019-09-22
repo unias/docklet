@@ -3,6 +3,7 @@ from webViews.view import normalView
 from webViews.log import logger
 from webViews.checkname import checkname
 from webViews.dockletrequest import dockletRequest
+from utils import env
 import json
 
 class batchJobListView(normalView):
@@ -32,7 +33,30 @@ class createBatchJobView(normalView):
         for master in masterips:
             images[master.split("@")[0]] = dockletRequest.post("/image/list/",{},master.split("@")[0]).get("images")
         logger.info(images)
-        return self.render(self.template_path, masterips=masterips, images=images)
+
+        data = {
+            "user": session['username'],
+        }
+        allresult = dockletRequest.post_to_all('/monitor/listphynodes/', data)
+        allmachines = {}
+        for master in allresult:
+            allmachines[master.split("@")[0]] = []
+            iplist = allresult[master].get('monitor').get('allnodes')
+            for ip in iplist:
+                result = dockletRequest.post('/monitor/hosts/%s/gpuinfo/'%(ip), data, master.split("@")[0])
+                gpuinfo = result.get('monitor').get('gpuinfo')
+                allmachines[master.split("@")[0]].append(gpuinfo)
+
+        batch_gpu_billing = env.getenv("BATCH_GPU_BILLING")
+        default_gpu_price = 100 # /cores*h
+        if batch_gpu_billing:
+            # examples: default:100,GeForce-GTX-1080-Ti:100,GeForce-GTX-2080-Ti:150,Tesla-V100-PCIE-16GB:200
+            billing_configs = batch_gpu_billing.split(',')
+            for config in billing_configs:
+                config_sp = config.split(':')
+                if config_sp[0] == 'default':
+                    default_gpu_price = int(config_sp[1])
+        return self.render(self.template_path, masterips=masterips, images=images, allmachines=allmachines, default_gpu_price=default_gpu_price)
 
 
 class infoBatchJobView(normalView):

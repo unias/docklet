@@ -25,7 +25,8 @@ def int_to_ip(num):
     return str((num>>24)&255)+"."+str((num>>16)&255)+"."+str((num>>8)&255)+"."+str(num&255)
 
 class Task():
-    def __init__(self, task_id, username, at_same_time, priority, max_size, task_infos):
+    def __init__(self, taskmgr, task_id, username, at_same_time, priority, max_size, task_infos):
+        self.taskmgr = taskmgr
         self.id = task_id
         self.username = username
         self.status = WAITING
@@ -44,7 +45,8 @@ class Task():
                 root_task = self,
                 vnode_info = task_info['vnode_info'],
                 command_info = task_info['command_info'],
-                max_retry_count = task_info['max_retry_count']
+                max_retry_count = task_info['max_retry_count'],
+                gpu_preference = task_info['gpu_preference']
             ) for (index, task_info) in enumerate(task_infos)]
 
     def get_billing(self):
@@ -59,7 +61,11 @@ class Task():
             cpu_beans = subtask.vnode_info.vnode.instance.cpu * tmp_time * cpu_price
             mem_beans = subtask.vnode_info.vnode.instance.memory / 1024.0 * tmp_time * mem_price
             disk_beans = subtask.vnode_info.vnode.instance.disk / 1024.0 * tmp_time * disk_price
+
+            worker_info = self.taskmgr.get_worker_resource_info(subtask.worker)
+            worker_gpu_price = worker_info['gpu_price'] / 3600.0
             gpu_beans = subtask.vnode_info.vnode.instance.gpu * tmp_time * gpu_price
+
             logger.info("subtask:%s running_time=%f beans for: cpu=%f mem_beans=%f disk_beans=%f gpu_beans=%f"
                         %(self.id, tmp_time, cpu_beans, mem_beans, disk_beans, gpu_beans ))
             beans = math.ceil(cpu_beans + mem_beans + disk_beans + gpu_beans)
@@ -96,7 +102,7 @@ class Task():
         hosts_file.close()
 
 class SubTask():
-    def __init__(self, idx, root_task, vnode_info, command_info, max_retry_count):
+    def __init__(self, idx, root_task, vnode_info, command_info, max_retry_count, gpu_preference):
         self.root_task = root_task
         self.vnode_info = vnode_info
         self.vnode_info.vnodeid = idx
@@ -104,6 +110,7 @@ class SubTask():
         if self.command_info != None:
             self.command_info.vnodeid = idx
         self.max_retry_count = max_retry_count
+        self.gpu_preference = gpu_preference
         self.vnode_started = False
         self.task_started = False
         self.start_at = 0
@@ -591,6 +598,8 @@ class TaskMgr(threading.Thread):
                 self.logger.info('worker_info: ' + str(worker_info))
                 #logger.info(worker_info)
                 #logger.info(self.get_cpu_usage(worker_ip))
+                if needs.gpu > 0 and sub_task.gpu_preference is not None and sub_task.gpu_preference != 'null' and sub_task.gpu_preference != worker_info['gpu_name']:
+                    continue
                 if needs.cpu + (not all_res) * self.get_cpu_usage(worker_ip) > worker_info['cpu']:
                     continue
                 elif needs.memory > worker_info['memory']:
@@ -639,6 +648,8 @@ class TaskMgr(threading.Thread):
         info['memory'] = (worker_info['meminfo']['buffers'] + worker_info['meminfo']['cached'] + worker_info['meminfo']['free']) / 1024 # (Mb)
         info['disk'] = sum([disk['free'] for disk in worker_info['diskinfo']]) / 1024 / 1024 # (Mb)
         info['gpu'] = len(worker_info['gpuinfo'])
+        info['gpu_name'] = worker_info['gpuinfo'][0]['name'] if len(worker_info['gpuinfo']) > 0 else ''
+        info['gpu_price'] = worker_info['gpuinfo'][0]['price'] if len(worker_info['gpuinfo']) > 0 else ''
         return info
 
     def get_cpu_usage(self, worker_ip):
@@ -674,6 +685,7 @@ class TaskMgr(threading.Thread):
             self.jobmgr.report(username,taskid,"failed","vnodeCount exceed limits.")
             return False
         task = Task(
+            taskmgr = self,
             task_id = taskid,
             username = username,
             # all vnode must be started at the same time
@@ -681,6 +693,7 @@ class TaskMgr(threading.Thread):
             priority = task_priority,
             max_size = (1 << self.task_cidr) - 2,
             task_infos = [{
+                'gpu_preference': json_task['gpuPreference'],
                 'max_retry_count': int(json_task['retryCount']),
                 'vnode_info': VNodeInfo(
                     taskid = taskid,
