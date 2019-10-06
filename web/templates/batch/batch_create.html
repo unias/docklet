@@ -113,9 +113,6 @@
     allmachines = allmachines.replace(/&#39;/g,"\"");
     console.log('allmachines', allmachines);
     allmachines = JSON.parse(allmachines);
-    var default_gpu_price = "{{ default_gpu_price }}";
-    default_gpu_price = default_gpu_price.replace(/&#39;/g,"\"");
-    console.log('default_gpu_price', default_gpu_price);
     $().ready(function() {
         $("#form").validate();
     });
@@ -344,7 +341,7 @@
            +"<tr>"
            +"<td>No Preference</td>"
            +"<td>--</td>"
-           +"<td>" + default_gpu_price + " <img src='/static/img/bean.png' /></td>"
+           +"<td>--</td>"
            +'<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="null" checked="checked"></label></div></td>'
            +"</tr>";
            for(var index in allmachines[masterip]) {
