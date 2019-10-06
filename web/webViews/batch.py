@@ -47,16 +47,7 @@ class createBatchJobView(normalView):
                 gpuinfo = result.get('monitor').get('gpuinfo')
                 allmachines[master.split("@")[0]].append(gpuinfo)
 
-        batch_gpu_billing = env.getenv("BATCH_GPU_BILLING")
-        default_gpu_price = 100 # /cores*h
-        if batch_gpu_billing:
-            # examples: default:100,GeForce-GTX-1080-Ti:100,GeForce-GTX-2080-Ti:150,Tesla-V100-PCIE-16GB:200
-            billing_configs = batch_gpu_billing.split(',')
-            for config in billing_configs:
-                config_sp = config.split(':')
-                if config_sp[0] == 'default':
-                    default_gpu_price = int(config_sp[1])
-        return self.render(self.template_path, masterips=masterips, images=images, allmachines=allmachines, default_gpu_price=default_gpu_price)
+        return self.render(self.template_path, masterips=masterips, images=images, allmachines=allmachines)
 
 
 class infoBatchJobView(normalView):
