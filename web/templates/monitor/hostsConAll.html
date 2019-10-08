@@ -68,7 +68,7 @@
                                  <td id='{{ container['Name'] }}_cpupercent'>--</td>
                                  <td id='{{ container['Name'] }}_mem'>--</td>
                                  <td><a class="btn btn-info btn-xs"
-                                         href='/vclusters/root/{{
+                                         href='/hosts/{{ masterip }}/{{ com_ip }}/containers/{{
                                          container['Name'] }}/'>Realtime</a></td>
 			     </tr>
                              {% endfor %}

@@ -399,6 +399,13 @@ def hostsConAll(com_ip,masterip):
     hostsConAllView.masterip = masterip
     return hostsConAllView.as_view()
 
+@app.route("/hosts/<masterip>/<com_ip>/containers/<node_name>/", methods=['GET'])
+@administration_required
+def hostsConRealtime(com_ip,node_name,masterip):
+    statusRealtimeView.masterip = masterip
+    statusRealtimeView.node_name = node_name
+    return statusRealtimeView.as_view()
+
 @app.route("/vclusters/", methods=['GET'])
 @login_required
 def status():
