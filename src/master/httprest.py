@@ -389,6 +389,23 @@ def save_cluster(user, beans, form):
     finally:
         G_ulockmgr.release(user)
 
+@app.route("/admin/ulock/release/", methods=['POST'])
+@login_required
+def release_ulock(user, beans, form):
+    global G_ulockmgr
+    if user != 'root':
+        return json.dumps({'success':'false', 'message':'root is required.'})
+    release_user = form.get("ulockname",None)
+    if release_user is None:
+        return json.dumps({'success':'false', 'message':'ulockname is required.'})
+
+    try:
+        G_ulockmgr.release(release_user)
+    except Exception as e:
+        logger.error(traceback.format_exc())
+        return json.dumps({'success':'false', 'message':'fail to release lock %s' % release_user})
+    return json.dumps({'success':'true', 'message':'lock %s release successfully' % release_user})
+
 @app.route("/admin/migrate_cluster/", methods=['POST'])
 @auth_key_required
 def migrate_cluster():
