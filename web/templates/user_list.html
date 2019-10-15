@@ -283,6 +283,7 @@
                     {
                       str=str + '<a class="btn btn-danger btn-xs" onClick="javascript:setActivateUser(' + row[0] + ');">' + 'Activate' + '</a>';
                     }
+                    str += '&nbsp;<a class="btn btn-warning btn-xs" onClick="javascript:releaseLock(\'' + row[1] + '\');">' + 'Release Lock' + '</a>';
                     return str;
                 },
                 "targets": 9
@@ -347,6 +348,12 @@
         $("#mAuthMethod").val(result.auth_method);
         $("#mDescription").val(result.description);
         $("#ChpasswordButton").attr("onClick", "javascript:setFormChpassword(\"" + result.username + "\");");
+      });
+    }
+    function releaseLock(uname){
+      $.post("/user/lock/release/"+uname+"/",{},
+      function(data,status){
+        alert(data);
       });
     }
     function setFormChpassword(arg){

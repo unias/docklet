@@ -507,6 +507,16 @@ def logs_get(filename):
 def userlist():
     return userlistView.as_view()
 
+@app.route("/user/lock/release/<ulockname>/", methods=['GET', 'POST'])
+@administration_required
+def userLockRelease(ulockname):
+    data = {
+        "ulockname": ulockname
+    }
+    result = dockletRequest.post_to_all("/admin/ulock/release/", data)
+    #logger.debug(result)
+    return json.dumps(result)    
+
 @app.route("/group/list/", methods=['POST'])
 @administration_required
 def grouplist():

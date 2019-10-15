@@ -1,7 +1,7 @@
 import requests
 from flask import abort, session
 from webViews.log import logger
-import os,sys,inspect
+import os,sys,inspect,traceback
 
 
 this_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile(inspect.currentframe    ()))[0]))
@@ -95,7 +95,7 @@ class dockletRequest():
             try:
                 res = requests.post("http://"+getip(masterip)+":"+master_port+url,data=data).json()
             except Exception as e:
-                logger.debug(e)
+                logger.debug(traceback.format_exc())
                 continue
             if 'success' in res and res['success'] == 'true':
                 result[masterip] = res
