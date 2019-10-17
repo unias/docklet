@@ -16,10 +16,6 @@ if src_folder not in sys.path:
 from utils import tools, env
 config = env.getenv("CONFIG")
 tools.loadenv(config)
-masterips = env.getenv("MASTER_IPS").split(",")
-G_masterips = []
-for masterip in masterips:
-    G_masterips.append(masterip.split("@")[0] + ":" + str(env.getenv("MASTER_PORT")))
 
 # must first init loadenv
 from utils.log import initlogging
@@ -35,6 +31,7 @@ from httplib2 import Http
 from urllib.parse import urlencode
 from master.settings import settings
 from master.bugreporter import send_bug_mail
+from stopreqmgr import StopAllReqMgr
 
 external_login = env.getenv('EXTERNAL_LOGIN')
 if(external_login == 'TRUE'):
@@ -70,17 +67,6 @@ def auth_key_required(func):
            return json.dumps({'success':'false','message': 'auth_key is required!'})
 
     return wrapper
-
-# send http request to master
-def request_master(url,data):
-    global G_masterip
-    #logger.info("master_ip:"+str(G_masterip))
-    header = {'Content-Type':'application/x-www-form-urlencoded'}
-    http = Http()
-    for masterip in G_masterips:
-        [resp,content] = http.request("http://"+masterip+url,"POST",urlencode(data),headers = header)
-        logger.info("response from master:"+content.decode('utf-8'))
-
 
 @app.route("/login/", methods=['POST'])
 def login():
@@ -530,10 +516,8 @@ def billing_beans():
             #logger.info("Billing User:"+str(owner))
             if owner.beans <= 0:
                 # stop all vcluster of the user if his beans are equal to or lower than 0.
-                logger.info("The beans of User(" + str(owner) + ") are less than or equal to zero, all his or her vclusters will be stopped.")
-                auth_key = env.getenv('AUTH_KEY')
-                form = {'username':owner.username, 'auth_key':auth_key}
-                request_master("/cluster/stopall/",form)
+                logger.info("The beans of User(" + str(owner) + ") are less than or equal to zero, add request to queue.")
+                G_stopreqmgr.add_request(owner.username)
         G_lockmgr.release('__beans_'+str(owner_name))
         return json.dumps({'success':'true'})
 
@@ -625,6 +609,7 @@ if __name__  ==  '__main__':
     global G_historymgr
     global G_applicationmgr
     global G_lockmgr
+    global G_stopreqmgr
 
     fs_path = env.getenv("FS_PREFIX")
     logger.info("using FS_PREFIX %s" % fs_path)
@@ -654,6 +639,9 @@ if __name__  ==  '__main__':
         logger.info("ApprovalRobot is started.")
     else:
         logger.info("ApprovalRobot is not started.")
+
+    G_stopreqmgr = StopAllReqMgr()
+    G_stopreqmgr.start()
 
     # server = http.server.HTTPServer((masterip, masterport), DockletHttpHandler)
     logger.info("starting user server")
