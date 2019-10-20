@@ -39,6 +39,7 @@ class Task():
         self.task_base_ip = None
         self.ips = None
         self.max_size = max_size
+        self.gpu_preference = task_infos[0]['gpu_preference']
 
         self.subtask_list = [SubTask(
                 idx = index,
@@ -532,6 +533,8 @@ class TaskMgr(threading.Thread):
         # simple FIFO with priority
         self.logger.info('[task_scheduler] scheduling... (%d tasks remains)' % len(self.task_queue))
 
+        gpu_has_pending_task = set()
+
         for task in self.task_queue:
             if task in self.lazy_delete_list or task.id in self.lazy_stop_list:
                 continue
@@ -544,8 +547,17 @@ class TaskMgr(threading.Thread):
                 # parallel tasks
                 if not self.has_waiting(task.subtask_list):
                     continue
+
+                # 如果偏好的gpu类型前面已经有其他任务在等待了，就直接跳过调度
+                if task.gpu_preference in gpu_has_pending_task:
+                    continue
+
                 workers = self.find_proper_workers(task.subtask_list)
                 if len(workers) == 0:
+                    # 如果找不到合适的节点，且存在gpu偏好，则允许不需要该gpu的节点先行调度
+                    if task.gpu_preference is not None and task.gpu_preference != 'null':
+                        gpu_has_pending_task.add(task.gpu_preference)
+                        continue
                     return None, None
                 else:
                     for i in range(len(workers)):
@@ -557,11 +569,18 @@ class TaskMgr(threading.Thread):
                 for sub_task in task.subtask_list:
                     if sub_task.status == WAITING:
                         has_waiting = True
+                        # 如果偏好的gpu类型前面已经有其他任务在等待了，就直接跳过调度
+                        if sub_task.gpu_preference in gpu_has_pending_task:
+                            continue
                         workers = self.find_proper_workers([sub_task])
                         if len(workers) > 0:
                             sub_task.worker = workers[0]
                             return task, [sub_task]
                 if has_waiting:
+                    # 如果找不到合适的节点，且存在gpu偏好，则允许不需要该gpu的节点先行调度
+                    if task.gpu_preference is not None and task.gpu_preference != 'null':
+                        gpu_has_pending_task.add(task.gpu_preference)
+                        continue
                     return None, None
 
         return None, None
@@ -693,7 +712,7 @@ class TaskMgr(threading.Thread):
             priority = task_priority,
             max_size = (1 << self.task_cidr) - 2,
             task_infos = [{
-                'gpu_preference': json_task['gpuPreference'],
+                'gpu_preference': json_task['gpuPreference'] if int(json_task['gpuSetting']) > 0 else 'null',
                 'max_retry_count': int(json_task['retryCount']),
                 'vnode_info': VNodeInfo(
                     taskid = taskid,
