@@ -215,8 +215,8 @@ class Container_Collector(threading.Thread):
             db.session.commit()
         except Exception as err:
             db.session.rollback()
-            logger.warning(traceback.format_exc())
-            logger.warning(err)
+            logger.error(traceback.format_exc())
+            logger.error(err)
             raise
         # update users' tables in database
         owner_name = get_owner(vnode_name)
@@ -617,6 +617,7 @@ def save_billing_history(vnode_name, billing_history):
         db.session.add(vcluster)
         db.session.commit()
     except Exception as err:
+        db.session.rollback()
         logger.error(traceback.format_exc())
     return
 
@@ -655,7 +656,11 @@ class History_Manager:
             vnode = VNode(vnode_name)
             vnode.histories = []
             db.session.add(vnode)
-            db.session.commit()
+            try:
+                db.session.commit()
+            except Exception as err:
+                db.session.rollback()
+                logger.error(traceback.format_exc())
         vnode = VNode.query.get(vnode_name)
         billing = 0
         cputime = 0
@@ -686,7 +691,7 @@ class History_Manager:
             db.session.commit()
         except Exception as err:
             db.session.rollback()
-            logger.warning(traceback.format_exc())
+            logger.error(traceback.format_exc())
 
     def getHistory(self,vnode_name):
         vnode = VNode.query.filter_by(name=vnode_name).first()
