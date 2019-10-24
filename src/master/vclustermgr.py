@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 import os, random, json, sys
-import datetime, math
+import datetime, math, time
 
 from utils.log import logger
 from utils import env, imagemgr, proxytool
 import requests, threading, traceback
 from utils.nettools import portcontrol
 from utils.model import db, Container, PortMapping, VCluster
+from queue import Queue
 
 userpoint = "http://" + env.getenv('USER_IP') + ":" + str(env.getenv('USER_PORT'))
 def post_to_user(url = '/', data={}):
@@ -83,16 +84,53 @@ class VclusterMgr(object):
         for group in groups:
             #logger.info(group)
             quotas[group['name']] = group['quotas']
+        recover_data = {}
+        recover_queue = Queue(maxsize=0)
         for user in os.listdir(usersdir):
-            for cluster in self.list_clusters(user)[1]:
-                logger.info ("recovering cluster:%s for user:%s ..." % (cluster, user))
-                #res = post_to_user('/user/uid/',{'username':user,'auth_key':auth_key})
+            clusters = self.list_clusters(user)[1]
+            if len(clusters) > 0:
                 recover_info = post_to_user("/master/user/recoverinfo/", {'username':user,'auth_key':auth_key})
-                uid = recover_info['uid']
-                groupname = recover_info['groupname']
-                input_rate_limit = quotas[groupname]['input_rate_limit']
-                output_rate_limit = quotas[groupname]['output_rate_limit']
-                self.recover_cluster(cluster, user, uid, input_rate_limit, output_rate_limit)
+                recover_data[user] = {}
+                recover_data[user]['uid'] = recover_info['uid']
+                recover_data[user]['groupname'] = recover_info['groupname']                
+            for cluster in clusters:
+                recover_queue.put({"user": user, "vcluster":cluster, "times":0})
+        
+        now_times = 0
+        sleep_time = 10
+        max_times = 5
+        while not recover_queue.empty():
+            q = recover_queue.get()
+            if q['times'] > max_times:
+                logger.error("recovering retry more than %d times, return" % max_times)
+                return
+            if q['times'] > now_times:
+                logger.error("recovering retry %d times, sleep %d seconds" % (q['times'], sleep_time))
+                time.sleep(sleep_time)
+                sleep_time = 2 * sleep_time
+                now_times = q['times']
+
+            user = q['user']
+            cluster = q['vcluster']
+            logger.info ("recovering cluster:%s for user:%s %d times..." % (cluster, user, q['times']))
+            uid = recover_data[user]['uid']
+            groupname = recover_data[user]['groupname']
+            input_rate_limit = quotas[groupname]['input_rate_limit']
+            output_rate_limit = quotas[groupname]['output_rate_limit']
+            success1, msg = self.recover_cluster(cluster, user, uid, input_rate_limit, output_rate_limit)
+            success2, cludb = self.get_vcluster(cluster, user)
+            if not success2:
+                logger.error("cannot find vcluster %s" % cluster)
+                continue
+            if not success1:
+                logger.error(msg)
+                q["times"] += 1
+                recover_queue.put(q)
+                cludb.status = "error"
+            else:
+                cludb.status = "running"
+            db_commit()
+
         logger.info("recovered all vclusters for all users")
 
     def mount_allclusters(self):
@@ -443,7 +481,7 @@ class VclusterMgr(object):
                 logger.info("container: %s found" % containername)
                 worker = self.nodemgr.ip_to_rpc(container.host)
                 if worker is None:
-                    return [False, "The worker can't be found or has been stopped."]
+                    return [False, "The worker %s can't be found or has been stopped." % container.host]
                 res = worker.create_image(username,imagename,containername,description,imagenum)
                 container.lastsave = datetime.datetime.now()
                 container.image = imagename
@@ -464,7 +502,7 @@ class VclusterMgr(object):
         for container in vcluster.containers:
             worker = self.nodemgr.ip_to_rpc(container.host)
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
+                return [False, "The worker %s can't be found or has been stopped." % container.host]
             worker.delete_container(container.containername)
             db.session.delete(container)
             ips.append(container.ip)
@@ -497,7 +535,7 @@ class VclusterMgr(object):
             if container.containername == containername:
                 worker = self.nodemgr.ip_to_rpc(container.host)
                 if worker is None:
-                    return [False, "The worker can't be found or has been stopped."]
+                    return [False, "The worker %s can't be found or has been stopped." % container.host]
                 worker.delete_container(containername)
                 db.session.delete(container)
                 self.networkmgr.release_userips(username, container.ip)
@@ -614,7 +652,7 @@ class VclusterMgr(object):
             self.networkmgr.check_usergre(username, uid, container['host'], self.nodemgr, self.distributedgw=='True')
             worker = self.nodemgr.ip_to_rpc(container['host'])
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
+                return [False, "The worker %s can't be found or has been stopped." % container['host']]
             worker.start_container(container['containername'])
             worker.start_services(container['containername'])
             namesplit = container['containername'].split('-')
@@ -635,7 +673,7 @@ class VclusterMgr(object):
         for container in info['containers']:
             worker = self.nodemgr.ip_to_rpc(container['host'])
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
+                return [False, "The worker %s can't be found or has been stopped." % container['host']]
             worker.mount_container(container['containername'])
         return [True, "mount cluster"]
 
@@ -653,7 +691,11 @@ class VclusterMgr(object):
                 # check public ip
                 if not self.check_public_ip(clustername,username):
                     [status, info] = self.get_clusterinfo(clustername, username)
-                self.nodemgr.call_rpc_function(worker,'set_route',["/" + info['proxy_public_ip'] + '/go/'+username+'/'+clustername, target])
+                try:
+                    self.nodemgr.call_rpc_function(worker,'set_route',["/" + info['proxy_public_ip'] + '/go/'+username+'/'+clustername, target])
+                except Exception as err:
+                    logger.error(traceback.format_exc())
+                    return [False, "fail to set proxy on node %s" % info['proxy_server_ip']]
             else:
                 if not info['proxy_server_ip'] == self.addr:
                     logger.info("%s %s proxy_server_ip has been changed, base_url need to be modified."%(username,clustername))
@@ -675,11 +717,15 @@ class VclusterMgr(object):
             self.networkmgr.check_usergre(username, uid, container['host'], self.nodemgr, self.distributedgw=='True')
             worker = self.nodemgr.ip_to_rpc(container['host'])
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
-            self.nodemgr.call_rpc_function(worker,'recover_container',[container['containername']])
-            namesplit = container['containername'].split('-')
-            portname = namesplit[1] + '-' + namesplit[2]
-            self.nodemgr.call_rpc_function(worker,'recover_usernet',[portname, uid, info['proxy_server_ip'], container['host']==info['proxy_server_ip']])
+                return [False, "The worker %s can't be found or has been stopped." % container['host']]
+            try:
+                self.nodemgr.call_rpc_function(worker,'recover_container',[container['containername']])
+                namesplit = container['containername'].split('-')
+                portname = namesplit[1] + '-' + namesplit[2]
+                self.nodemgr.call_rpc_function(worker,'recover_usernet',[portname, uid, info['proxy_server_ip'], container['host']==info['proxy_server_ip']])
+            except Exception as err:
+                logger.error(traceback.format_exc())
+                return [False, "fail to recover container or usernet on node %s" % container['host']]                
         # recover ports mapping
         [success, msg] = self.recover_port_mapping(username,clustername)
         if not success:
@@ -702,7 +748,7 @@ class VclusterMgr(object):
             self.delete_all_port_mapping(username,clustername,container['containername'])
             worker = self.nodemgr.ip_to_rpc(container['host'])
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
+                return [False, "The worker %s can't be found or has been stopped." % container['host']]
             worker.stop_container(container['containername'])
         [status, vcluster] = self.get_vcluster(clustername, username)
         vcluster.status = 'stopped'
@@ -721,7 +767,7 @@ class VclusterMgr(object):
         for container in info['containers']:
             worker = self.nodemgr.ip_to_rpc(container['host'])
             if worker is None:
-                return [False, "The worker can't be found or has been stopped."]
+                return [False, "The worker %s can't be found or has been stopped." % container['host']]
             worker.detach_container(container['containername'])
         return [True, "detach cluster"]
 
@@ -755,7 +801,7 @@ class VclusterMgr(object):
 
         oldworker = self.nodemgr.ip_to_rpc(con_db.host)
         if oldworker is None:
-            return [False, "Old host worker can't be found or has been stopped."]
+            return [False, "Old host worker %s can't be found or has been stopped." % con_db.host]
         oldworker.stop_container(containername)
         imagename = "migrate-" + containername + "-" + datetime.datetime.now().strftime("%Y-%m-%d")
         logger.info("Save Image for container:%s imagename:%s host:%s"%(containername, imagename, con_db.host))
@@ -789,7 +835,7 @@ class VclusterMgr(object):
         worker = self.nodemgr.ip_to_rpc(new_host)
         if worker is None:
             self.imgmgr.removeImage(username,imagename)
-            return [False, "New host worker can't be found or has been stopped."]
+            return [False, "New host worker %s can't be found or has been stopped." % new_host]
         status,msg = worker.create_container(containername, proxy_public_ip, username, uid, json.dumps(setting),
                      clustername, str(clusterid), str(cid), hostname, con_db.ip, gateway, json.dumps(image))
         if not status:

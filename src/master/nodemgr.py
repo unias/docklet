@@ -177,14 +177,19 @@ class NodeMgr(object):
         if ip in self.allrunnodes:
             return xmlrpc.client.ServerProxy("http://%s:%s" % (ip, env.getenv("WORKER_PORT")))
         else:
-            logger.info('Worker %s is not connected, create rpc client failed, push task into queue')
-            if not ip in self.tasks:
-                self.tasks[ip] = []
-            return self.tasks[ip]
+            return None
+            #logger.info('Worker %s is not connected, create rpc client failed, push task into queue')
+            #if not ip in self.tasks:
+            #    self.tasks[ip] = []
+            #return self.tasks[ip]
 
     def call_rpc_function(self, worker, function, args):
-        if type(worker) is list:
-            worker.append({'taskname':function,'args':args})
-            return [True, 'append task success']
+        #if type(worker) is list:
+        #    worker.append({'taskname':function,'args':args})
+        #    return [True, 'append task success']
+        #else:
+        if worker is None:
+            logger.error("worker is None, fail to call rpc function.")
+            return None
         else:
             return eval('worker.'+function)(*args)
