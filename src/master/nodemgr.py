@@ -5,6 +5,7 @@ import threading, random, time, xmlrpc.client, sys
 from utils.nettools import netcontrol,ovscontrol
 from utils.log import logger
 from utils import env
+from queue import Queue
 
 ##########################################
 #                NodeMgr
@@ -24,6 +25,7 @@ class NodeMgr(object):
         self.mode = mode
         self.workerport = env.getenv('WORKER_PORT')
         self.tasks = {}
+        self.recover_queue = Queue(maxsize=0)
 
         # delete the existing network
         logger.info ("delete the existing network")
@@ -125,10 +127,12 @@ class NodeMgr(object):
                             self.allnodes.append(nodeip)
                             self.etcd.setkey("machines/allnodes/"+nodeip, "ok")
                         else:
-                            if nodeip in self.tasks:
-                                recover_task = threading.Thread(target = self.recover_node, args=(nodeip,self.tasks[nodeip]))
-                                recover_task.start()
-                                del self.tasks[nodeip]
+                            # recover node
+                            self.recover_queue.put(nodeip)
+                            #if nodeip in self.tasks:
+                            #    recover_task = threading.Thread(target = self.recover_node, args=(nodeip,self.tasks[nodeip]))
+                            #    recover_task.start()
+                            #    del self.tasks[nodeip]
                         logger.debug ("all nodes are: %s" % self.allnodes)
                         logger.debug ("run nodes are: %s" % self.runnodes)
                 elif node['value'] == 'ok':

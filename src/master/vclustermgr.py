@@ -72,66 +72,23 @@ class VclusterMgr(object):
         else:
             logger.error ("not supported mode:%s" % self.mode)
             sys.exit(1)
+        # start a thread to watch recovering node to recover clusters
+        threading.Thread(target = self._watchrecovering, args=()).start()
 
+    def _watchrecovering(self):
+        logger.info("watching recovering node to recover clusters...")
+        while True:
+            node = self.nodemgr.recover_queue.get()
+            self.recover_cluster_on(node)
+            self.nodemgr.recover_queue.task_done()
+    
     def recover_allclusters(self):
-        logger.info("recovering all vclusters for all users...")
-        usersdir = self.fspath+"/global/users/"
-        auth_key = env.getenv('AUTH_KEY')
-        res = post_to_user("/master/user/groupinfo/", {'auth_key':auth_key})
-        #logger.info(res)
-        groups = json.loads(res['groups'])
-        quotas = {}
-        for group in groups:
-            #logger.info(group)
-            quotas[group['name']] = group['quotas']
-        recover_data = {}
-        recover_queue = Queue(maxsize=0)
-        for user in os.listdir(usersdir):
-            clusters = self.list_clusters(user)[1]
-            if len(clusters) > 0:
-                recover_info = post_to_user("/master/user/recoverinfo/", {'username':user,'auth_key':auth_key})
-                recover_data[user] = {}
-                recover_data[user]['uid'] = recover_info['uid']
-                recover_data[user]['groupname'] = recover_info['groupname']                
-            for cluster in clusters:
-                recover_queue.put({"user": user, "vcluster":cluster, "times":0})
-        
-        now_times = 0
-        sleep_time = 10
-        max_times = 5
-        while not recover_queue.empty():
-            q = recover_queue.get()
-            if q['times'] > max_times:
-                logger.error("recovering retry more than %d times, return" % max_times)
-                return
-            if q['times'] > now_times:
-                logger.error("recovering retry %d times, sleep %d seconds" % (q['times'], sleep_time))
-                time.sleep(sleep_time)
-                sleep_time = 2 * sleep_time
-                now_times = q['times']
-
-            user = q['user']
-            cluster = q['vcluster']
-            logger.info ("recovering cluster:%s for user:%s %d times..." % (cluster, user, q['times']))
-            uid = recover_data[user]['uid']
-            groupname = recover_data[user]['groupname']
-            input_rate_limit = quotas[groupname]['input_rate_limit']
-            output_rate_limit = quotas[groupname]['output_rate_limit']
-            success1, msg = self.recover_cluster(cluster, user, uid, input_rate_limit, output_rate_limit)
-            success2, cludb = self.get_vcluster(cluster, user)
-            if not success2:
-                logger.error("cannot find vcluster %s" % cluster)
-                continue
-            if not success1:
-                logger.error(msg)
-                q["times"] += 1
-                recover_queue.put(q)
-                cludb.status = "error"
-            else:
-                cludb.status = "running"
-            db_commit()
-
-        logger.info("recovered all vclusters for all users")
+        logger.info("try to recover all clusters for all users...")
+        vcs = VCluster.query.filter(VCluster.status.in_(["running","error"])).all()
+        need_recovers = []
+        for vc in vcs:
+            need_recovers.append([vc.clustername, vc.ownername])
+        self.recover_clusters(need_recovers)        
 
     def mount_allclusters(self):
         logger.info("mounting all vclusters for all users...")
@@ -676,6 +633,73 @@ class VclusterMgr(object):
                 return [False, "The worker %s can't be found or has been stopped." % container['host']]
             worker.mount_container(container['containername'])
         return [True, "mount cluster"]
+
+    def recover_cluster_on(self, host):
+        logger.info("start to recover clusters which has containers on host %s" % host)
+        vcs = VCluster.query.filter(VCluster.status.in_(["running","error"])).all()
+        need_recovers = []
+        for vc in vcs:
+            if len(vc.containers.filter_by(host=host).all()) > 0:
+                need_recovers.append([vc.clustername, vc.ownername])
+        self.recover_clusters(need_recovers)
+    
+    def recover_clusters(self, clusters_users):
+        logger.info("start to recover clusters:"+ str(clusters_users))
+        clusters = [d[0] for d in clusters_users]
+        users = set([d[1] for d in clusters_users])
+        auth_key = env.getenv('AUTH_KEY')
+        res = post_to_user("/master/user/groupinfo/", {'auth_key':auth_key})
+        #logger.info(res)
+        groups = json.loads(res['groups'])
+        quotas = {}
+        for group in groups:
+            #logger.info(group)
+            quotas[group['name']] = group['quotas']
+        recover_data = {}
+        recover_queue = Queue(maxsize=0)
+        for user in users:
+            recover_info = post_to_user("/master/user/recoverinfo/", {'username':user,'auth_key':auth_key})
+            recover_data[user] = {}
+            recover_data[user]['uid'] = recover_info['uid']
+            recover_data[user]['groupname'] = recover_info['groupname']                
+        
+        for d in clusters_users:
+            recover_queue.put({"user": d[1], "vcluster":d[0], "times":0})
+        
+        now_times = 0
+        sleep_time = 10
+        max_times = 1
+        while not recover_queue.empty():
+            q = recover_queue.get()
+            if q['times'] >= max_times:
+                logger.error("recovering retry more than %d times, return" % max_times)
+                return
+            if q['times'] > now_times:
+                logger.error("recovering retry %d times, sleep %d seconds" % (q['times'], sleep_time))
+                time.sleep(sleep_time)
+                sleep_time = 2 * sleep_time
+                now_times = q['times']
+
+            user = q['user']
+            cluster = q['vcluster']
+            logger.info ("recovering cluster:%s for user:%s %d times..." % (cluster, user, q['times']))
+            uid = recover_data[user]['uid']
+            groupname = recover_data[user]['groupname']
+            input_rate_limit = quotas[groupname]['input_rate_limit']
+            output_rate_limit = quotas[groupname]['output_rate_limit']
+            success1, msg = self.recover_cluster(cluster, user, uid, input_rate_limit, output_rate_limit)
+            success2, cludb = self.get_vcluster(cluster, user)
+            if not success2:
+                logger.error("cannot find vcluster %s" % cluster)
+                continue
+            if not success1:
+                logger.error(msg)
+                q["times"] += 1
+                recover_queue.put(q)
+                cludb.status = "error"
+            else:
+                cludb.status = "running"
+            db_commit()
 
     def recover_cluster(self, clustername, username, uid, input_rate_limit, output_rate_limit):
         [status, info] = self.get_clusterinfo(clustername, username)
