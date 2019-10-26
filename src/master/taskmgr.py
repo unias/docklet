@@ -40,6 +40,7 @@ class Task():
         self.ips = None
         self.max_size = max_size
         self.gpu_preference = task_infos[0]['gpu_preference']
+        self.order = -1 # scheduling order of the task
 
         self.subtask_list = [SubTask(
                 idx = index,
@@ -176,9 +177,7 @@ class TaskMgr(threading.Thread):
         # self.last_nodes_info_update_time = 0
         # self.nodes_info_update_interval = 30 # (s)
 
-        self.pending_gpu_tasks_info_cache = {}
-        self.last_pending_gpu_tasks_info_update_time = 0
-        self.pending_gpu_tasks_info_update_interval = 10 # (s)
+        self.gpu_pending_tasks = {}
 
         self.network_lock = threading.Lock()
         batch_net = env.getenv('BATCH_NET')
@@ -279,6 +278,19 @@ class TaskMgr(threading.Thread):
             self.task_queue.extend(self.lazy_append_list)
             self.lazy_append_list.clear()
             self.task_queue = sorted(self.task_queue, key=lambda x: x.priority)
+
+        self.gpu_pending_tasks = {}
+        no_pref_task_counts = 0
+        for task in self.task_queue:
+            if task.gpu_preference == 'null':
+                task.order = no_pref_task_counts
+                no_pref_task_counts += 1
+            else:
+                if task.gpu_preference not in self.gpu_pending_tasks:
+                    self.gpu_pending_tasks[task.gpu_preference] = 0
+                task.order = no_pref_task_counts + self.gpu_pending_tasks[task.gpu_preference]
+                self.gpu_pending_tasks[task.gpu_preference] += 1
+        self.gpu_pending_tasks['null'] = no_pref_task_counts
 
     def start_vnode(self, subtask):
         try:
@@ -781,32 +793,15 @@ class TaskMgr(threading.Thread):
     def get_task_list(self):
         return self.task_queue.copy()
 
-    def get_pending_gpu_tasks_info(self):
-        if time.time() - self.last_pending_gpu_tasks_info_update_time > self.pending_gpu_tasks_info_update_interval:
-            self.pending_gpu_tasks_info_cache = self.do_get_pending_gpu_tasks_info()
-            self.last_pending_gpu_tasks_info_update_time = time.time()
-        return self.pending_gpu_tasks_info_cache
-
     @data_lock('task_queue_lock')
-    def do_get_pending_gpu_tasks_info(self):
-        pending_gpu_tasks_info = {}
-        for task in self.task_queue:
-            if task in self.lazy_delete_list or task.id in self.lazy_stop_list:
-                continue
-            if task.subtask_list is None or len(task.subtask_list) == 0:
-                continue
-            first_sub_task = task.subtask_list[0]
-            if first_sub_task.vnode_info.vnode.instance.gpu <= 0:
-                continue
-            if first_sub_task.gpu_preference not in pending_gpu_tasks_info:
-                pending_gpu_tasks_info[first_sub_task.gpu_preference] = {
-                    'task_count': 0,
-                    'max_time': 0
-                }
-            pending_gpu_tasks_info[first_sub_task.gpu_preference]['task_count'] += 1
-            pending_gpu_tasks_info[first_sub_task.gpu_preference]['max_time'] += first_sub_task.max_retry_count * first_sub_task.command_info.timeout * len(task.subtask_list)
-        return pending_gpu_tasks_info
+    def get_pending_gpu_tasks_info(self):
+        return self.gpu_pending_tasks
 
+    def get_task_order(self, taskid):
+        task = self.get_task(taskid)
+        if task is not None:
+            return task.order
+        return -1
 
     @data_lock('task_queue_lock')
     def get_task(self, taskid):

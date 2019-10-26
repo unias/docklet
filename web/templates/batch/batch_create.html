@@ -346,14 +346,9 @@
            +"<tr>"
            +"<td>No Preference</td>"
            +"<td>--</td>"
-           +"<td>--</td>";
-    if (pending_gpu_tasks[masterip]['null']) {
-      task_html += "<td>" + pending_gpu_tasks[masterip]['null']['task_count'] + "</td>";
-    } else {
-      task_html += "<td>0</td>";
-    }
-    task_html +=
-            '<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="null" checked="checked"></label></div></td>'
+           +"<td>--</td>"
+           +"<td>" + pending_gpu_tasks[masterip]['null'] + "</td>"
+           +'<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="null" checked="checked"></label></div></td>'
            +"</tr>";
            for(var index in allmachines[masterip]) {
               var gpuinfo = allmachines[masterip][index]
@@ -364,7 +359,7 @@
                  +"<td>"+gpuinfo[0]['memory_max']+"</td>"
                  +"<td>"+gpuinfo[0]['price']+" <img src='/static/img/bean.png' /></td>";
                 if (pending_gpu_tasks[masterip][gpuinfo[0]['name']]) {
-                  task_html += "<td>" + pending_gpu_tasks[masterip][gpuinfo[0]['name']]['task_count'] + "</td>"
+                  task_html += "<td>" + pending_gpu_tasks[masterip][gpuinfo[0]['name']] + "</td>"
                 } else {
                   task_html += "<td>0</td>"
                 }
