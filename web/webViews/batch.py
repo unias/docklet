@@ -47,7 +47,11 @@ class createBatchJobView(normalView):
                 gpuinfo = result.get('monitor').get('gpuinfo')
                 allmachines[master.split("@")[0]].append(gpuinfo)
 
-        return self.render(self.template_path, masterips=masterips, images=images, allmachines=allmachines)
+        pending_gpu_tasks = {}
+        for master in masterips:
+            pending_gpu_tasks[master.split("@")[0]] = dockletRequest.post("/monitor/pending_gpu_tasks/",{},master.split("@")[0]).get("monitor").get("pending_tasks")
+
+        return self.render(self.template_path, masterips=masterips, images=images, allmachines=allmachines, pending_gpu_tasks=pending_gpu_tasks)
 
 
 class infoBatchJobView(normalView):

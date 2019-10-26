@@ -764,6 +764,15 @@ def listphynodes_monitor(user, beans, form):
     res['allnodes'] = G_nodemgr.get_nodeips()
     return json.dumps({'success':'true', 'monitor':res})
 
+@app.route("/monitor/pending_gpu_tasks/", methods=['POST'])
+@login_required
+def pending_gpu_tasks_monitor(user, beans, form):
+    global G_taskmgr
+    logger.info("handle request: monitor/pending_gpu_tasks/")
+    res = {}
+    res['pending_tasks'] = G_taskmgr.get_pending_gpu_tasks_info()
+    return json.dumps({'success':'true', 'monitor':res})
+
 @app.route("/billing/beans/", methods=['POST'])
 @auth_key_required
 def billing_beans():

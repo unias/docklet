@@ -113,6 +113,10 @@
     allmachines = allmachines.replace(/&#39;/g,"\"");
     console.log('allmachines', allmachines);
     allmachines = JSON.parse(allmachines);
+    pending_gpu_tasks = "{{ pending_gpu_tasks }}";
+    pending_gpu_tasks = pending_gpu_tasks.replace(/&#39;/g,"\"");
+    console.log('allmachines', pending_gpu_tasks);
+    pending_gpu_tasks = JSON.parse(pending_gpu_tasks);
     $().ready(function() {
         $("#form").validate();
     });
@@ -334,6 +338,7 @@
            +"<th>GPU Name</th>"
            +"<th>Memory</th>"
            +"<th>Price/h</th>"
+           +"<th>Pending Tasks</th>"
            +"<th>Choose</th>"
            +"</tr>"
            +"</thead>"
@@ -341,8 +346,14 @@
            +"<tr>"
            +"<td>No Preference</td>"
            +"<td>--</td>"
-           +"<td>--</td>"
-           +'<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="null" checked="checked"></label></div></td>'
+           +"<td>--</td>";
+    if (pending_gpu_tasks[masterip]['null']) {
+      task_html += "<td>" + pending_gpu_tasks[masterip]['null']['task_count'] + "</td>";
+    } else {
+      task_html += "<td>0</td>";
+    }
+    task_html +=
+            '<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="null" checked="checked"></label></div></td>'
            +"</tr>";
            for(var index in allmachines[masterip]) {
               var gpuinfo = allmachines[masterip][index]
@@ -351,8 +362,14 @@
                   "<tr>"
                  +"<td>"+gpuinfo[0]['name']+"</td>"
                  +"<td>"+gpuinfo[0]['memory_max']+"</td>"
-                 +"<td>"+gpuinfo[0]['price']+" <img src='/static/img/bean.png' /></td>"
-                 +'<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="'+gpuinfo[0]['name']+'"><label></div></td>'
+                 +"<td>"+gpuinfo[0]['price']+" <img src='/static/img/bean.png' /></td>";
+                if (pending_gpu_tasks[masterip][gpuinfo[0]['name']]) {
+                  task_html += "<td>" + pending_gpu_tasks[masterip][gpuinfo[0]['name']]['task_count'] + "</td>"
+                } else {
+                  task_html += "<td>0</td>"
+                }
+                task_html +=
+                  '<td><div class="i-checks"><label><input type="radio" name="gpuPreference_' + task_number + '" value="'+gpuinfo[0]['name']+'"><label></div></td>'
                  +"</tr>";
                }
            }

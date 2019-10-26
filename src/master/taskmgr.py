@@ -176,6 +176,10 @@ class TaskMgr(threading.Thread):
         # self.last_nodes_info_update_time = 0
         # self.nodes_info_update_interval = 30 # (s)
 
+        self.pending_gpu_tasks_info_cache = {}
+        self.last_pending_gpu_tasks_info_update_time = 0
+        self.pending_gpu_tasks_info_update_interval = 10 # (s)
+
         self.network_lock = threading.Lock()
         batch_net = env.getenv('BATCH_NET')
         self.batch_cidr = int(batch_net.split('/')[1])
@@ -776,6 +780,32 @@ class TaskMgr(threading.Thread):
     @data_lock('task_queue_lock')
     def get_task_list(self):
         return self.task_queue.copy()
+
+    def get_pending_gpu_tasks_info(self):
+        if time.time() - self.last_pending_gpu_tasks_info_update_time > self.pending_gpu_tasks_info_update_interval:
+            self.pending_gpu_tasks_info_cache = self.do_get_pending_gpu_tasks_info()
+            self.last_pending_gpu_tasks_info_update_time = time.time()
+        return self.pending_gpu_tasks_info_cache
+
+    @data_lock('task_queue_lock')
+    def do_get_pending_gpu_tasks_info(self):
+        pending_gpu_tasks_info = {}
+        for task in self.task_queue:
+            if task in self.lazy_delete_list or task.id in self.lazy_stop_list:
+                continue
+            if task.subtask_list is None or len(task.subtask_list) == 0:
+                continue
+            first_sub_task = task.subtask_list[0]
+            if first_sub_task.vnode_info.vnode.instance.gpu <= 0:
+                continue
+            if first_sub_task.gpu_preference not in pending_gpu_tasks_info:
+                pending_gpu_tasks_info[first_sub_task.gpu_preference] = {
+                    'task_count': 0,
+                    'max_time': 0
+                }
+            pending_gpu_tasks_info[first_sub_task.gpu_preference]['task_count'] += 1
+            pending_gpu_tasks_info[first_sub_task.gpu_preference]['max_time'] += first_sub_task.max_retry_count * first_sub_task.command_info.timeout * len(task.subtask_list)
+        return pending_gpu_tasks_info
 
 
     @data_lock('task_queue_lock')
