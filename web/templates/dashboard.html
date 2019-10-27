@@ -57,15 +57,24 @@
 				 <td>
 					 <a href="/{{ cluster['proxy_public_ip'] }}/go/{{ mysession['username'] }}/{{ cluster['name'] }}" target="_blank"><button type="button" class="btn btn-xs btn-success">&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;</button></a>
 				</td>
-			     {% else %}
-			     <td><a href="/vclusters/"><div class="text-warning"><i class="fa fa-stop "></i> Stopped</div></a></td>
+                 {% elif cluster['status'] == 'stopped' %}
+			     <td><a href="/vclusters/"><div class="text-warning"><i class="fa fa-stop"></i> Stopped</div></a></td>
 			     <td>
 				     <a href="/workspace/{{master.split("@")[0]}}/start/{{ cluster['name'] }}/"><button type="button" class="btn btn-xs btn-success"> &nbsp;Start&nbsp;</button></a>
 				     <a href="/workspace/{{master.split("@")[0]}}/delete/{{ cluster['name'] }}/"><button type="button"  class="btn btn-xs btn-danger">Delete</button></a>
 			     </td>
 				 <td>
 				     <button type="button" class="btn btn-xs btn-default">&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;</button>
-				 </td>
+                 </td>
+                 {% else %}
+                 <td><a href="/vclusters/"><div class="text-warning"><i class="fa fa-times"></i> Error</div></a></td>
+			     <td>
+				     <a href="/workspace/{{master.split("@")[0]}}/stop/{{ cluster['name'] }}/"><button type="button"  class="btn btn-xs btn-warning"> &nbsp;Stop&nbsp;&nbsp; </button></a>
+				     <button type="button" class="btn btn-xs btn-default"> Delete </button>
+			     </td>
+				 <td>
+                    <button type="button" class="btn btn-xs btn-default">&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;</button>
+                </td>
 			 {% endif %}
 			 <td><a href="/masterdesc/{{master.split("@")[1]}}/" target="_blank" title="{{desc[master.split("@")[1]]}}">{{master.split("@")[1]}}</a></td>
                          </tr>

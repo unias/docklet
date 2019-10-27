@@ -5,6 +5,7 @@ import threading, random, time, xmlrpc.client, sys
 from utils.nettools import netcontrol,ovscontrol
 from utils.log import logger
 from utils import env
+from queue import Queue
 
 ##########################################
 #                NodeMgr
@@ -24,6 +25,7 @@ class NodeMgr(object):
         self.mode = mode
         self.workerport = env.getenv('WORKER_PORT')
         self.tasks = {}
+        self.recover_queue = Queue(maxsize=0)
 
         # delete the existing network
         logger.info ("delete the existing network")
@@ -125,10 +127,12 @@ class NodeMgr(object):
                             self.allnodes.append(nodeip)
                             self.etcd.setkey("machines/allnodes/"+nodeip, "ok")
                         else:
-                            if nodeip in self.tasks:
-                                recover_task = threading.Thread(target = self.recover_node, args=(nodeip,self.tasks[nodeip]))
-                                recover_task.start()
-                                del self.tasks[nodeip]
+                            # recover node
+                            self.recover_queue.put(nodeip)
+                            #if nodeip in self.tasks:
+                            #    recover_task = threading.Thread(target = self.recover_node, args=(nodeip,self.tasks[nodeip]))
+                            #    recover_task.start()
+                            #    del self.tasks[nodeip]
                         logger.debug ("all nodes are: %s" % self.allnodes)
                         logger.debug ("run nodes are: %s" % self.runnodes)
                 elif node['value'] == 'ok':
@@ -177,14 +181,19 @@ class NodeMgr(object):
         if ip in self.allrunnodes:
             return xmlrpc.client.ServerProxy("http://%s:%s" % (ip, env.getenv("WORKER_PORT")))
         else:
-            logger.info('Worker %s is not connected, create rpc client failed, push task into queue')
-            if not ip in self.tasks:
-                self.tasks[ip] = []
-            return self.tasks[ip]
+            return None
+            #logger.info('Worker %s is not connected, create rpc client failed, push task into queue')
+            #if not ip in self.tasks:
+            #    self.tasks[ip] = []
+            #return self.tasks[ip]
 
     def call_rpc_function(self, worker, function, args):
-        if type(worker) is list:
-            worker.append({'taskname':function,'args':args})
-            return [True, 'append task success']
+        #if type(worker) is list:
+        #    worker.append({'taskname':function,'args':args})
+        #    return [True, 'append task success']
+        #else:
+        if worker is None:
+            logger.error("worker is None, fail to call rpc function.")
+            return None
         else:
             return eval('worker.'+function)(*args)
