@@ -194,7 +194,7 @@ class VclusterMgr(object):
         for con in containers:
             vcluster.containers.append(con)
         db.session.add(vcluster)
-        db.session.commit()
+        db_commit()
         #proxy_url = env.getenv("PORTAL_URL") +"/"+ proxy_public_ip +"/_web/" + username + "/" + clustername
         #info = {'clusterid':clusterid, 'status':'stopped', 'size':clustersize, 'containers':containers, 'nextcid': clustersize, 'create_time':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'start_time':"------"}
         #info['proxy_url'] = proxy_url
@@ -258,7 +258,7 @@ class VclusterMgr(object):
         vcluster.containers.append(Container(lxc_name,hostname,ip,workerip,image['name'],datetime.datetime.now(),setting))
         #{'containername':lxc_name, 'hostname':hostname, 'ip':ip, 'host':workerip, 'image':image['name'], 'lastsave':datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'setting': setting})
         db.session.add(vcluster)
-        db.session.commit()
+        db_commit()
         return [True, clusterinfo]
 
     def addproxy(self,username,clustername,ip,port):
@@ -317,7 +317,7 @@ class VclusterMgr(object):
             return [False,"VCluster not found."]
         vcluster.port_mapping.append(PortMapping(node_name,node_ip,port,host_port))
         db.session.add(vcluster)
-        db.session.commit()
+        db_commit()
         return [True, json.loads(str(vcluster))]
 
     def recover_port_mapping(self,username,clustername):
@@ -354,7 +354,7 @@ class VclusterMgr(object):
         if len(delete_list) > 0:
             for item in delete_list:
                 db.session.delete(item)
-            db.session.commit()
+            db_commit()
         else:
             return [True,"No port mapping."]
         if error_msg is not None:
@@ -376,7 +376,7 @@ class VclusterMgr(object):
                 else:
                     [success,msg] = portcontrol.release_port_mapping(node_name, node_ip, str(node_port))
                 db.session.delete(item)
-                db.session.commit()
+                db_commit()
                 if success:
                     return [True, json.loads(str(vcluster))]
                 else:
@@ -446,7 +446,7 @@ class VclusterMgr(object):
         else:
             res = [False, "container not found"]
             logger.error("container: %s not found" % containername)
-        db.session.commit()
+        db_commit()
         return res
 
     def delete_cluster(self, clustername, username, user_info):
@@ -470,7 +470,7 @@ class VclusterMgr(object):
         for bh in vcluster.billing_history:
             db.session.delete(bh)
         db.session.delete(vcluster)
-        db.session.commit()
+        db_commit()
         os.remove(self.fspath+"/global/users/"+username+"/hosts/"+str(vcluster.clusterid)+".hosts")
 
         groupname = json.loads(user_info)["data"]["group"]
@@ -501,7 +501,7 @@ class VclusterMgr(object):
         cid = containername[containername.rindex("-")+1:]
         clusterid = vcluster.clusterid
         hostpath = self.fspath + "/global/users/" + username + "/hosts/" + str(clusterid) + ".hosts"
-        db.session.commit()
+        db_commit()
         hostfile = open(hostpath, 'r')
         hostinfo = hostfile.readlines()
         hostfile.close()
