@@ -85,6 +85,7 @@ class ReleaseMgr(threading.Thread):
             vcs = VCluster.query.filter_by(status='stopped').all()
             #logger.info(str(vcs))
             for vc in vcs:
+                vc = VCluster.query.get(vc.clusterid)
                 if vc.stop_time is None:
                     continue
                 days = (datetime.datetime.now() - vc.stop_time).days
@@ -125,11 +126,11 @@ class ReleaseMgr(threading.Thread):
                     self._send_email(rc_info['email'], vc.ownername, vc, self.warning_days, False)
                     vc.is_warned = True
 
-            try:
-                db.session.commit()
-            except Exception as err:
-                db.session.rollback()
-                logger.warning(traceback.format_exc())
+                    try:
+                        db.session.commit()
+                    except Exception as err:
+                        db.session.rollback()
+                        logger.warning(traceback.format_exc())
             time.sleep(self.check_interval)
 
     def stop(self):
