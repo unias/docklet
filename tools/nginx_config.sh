@@ -31,4 +31,4 @@ fi
 
 
 echo "restart nginx..."
-/etc/init.d/nginx restart
+service nginx restart

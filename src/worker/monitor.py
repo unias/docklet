@@ -111,10 +111,10 @@ class Container_Collector(threading.Thread):
 
     # list containers on this worker
     def list_container(self):
-        output = subprocess.check_output(["sudo lxc-ls"],shell=True)
-        output = output.decode('utf-8')
-        containers = re.split('\s+',output)
-        return containers
+        # output = subprocess.check_output(["sudo lxc-ls"],shell=True)
+        # output = output.decode('utf-8')
+        # containers = re.split('\s+',output)
+        return lxc.list_containers()
 
     # get running time of a process, return seconds
     def get_proc_etime(self,pid):
