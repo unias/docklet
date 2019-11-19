@@ -6,6 +6,23 @@ from webViews.dockletrequest import dockletRequest
 from utils import env
 import json
 
+class batchAdminListView(normalView):
+    template_path = "batch/batch_admin_list.html"
+
+    @classmethod
+    def get(self):
+        masterips = dockletRequest.post_to_all()
+        job_list = {}
+        for ipname in masterips:
+            ip = ipname.split("@")[0]
+            result = dockletRequest.post("/batch/job/listall/",{},ip)
+            job_list[ip] = result.get("data")
+            logger.debug("job_list[%s]: %s" % (ip,job_list[ip]))
+        if True:
+            return self.render(self.template_path, masterips=masterips, job_list=job_list)
+        else:
+            return self.error()
+
 class batchJobListView(normalView):
     template_path = "batch/batch_list.html"
 
