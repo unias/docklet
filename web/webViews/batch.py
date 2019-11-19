@@ -118,6 +118,20 @@ class stopBatchJobView(normalView):
         else:
             return self.render(self.error_path, message = result.get('message'))
 
+class adminStopBatchJobView(normalView):
+    template_path = "batch/batch_admin_list.html"
+    error_path = "error.html"
+
+    @classmethod
+    def get(self):
+        masterip = self.masterip
+        data = {'jobid':self.jobid}
+        result = dockletRequest.post("/batch/job/stop/", data, masterip)
+        if result.get('success', None) == "true":
+            return redirect('/admin_batch_list/')
+        else:
+            return self.render(self.error_path, message = result.get('message'))
+
 class outputBatchJobView(normalView):
     template_path = "batch/batch_output.html"
     masterip = ""

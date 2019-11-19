@@ -157,6 +157,13 @@ def stop_batch_job(masterip,jobid):
     stopBatchJobView.jobid = jobid
     return stopBatchJobView().as_view()
 
+@app.route("/admin_batch_job/<masterip>/stop/<jobid>/", methods=['GET'])
+@login_required
+def admin_stop_batch_job(masterip,jobid):
+    adminStopBatchJobView.masterip = masterip
+    adminStopBatchJobView.jobid = jobid
+    return adminStopBatchJobView().as_view()
+
 @app.route("/batch_job/<masterip>/info/<jobid>/", methods=['GET'])
 @login_required
 def info_batch_job(masterip,jobid):

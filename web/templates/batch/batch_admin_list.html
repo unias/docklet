@@ -107,7 +107,7 @@
                             {% if job_info['status'] == 'done' or job_info['status'] == 'failed' or job_info['status'] == 'stopping' or job_info['status'] == 'stopped'%}
                             <td><button type="button"  class="btn btn-xs btn-default"> &nbsp;Stop&nbsp;&nbsp; </button></td>
                             {% else %}
-                            <td><a href="/batch_job/{{master.split("@")[0]}}/stop/{{ job_info['job_id'] }}/"><button type="button"  class="btn btn-xs btn-danger"> &nbsp;Stop&nbsp; </button></a></td>
+                            <td><a href="/admin_batch_job/{{master.split("@")[0]}}/stop/{{ job_info['job_id'] }}/"><button type="button"  class="btn btn-xs btn-danger"> &nbsp;Stop&nbsp; </button></a></td>
                             {% endif %}
                             <td>{{ job_info['create_time'] }}</td>
                             <td>{{ job_info['end_time'] }}</td>
