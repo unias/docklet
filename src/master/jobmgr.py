@@ -384,6 +384,21 @@ class JobMgr():
             res.append(jobdata)
         return res
 
+    # list all users' jobs
+    def list_all_jobs(self):
+        alljobs = Batchjob.query.all()
+        res = []
+        for job in alljobs:
+            jobdata = json.loads(str(job))
+            tasks = job.tasks.all()
+            jobdata['tasks'] = [t.idx for t in tasks]
+            tasks_vnodeCount = {}
+            for t in tasks:
+                tasks_vnodeCount[t.idx] = int(json.loads(t.config)['vnodeCount'])
+            jobdata['tasks_vnodeCount'] = tasks_vnodeCount
+            res.append(jobdata)
+        return res
+
     # user: username
     # jobid: the id of job
     # get the information of a job, including the status, json description and other information

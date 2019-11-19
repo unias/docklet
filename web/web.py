@@ -119,7 +119,7 @@ def redirect_dochome():
 
 @app.route("/config/", methods=['GET'])
 @login_required
-def config():
+def config_view():
     return configView.as_view()
 
 @app.route("/bug/report/", methods=['POST'])
@@ -127,6 +127,11 @@ def config():
 def reportBug():
     reportBugView.bugmessage = request.form['bugmessage']
     return reportBugView.as_view()
+
+@app.route("/admin_batch_list/", methods=['GET'])
+@login_required
+def batch_admin_job():
+    return batchAdminListView().as_view()
 
 @app.route("/batch_jobs/", methods=['GET'])
 @login_required

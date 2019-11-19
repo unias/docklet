@@ -968,6 +968,16 @@ def list_job(user,beans,form):
     }
     return json.dumps(result)
 
+@app.route("/batch/job/listall/", methods=['POST'])
+@login_required
+def list_all_job(user,beans,form):
+    global G_jobmgr
+    result = {
+        'success': 'true',
+        'data': G_jobmgr.list_all_jobs()
+    }
+    return json.dumps(result)
+
 @app.route("/batch/job/info/", methods=['POST'])
 @login_required
 def info_job(user,beans,form):
