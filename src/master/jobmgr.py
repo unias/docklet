@@ -356,7 +356,7 @@ class JobMgr():
             job = self.job_map[job_id]
             if job.job_db.status == 'done' or job.job_db.status == 'failed':
                 return [True,""]
-            if job.user != user:
+            if job.user != user and user != 'root':
                 raise Exception("Wrong User.")
             for task_idx in job.tasks.keys():
                 taskid = job_id + '_' + task_idx
@@ -406,7 +406,7 @@ class JobMgr():
         job = Batchjob.query.get(job_id)
         if job is None:
             return [False, "Jobid(%s) does not exist."%job_id]
-        if job.username != user:
+        if job.username != user and user != 'root':
             return [False, "Wrong User!"]
         jobdata = json.loads(str(job))
         tasks = job.tasks.order_by(Batchtask.idx).all()
