@@ -411,7 +411,13 @@ class JobMgr():
         jobdata = json.loads(str(job))
         tasks = job.tasks.order_by(Batchtask.idx).all()
         tasksdata = [json.loads(str(t)) for t in tasks]
+
+        for i in range(len(tasksdata)):
+            if tasksdata[i]['status'] == 'scheduling':
+                order = self.taskmgr.get_task_order(tasksdata[i]['id'])
+                tasksdata[i]['order'] = order
         jobdata['tasks'] = tasksdata
+
         return [True, jobdata]
 
     # check if a job exists

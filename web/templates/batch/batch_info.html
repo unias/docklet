@@ -99,7 +99,11 @@
                       {% for task in jobinfo['tasks'] %}
                       <tr>
                           <td>{{ task['idx'] }}</td>
+                          {% if task['status'] == 'scheduling' %}
+                          <td>{{ task['status'] }}({{ task['order'] }} scheduling tasks before)</td>
+                          {% else %}
                           <td>{{ task['status'] }}</td>
+                          {% endif %}
                           <td>{{ task['failed_reason'] }}</td>
                           <td>{{ task['tried_times'] }}</td>
                           <td>{{ task['start_time'] }}</td>
