@@ -684,7 +684,7 @@ class TaskMgr(threading.Thread):
         info['disk'] = sum([disk['free'] for disk in worker_info['diskinfo']]) / 1024 / 1024 # (Mb)
         info['gpu'] = len(worker_info['gpuinfo'])
         info['gpu_name'] = worker_info['gpuinfo'][0]['name'] if len(worker_info['gpuinfo']) > 0 else ''
-        info['gpu_price'] = worker_info['gpuinfo'][0]['price'] if len(worker_info['gpuinfo']) > 0 else ''
+        info['gpu_price'] = worker_info['gpuinfo'][0]['price'] if len(worker_info['gpuinfo']) > 0 else 0
         return info
 
     def get_cpu_usage(self, worker_ip):

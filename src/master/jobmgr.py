@@ -293,7 +293,7 @@ class JobMgr():
     def recover_jobs(self):
         logger.info("Rerun the unfailed and unfinished jobs...")
         try:
-            rejobs = Batchjob.query.filter(~Batchjob.status.in_(['done','failed']))
+            rejobs = Batchjob.query.filter(~Batchjob.status.in_(['done','failed','stopped']))
             rejobs = rejobs.order_by(Batchjob.create_time).all()
             for rejob in rejobs:
                 logger.info("Rerun job: "+rejob.id)
@@ -411,7 +411,13 @@ class JobMgr():
         jobdata = json.loads(str(job))
         tasks = job.tasks.order_by(Batchtask.idx).all()
         tasksdata = [json.loads(str(t)) for t in tasks]
+
+        for i in range(len(tasksdata)):
+            if tasksdata[i]['status'] == 'scheduling':
+                order = self.taskmgr.get_task_order(tasksdata[i]['id'])
+                tasksdata[i]['order'] = order
         jobdata['tasks'] = tasksdata
+
         return [True, jobdata]
 
     # check if a job exists
