@@ -293,7 +293,7 @@ class JobMgr():
     def recover_jobs(self):
         logger.info("Rerun the unfailed and unfinished jobs...")
         try:
-            rejobs = Batchjob.query.filter(~Batchjob.status.in_(['done','failed']))
+            rejobs = Batchjob.query.filter(~Batchjob.status.in_(['done','failed','stopped']))
             rejobs = rejobs.order_by(Batchjob.create_time).all()
             for rejob in rejobs:
                 logger.info("Rerun job: "+rejob.id)
