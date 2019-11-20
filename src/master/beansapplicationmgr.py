@@ -137,8 +137,8 @@ class ApprovalRobot(threading.Thread):
             applymsgs = ApplyMsg.query.filter_by(status="Processing").all()
             for msg in applymsgs:
                 secs = (datetime.datetime.now() - msg.time).seconds
-                ranint = random.randint(self.interval,self.maxtime)
-                if secs >= ranint:
+                #ranint = random.randint(self.interval,self.maxtime)
+                if secs >= self.maxtime:
                     msg.status = "Agreed"
                     user = User.query.filter_by(username=msg.username).first()
                     if user is not None:
