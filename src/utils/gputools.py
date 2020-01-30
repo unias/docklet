@@ -43,8 +43,10 @@ def nvidia_smi(args=[]):
     try:
         cmd = ['nvidia-smi']
         cmd.extend(args)
-        ret = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False, check=True)
-        return ret.stdout.decode('utf-8').split('\n')
+        ret = subprocess.check_output(cmd, stderr=subprocess.STDOUT, timeout=5)
+        return ret.split('\n')
+    except subprocess.TimeoutExpired:
+        return None
     except subprocess.CalledProcessError:
         return None
     except Exception as e:
