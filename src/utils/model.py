@@ -25,7 +25,7 @@ Usergroup
 Token expiration can be set in User.generate_auth_token
 '''
 from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from base64 import b64encode, b64decode
 import os, json
