@@ -117,6 +117,7 @@
     pending_gpu_tasks = pending_gpu_tasks.replace(/&#39;/g,"\"");
     console.log('allmachines', pending_gpu_tasks);
     pending_gpu_tasks = JSON.parse(pending_gpu_tasks);
+    var user = "{{ user }}";
     $().ready(function() {
         $("#form").validate();
     });
@@ -202,10 +203,10 @@
             "<tr>"
             +"<td>"+image.name+"</td>"
             +"<td>private</td>"
-            +"<td>{{user}}</td>"
+            +"<td>" + user + "</td>"
             +"<td>"+image.size_format+"</td>"
-            +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
-            +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
+            +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + user + '_private/" target="_blank">' + image.description + '</a></td>'
+            +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_' + user + '_private"><label></div></td>'
             +"</tr>";
         }
         for(var p_user in images[masterip].public) {
@@ -218,7 +219,7 @@
               +"<td>" + p_user + "</td>"
               +"<td>"+image.size_format+"</td>"
               +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
-              +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
+              +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_' + p_user + '_public"><label></div></td>'
               +"</tr>";
           }
         }
@@ -280,10 +281,10 @@
                 "<tr>"
                +"<td>"+image.name+"</td>"
                +"<td>private</td>"
-               +"<td>{{user}}</td>"
+               +"<td>" + user + "</td>"
                +"<td>"+image.size_format+"</td>"
-               +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
-               +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
+               +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + user + '_private/" target="_blank">' + image.description + '</a></td>'
+               +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_' + user + '_private"><label></div></td>'
                +"</tr>";
            }
            for(var p_user in images[masterip].public) {
@@ -296,7 +297,7 @@
                  +"<td>" + p_user + "</td>"
                  +"<td>"+image.size_format+"</td>"
                  +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
-                 +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
+                 +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_' + p_user + '_public"><label></div></td>'
                  +"</tr>";
               }
            }
