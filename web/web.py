@@ -527,7 +527,7 @@ def userLockRelease(ulockname):
     }
     result = dockletRequest.post_to_all("/admin/ulock/release/", data)
     #logger.debug(result)
-    return json.dumps(result)    
+    return json.dumps(result)
 
 @app.route("/group/list/", methods=['POST'])
 @administration_required
@@ -825,4 +825,5 @@ if __name__ == '__main__':
         elif opt in ("-p", "--port"):
             webport = int(arg)
 
-app.run(host = webip, port = webport, threaded=True)
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.run(host = webip, port = webport, threaded=True)

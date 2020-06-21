@@ -250,6 +250,14 @@ case "$1" in
         do_stop_web
         ;;
 
+    start_user)
+        do_start_user
+        ;;
+
+    stop_user)
+        do_stop_user
+        ;;
+
     reinit)
         do_stop_web
         do_stop_proxy
