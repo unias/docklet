@@ -360,7 +360,9 @@ class userManager:
         else:
             logger.info("Login failed: userip=%s" % (userip))
             failmsg.failcnt += 1
-            if failmsg.failcnt == 10:
+            if failmsg.failcnt == 5:
+                failmsg.bantime = datetime.now() + timedelta(minutes=5)
+            elif failmsg.failcnt == 10:
                 failmsg.bantime = datetime.now() + timedelta(minutes=10)
             elif failmsg.failcnt == 20:
                 failmsg.bantime = datetime.now() + timedelta(minutes=100)
