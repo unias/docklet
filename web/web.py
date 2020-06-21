@@ -825,5 +825,6 @@ if __name__ == '__main__':
         elif opt in ("-p", "--port"):
             webport = int(arg)
 
-    app.config['SESSION_COOKIE_SECURE'] = True
+    # Set True when using ssl/https
+    #app.config['SESSION_COOKIE_SECURE'] = True
     app.run(host = webip, port = webport, threaded=True)
