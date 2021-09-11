@@ -65,7 +65,7 @@ echo "directory FS_PREFIX (${FS_PREFIX}) have been created"
 if [[ ! -d $FS_PREFIX/local/basefs && ! $1 = "withoutfs" ]]; then
 	mkdir -p $FS_PREFIX/local/basefs
 	echo "Generating basefs"
-	wget -P $FS_PREFIX/local http://iwork.pku.edu.cn:1616/basefs-0.11.tar.bz2 && tar xvf $FS_PREFIX/local/basefs-0.11.tar.bz2 -C $FS_PREFIX/local/ > /dev/null
+	# wget -P $FS_PREFIX/local http://iwork.pku.edu.cn:1616/basefs-0.11.tar.bz2 && tar xvf $FS_PREFIX/local/basefs-0.11.tar.bz2 -C $FS_PREFIX/local/ > /dev/null
 	[ $? != "0" ] && echo "Generate basefs failed, please download it from http://unias.github.io/docklet/download to FS_PREFIX/local and then extract it using root. (defalut FS_PRERIX is /opt/docklet)"
 fi
 
