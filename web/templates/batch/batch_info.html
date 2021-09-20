@@ -142,6 +142,7 @@
                         </a>
                       </h4>
                     </div>
+                    {% if task['config']['taskType'] != 'hpc' %}
                     <div id="collapse{{ task['idx'] }}" class="panel-collapse collapse in">
                       <div class="panel-body">
                         <div class="table-responsive">
@@ -248,6 +249,46 @@
                           {% endif %}
                       </div>
                     </div>
+                    {% else %}
+                    <div id="collapse{{ task['idx'] }}" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                  <th>NFS Src Path</th>
+                                  <th>NFS Data Path</th>
+                                  <th>HPC Running Path</th>
+                                  <th>Command</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ task['config']['execAddr'] }}</td>
+                                    <td>{{ task['config']['dataAddr'] }}</td>
+                                    <td>{{ task['config']['workingDir'] }}</td>
+                                    <td>{{ task['config']['command'] }}</td>
+                                </tr>
+                                </tbody>
+                                <thead>
+                                <tr>
+                                  <th>Nodes</th>
+                                  <th>Runlog path</th>
+                                  <th>Dependency</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ task['config']['vnodeCount'] }}</td>
+                                    <td>{{ task['config']['runlog'] }}</td>
+                                    <td>{{ task['config']['dependency'] }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
                   </div>
                   {% endfor %}
               </div>

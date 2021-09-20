@@ -225,3 +225,22 @@
 # The GPU's name can be found by 'nvidia-smi -L' and all spaces need be replaced by '-'
 # default: 100
 # BATCH_GPU_BILLING=default:100,GeForce-GTX-1080-Ti:100,GeForce-GTX-2080-Ti:150,Tesla-V100-PCIE-16GB:200
+
+# ==================================================
+#
+# Batch Config
+#
+# ==================================================
+
+# HPC_ENABLED: enable hpc, default is false.
+# if this value is set to be true, the value "HPC_LOGIN_NODE", "HPC_LOGIN_USER" and "HPC_QUEUE_X86" must be set.
+# HPC_ENABLED=true
+
+# HPC_LOGIN_NODE: login node ip of HPC
+# HPC_LOGIN_NODE=
+
+# HPC_LOGIN_USER: login user of HPC
+# HPC_LOGIN_USER=
+
+# HPC_QUEUE_X86: x86 queue of HPC
+# HPC_QUEUE_X86=

@@ -28,6 +28,7 @@ import xmlrpc.client
 from socketserver import ThreadingMixIn
 from utils import etcdlib, imagemgr
 from master import nodemgr, vclustermgr, notificationmgr, lockmgr, cloudmgr, jobmgr, taskmgr
+from master.hpc import hpcmgr
 from utils.logs import logs
 from master import userManager, beansapplicationmgr, monitor, sysmgr, network, releasemgr
 from worker.monitor import History_Manager
@@ -1096,6 +1097,7 @@ if __name__ == '__main__':
     global G_applicationmgr
     global G_ulockmgr
     global G_cloudmgr
+    global G_hpcmgr
     global G_jobmgr
     global G_taskmgr
     # move 'tools.loadenv' to the beginning of this file
@@ -1218,8 +1220,12 @@ if __name__ == '__main__':
     # server = http.server.HTTPServer((masterip, masterport), DockletHttpHandler)
     logger.info("starting master server")
 
+    G_hpcmgr = hpcmgr.HpcMgr()
     G_taskmgr = taskmgr.TaskMgr(G_nodemgr, monitor.Fetcher, ipaddr)
-    G_jobmgr = jobmgr.JobMgr(G_taskmgr)
+    G_jobmgr = jobmgr.JobMgr(G_taskmgr, G_hpcmgr)
+
+    G_hpcmgr.set_jobmgr(G_jobmgr)
+    G_hpcmgr.start()
     G_taskmgr.set_jobmgr(G_jobmgr)
     G_taskmgr.start()
 
