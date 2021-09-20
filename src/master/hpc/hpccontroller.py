@@ -49,7 +49,10 @@ def connect_ssh():
     global ssh_transport
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    private_key = paramiko.RSAKey.from_private_key_file('/root/.ssh/id_rsa')
+    # for aliyun
+    # private_key = paramiko.RSAKey.from_private_key_file('/root/.ssh/id_rsa')
+    # for ucloud
+    private_key = paramiko.RSAKey.from_private_key_file('/home/ubuntu/.ssh/id_rsa')
     ssh_transport = paramiko.Transport((hpc_login_node, 22))
     ssh_transport.connect(username=hpc_login_user, pkey=private_key)
     ssh_client._transport = ssh_transport
@@ -245,7 +248,9 @@ def upload(local, remote, mode, callback):
     logger.info('[hpccontroller] upload: [%s] -> [%s]' % (local, remote))
     if remote.startswith('~/'):
         remote = remote[2:]
-    with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/root/.ssh/id_rsa') as sftp:
+    # with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/root/.ssh/id_rsa') as sftp:
+    cnopts = pysftp.CnOpts(knownhosts='/home/ubuntu/.ssh/known_hosts')
+    with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/home/ubuntu/.ssh/id_rsa',cnopts=cnopts) as sftp:
         if os.path.isdir(local):
             if sftp.exists(remote) and not sftp.isdir(remote):
                 raise Exception('[hpccontroller] Error: trying to copy local directory to existing remote file')
@@ -273,7 +278,9 @@ def download(remote, local, mode, callback):
     logger.info('[hpccontroller] download: [%s] -> [%s]' % (remote, local))
     if remote.startswith('~/'):
         remote = remote[2:]
-    with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/root/.ssh/id_rsa') as sftp:
+    # with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/root/.ssh/id_rsa') as sftp:
+    cnopts = pysftp.CnOpts(knownhosts='/home/ubuntu/.ssh/known_hosts')
+    with pysftp.Connection(host=hpc_login_node, username=hpc_login_user, private_key='/home/ubuntu/.ssh/id_rsa',cnopts=cnopts) as sftp:
         if sftp.isdir(remote):
             if os.path.exists(local) and not os.path.isdir(local):
                 raise Exception('[hpccontroller] Error: trying to copy remote directory to existing local file')
