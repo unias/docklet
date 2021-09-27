@@ -14,22 +14,36 @@ fi
 
 # install packages that docklet needs (in ubuntu)
 # some packages' name maybe different in debian
-apt-get install -y lxc lxcfs lxc-templates lvm2 bridge-utils curl exim4 openssh-server openvswitch-switch
-apt-get install -y python3 python3-netifaces python3-flask python3-flask-sqlalchemy python3-pampy python3-httplib2 python3-pip
-apt-get install -y python3-psutil python3-flask-migrate python3-paramiko
-apt-get install -y python3-lxc
-apt-get install -y python3-requests python3-suds
+yum install -y epel-release
+yum install -y debootstrap perl libvirt
+yum install -y lxc lxcfs lxc-templates lvm2 bridge-utils curl exim openssh-server
+yum install -y redhat-lsb
 
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - 
-apt update
-apt-get install -y nodejs npm
-apt-get install -y etcd
-apt-get install -y glusterfs-client attr
-apt-get install -y nginx
+yum install -y python3
+easy_install-3.6 pip
+pip3 install netifaces flask flask-sqlalchemy python-pam httplib2
+
+yum install -y gcc python36-devel
+pip3 install psutil flask-migrate paramiko
+
+yum install -y python36-lxc
+yum install -y python36-requests python36-suds
+yum install -y nodejs npm
+yum install -y etcd
+yum install -y glusterfs-client attr
+yum install -y nginx
 pip3 install Flask-WTF
-apt-get install -y gdebi-core
 pip3 install grpcio grpcio-tools googleapis-common-protos
-pip3 install pyftp pysftp
+
+pip3 install pycrypto paramiko pysftp
+
+# install aufs, need reboot
+yum install -y kernel-ml-aufs
+
+which ovs-vsctl &>/dev/null || { echo "Error: need to manully install openvswitch-switch" && exit 1; }
+which lxcfs &>/dev/null || { echo "Error: need to manully install lxcfs" && exit 1; }
+
+setsebool -P httpd_can_network_connect 1
 
 #add ip forward
 echo "net.ipv4.ip_forward=1" >>/etc/sysctl.conf

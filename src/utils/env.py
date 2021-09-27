@@ -95,5 +95,13 @@ def getenv(key):
         return os.environ.get("BATCH_NET","10.16.0.0/16")
     elif key == "BATCH_MAX_THREAD_WORKER":
         return os.environ.get("BATCH_MAX_THREAD_WORKER","5")
+    elif key == "HPC_ENABLED":
+        return os.environ.get("HPC_ENABLED", "false") == "true"
+    elif key == "HPC_LOGIN_NODE":
+        return os.environ.get("HPC_LOGIN_NODE", None)
+    elif key == "HPC_LOGIN_USER":
+        return os.environ.get("HPC_LOGIN_USER", None)
+    elif key == "HPC_QUEUE_X86":
+        return os.environ.get("HPC_QUEUE_X86", "q_x86_expr")
     else:
         return os.environ.get(key,"")

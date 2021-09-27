@@ -40,8 +40,8 @@
                 <form id="form" class="form-horizontal" action="/batch_job/{{masterips[0].split("@")[0]}}/add/" method="POST">
 
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <div class="form-group"><label class="col-sm-2 control-label">Job Name</label>
-                        <div class="col-sm-10"><input type="text" class="form-control" name="jobName" id="job_name" required></div>
+                    <div class="form-group"><label class="col-sm-2 control-label"><span class="text-danger">*</span>Job Name</label>
+                        <div class="col-sm-10"><input type="text" class="form-control" name="jobName" id="job_name" value="BatchDemo" required></div>
                     </div>
                     <br/>
                     <div class="form-group"><label class="col-sm-2 control-label">Location</label>
@@ -51,16 +51,18 @@
                        {% endfor %}
                     </select></div>
                     </div>
-                    <div class="hr-line-dashed"></div>
-                    <br/>
-                        <div class="form-group"><label class="col-sm-2 control-label">Priority</label>
-                        <div class="col-sm-10"><select id="priority_selector" class="form-control" name="jobPriority">
-                        {% for priority in range(10) %}
-                        <option value="{{priority}}">{{priority}}</option>
-                        {% endfor %}
-                        </select></div>
+                    <div style="display: none">
+                      <div class="hr-line-dashed"></div>
+                      <br/>
+                          <div class="form-group"><label class="col-sm-2 control-label">Priority</label>
+                          <div class="col-sm-10"><select id="priority_selector" class="form-control" name="jobPriority">
+                          {% for priority in range(10) %}
+                          <option value="{{priority}}">{{priority}}</option>
+                          {% endfor %}
+                          </select></div>
+                      </div>
+                      <br/>
                     </div>
-                    <br/>
 
                     <div class="hr-line-dashed"></div>
                     <div class="panel-group" id="accordion">
@@ -70,9 +72,10 @@
                     <div class="hr-line-dashed"></div>
                     <div class="row">
                       <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary" type="button" id="add_task" class="btn btn-box-tool" title="add a task">Add Task <i class="fa fa-plus"></i></button>
-                            <button class="btn btn-primary" type="submit">Create Job</button>
+                        <div class="col-sm-5 col-sm-offset-1">
+                          <button class="btn btn-primary" type="button" id="add_task" class="btn btn-box-tool" title="add a vCluster task">Add vCluster Task <i class="fa fa-plus"></i></button>
+                          <button class="btn btn-primary" type="button" id="add_hpc_task" class="btn btn-box-tool" title="add a HPC task">Add HPC Task <i class="fa fa-plus"></i></button>
+                          <button class="btn btn-primary" type="submit">Create Job</button>
                         </div>
                       </div>
                     </div>
@@ -117,7 +120,6 @@
     pending_gpu_tasks = pending_gpu_tasks.replace(/&#39;/g,"\"");
     console.log('allmachines', pending_gpu_tasks);
     pending_gpu_tasks = JSON.parse(pending_gpu_tasks);
-    var user = "{{ user }}";
     $().ready(function() {
         $("#form").validate();
     });
@@ -203,10 +205,10 @@
             "<tr>"
             +"<td>"+image.name+"</td>"
             +"<td>private</td>"
-            +"<td>" + user + "</td>"
+            +"<td>{{user}}</td>"
             +"<td>"+image.size_format+"</td>"
-            +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + user + '_private/" target="_blank">' + image.description + '</a></td>'
-            +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_' + user + '_private"><label></div></td>'
+            +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
+            +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
             +"</tr>";
         }
         for(var p_user in images[masterip].public) {
@@ -219,7 +221,7 @@
               +"<td>" + p_user + "</td>"
               +"<td>"+image.size_format+"</td>"
               +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
-              +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_' + p_user + '_public"><label></div></td>'
+              +'<td><div class="i-checks"><label><input type="radio" name="image_' + tnum + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
               +"</tr>";
           }
         }
@@ -244,6 +246,7 @@
            +'</h4></div>'
            +'<div id="collapse' + task_number + '" class="panel-collapse collapse in">'
            +'<div class="panel-body">'
+           +'<input type="hidden" name="taskType_' + task_number + '" id="taskType_' + task_number + '" value="batch" />'
            +'<div class="form-group">'
            +'<label class="col-sm-2 control-label">Running Path</label>'
            +'<div class="col-sm-3"><input type="text" class="form-control" name="srcAddr_' + task_number + '" id="srcAddr_' + task_number + '" value="/root" required/>'
@@ -281,10 +284,10 @@
                 "<tr>"
                +"<td>"+image.name+"</td>"
                +"<td>private</td>"
-               +"<td>" + user + "</td>"
+               +"<td>{{user}}</td>"
                +"<td>"+image.size_format+"</td>"
-               +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + user + '_private/" target="_blank">' + image.description + '</a></td>'
-               +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_' + user + '_private"><label></div></td>'
+               +'<td><a href="/image/' + masterip + '/description/' + image.name + '_' + '{{user}}' + '_private/" target="_blank">' + image.description + '</a></td>'
+               +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{user}}_private"><label></div></td>'
                +"</tr>";
            }
            for(var p_user in images[masterip].public) {
@@ -297,7 +300,7 @@
                  +"<td>" + p_user + "</td>"
                  +"<td>"+image.size_format+"</td>"
                  +'<td><a href="/image/' + masterip + '/description/' + image.name + "_" + p_user + '_public/" target="_blank">' + image.description + '</a></td>'
-                 +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_' + p_user + '_public"><label></div></td>'
+                 +'<td><div class="i-checks"><label><input type="radio" name="image_' + task_number + '" value="'+image.name+'_{{p_user}}_public"><label></div></td>'
                  +"</tr>";
               }
            }
@@ -423,7 +426,68 @@
            +'</div></div>'
       $(task_html).appendTo("#accordion");
     }
-    addTask();
+    function addHpcTask() {
+      task_number += 1;
+      var masterip=$("select#masterselector").children('option:selected').val();
+      //mapping_number = 0;
+      var task_html = '';
+      task_html +=
+            '<div class="panel panel-default" id="task_pannel_' + task_number + '">'
+           +'<div class="panel-heading">'
+           +'<h4 class="panel-title">'
+           +'<a data-toggle="collapse" data-panel="#accordion" href="#collapse' + task_number + '">'
+           +'HPC Task #' + task_number
+           +'</a><div class="box-tools pull-right"><button type="button" id="' + task_number + '" onclick="removeTask(this)" class="btn btn-box-tool"><i class="fa fa-times"></i></button></div>'
+           +'</h4></div>'
+           +'<div id="collapse' + task_number + '" class="panel-collapse collapse in">'
+           +'<div class="panel-body">'
+           +'<input type="hidden" name="taskType_' + task_number + '" id="taskType_' + task_number + '" value="hpc" />'
+           +'<div class="form-group">'
+           //+'<div class="col-sm-2"></div>'
+           //+'<div class="col-sm-10 text-danger">The source file in NFS and the the data dir/file will be transferred to HPC Working Dir</div>'
+           +'<label class="col-sm-2 control-label">NFS Src Path&nbsp<i class="fa fa-question-circle" title="The path of the source file or directory, which should be a relative path to ~/nfs, e.g. ./a.out, ~/nfs/a.out"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="execAddr_' + task_number + '" id="execAddr_' + task_number + '" placeholder="./a.out, ~/nfs/a.out, ~/nfs/<folder>" value="~/nfs" value="" />'
+           +'</div>'
+           +'<label class="col-sm-2 control-label">NFS Data Path&nbsp<i class="fa fa-question-circle" title="The path of the data file or directory, which should be a relative path to ~/nfs, e.g. ./a.dat, ~/nfs/a.dat"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="dataAddr_' + task_number + '" id="dataAddr_' + task_number + '" placeholder="./a.dat, ~/nfs/a.dat, ~/nfs/<folder>" value="" />'
+           +'</div></div>'
+           +'<div class="form-group">'
+           +'<label class="col-sm-2 control-label"><span class="text-danger">*</span>HPC Working Dir&nbsp<i class="fa fa-question-circle" title="The working directory in HPC, which should start with ~ or $. ~ stands for your personal storage, while $ stands for the public storage."></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="workingDir_' + task_number + '" id="workingDir_' + task_number + '" value="~/" placeholder="~/" required/>'
+           +'</div>'
+           +'<label class="col-sm-2 control-label"><span class="text-danger">*</span>Command&nbsp<i class="fa fa-question-circle" title="The tasks ids that this task depends on, seperate them with commas, eg: 1, 2"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="command_' + task_number + '" id="command_' + task_number + '" value="" placeholder="./a.out" required/>'
+           +'</div></div>'
+
+    task_html +=
+            '<div class="panel panel-default" id="task_subpannel_' + task_number + '">'
+           +'<div class="panel-heading">'
+           +'<h4 class="panel-title">'
+           +'<a data-toggle="collapse" data-panel="#acc" href="#subcollapse' + task_number + '">'
+           +'Show detailed options'
+           +'</a>'
+           +'</h4></div>'
+           +'<div id="subcollapse' + task_number + '" class="panel-collapse collapse">'
+           +'<div class="panel-body">'
+           +'<div class="form-group">'
+           +'<label class="col-sm-2 control-label"><span class="text-danger">*</span>Nodes</label>'
+           +'<div class="col-sm-3"><input type="number" class="form-control" name="vnodeCount_' + task_number + '" id="vnodeCount_' + task_number + '" value = 1  min="1" max="8" required/>'
+           +'</div>'
+           +'<label class="col-sm-2 control-label"><span class="text-danger">*</span>Runlog path&nbsp<i class="fa fa-question-circle" title="The optional NFS path for runlog, which will be downloaded from HPC to NFS after the task is finished"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="runlog_' + task_number + '" id="runlog_' + task_number + '" value="~/nfs/batch_{jobid}" placeholder="~/nfs/batch_{jobid}" required />'
+           +'</div></div>'
+           +'<div class="form-group">'
+           +'<label class="col-sm-2 control-label">Dependency&nbsp<i class="fa fa-question-circle" title="The tasks ids that this task depends on, seperate them with commas, eg: 1, 2"></i></label>'
+           +'<div class="col-sm-3"><input type="text" class="form-control" name="dependency_' + task_number + '" id="dependency_' + task_number + '"  />'
+           +'</div></div>'
+
+      task_html +=
+           '</div></div></div>'
+           +'<div class="box-tools pull-right"><button type="button" id="' + task_number + '" onclick="unfoldTask(this)" class="btn btn-primary">Confirm</button></div>'
+           +'</div></div>'
+      $(task_html).appendTo("#accordion");
+    }
     $("#add_task").click(addTask);
+    $("#add_hpc_task").click(addHpcTask);
     </script>
 {% endblock %}

@@ -111,9 +111,9 @@ class Container_Collector(threading.Thread):
 
     # list containers on this worker
     def list_container(self):
-        output = subprocess.check_output(["sudo lxc-ls"],shell=True)
-        output = output.decode('utf-8')
-        containers = re.split('\s+',output)
+        # output = subprocess.check_output(["sudo lxc-ls"],shell=True)
+        # output = output.decode('utf-8')
+        # containers = re.split('\s+',output)
         return containers
 
     # get running time of a process, return seconds
@@ -262,7 +262,11 @@ class Container_Collector(threading.Thread):
         global pid2name
         global laststopcpuval
         global laststopruntime
-        is_batch = container_name.split('-')[1] == 'batch'
+        is_batch = False
+        try:
+            is_batch = container_name.split('-')[1] == 'batch'
+        except:
+            pass
         # collect basic information, such as running time,state,pid,ip,name
         container = lxc.Container(container_name)
         basic_info = {}
