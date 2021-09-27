@@ -275,7 +275,7 @@ class BatchJob(object):
 class JobMgr():
     # load job information from etcd
     # initial a job queue and job schedueler
-    def __init__(self, taskmgr):
+    def __init__(self, taskmgr, hpcmgr=None):
         logger.info("Init jobmgr...")
         try:
             Batchjob.query.all()
@@ -283,6 +283,7 @@ class JobMgr():
             db.create_all(bind='__all__')
         self.job_map = {}
         self.taskmgr = taskmgr
+        self.hpcmgr = hpcmgr
         self.fspath = env.getenv('FS_PREFIX')
         self.lock = threading.Lock()
         self.userpoint = "http://" + env.getenv('USER_IP') + ":" + str(env.getenv('USER_PORT'))
@@ -336,7 +337,9 @@ class JobMgr():
         try:
             job = self.create_job(user, job_info)
             self.job_map[job.job_id] = job
-            self.process_job(job)
+            succ, msg = self.process_job(job)
+            if not succ:
+                return False, msg
         except ValueError as err:
             logger.error(err)
             return [False, err.args[0]]
@@ -360,7 +363,11 @@ class JobMgr():
                 raise Exception("Wrong User.")
             for task_idx in job.tasks.keys():
                 taskid = job_id + '_' + task_idx
-                self.taskmgr.lazy_stop_task(taskid)
+                taskdata = json.loads(json.dumps(eval(str(job.tasks[task_idx]))))
+                if 'taskType' in taskdata['config'] and taskdata['config']['taskType'] == 'hpc':
+                    self.hpcmgr.lazy_stop_task(taskid)
+                else:
+                    self.taskmgr.lazy_stop_task(taskid)
             job.stop_job()
         except Exception as err:
             logger.error(traceback.format_exc())
@@ -414,8 +421,12 @@ class JobMgr():
 
         for i in range(len(tasksdata)):
             if tasksdata[i]['status'] == 'scheduling':
-                order = self.taskmgr.get_task_order(tasksdata[i]['id'])
-                tasksdata[i]['order'] = order
+                if 'taskType' in tasksdata[i]['config'] and tasksdata[i]['config']['taskType'] == 'hpc':
+                    order = self.hpcmgr.get_task_order(tasksdata[i]['id'])
+                    tasksdata[i]['order'] = order
+                else:
+                    order = self.taskmgr.get_task_order(tasksdata[i]['id'])
+                    tasksdata[i]['order'] = order
         jobdata['tasks'] = tasksdata
 
         return [True, jobdata]
@@ -437,11 +448,17 @@ class JobMgr():
         for task_name, task_info, task_priority in tasks:
             if not task_info:
                 logger.error("task_info does not exist! task_name(%s)" % task_name)
-                return False
+                return False, "task_info does not exist!"
             else:
                 logger.debug("Add task(name:%s) with priority(%s) to taskmgr's queue." % (task_name, task_priority) )
-                self.taskmgr.add_task(user, task_name, task_info, task_priority)
-        return True
+                if "taskType" in task_info and task_info["taskType"] == "hpc":
+                    if self.hpcmgr is not None:
+                        self.hpcmgr.add_task(user, task_name, task_info, task_priority)
+                    else:
+                        return False, "HPC is not enabled."
+                else:
+                    self.taskmgr.add_task(user, task_name, task_info, task_priority)
+        return True, ""
 
     # to process a job, add tasks without dependencies of the job into taskmgr
     def process_job(self, job):
@@ -469,8 +486,9 @@ class JobMgr():
                taskdb.status == 'failed' or taskdb.status == 'stopped'):
                 return
             taskdb.status = status
-            if status == 'failed':
-                taskdb.failed_reason = reason
+            taskdb.failed_reason = reason
+            # if status == 'failed':
+            #     taskdb.failed_reason = reason
             if status == 'failed' or status == 'stopped' or status == 'finished':
                 taskdb.end_time = datetime.now()
             if billing > 0:

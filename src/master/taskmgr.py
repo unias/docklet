@@ -547,7 +547,7 @@ class TaskMgr(threading.Thread):
     # return task, workers
     def task_scheduler(self):
         # simple FIFO with priority
-        self.logger.info('[task_scheduler] scheduling... (%d tasks remains)' % len(self.task_queue))
+        # self.logger.info('[task_scheduler] scheduling... (%d tasks remains)' % len(self.task_queue))
 
         gpu_has_pending_task = set()
 
